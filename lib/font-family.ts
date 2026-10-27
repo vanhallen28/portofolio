@@ -23,3 +23,8 @@ export const FONT_LABEL: Record<FontKey, string> = {
   unbounded: "Unbounded", cormorant: "Cormorant Garamond", host: "Host Grotesk", quicksand: "Quicksand", lora: "Lora",
 };
 
+
+/** The weight each title font is shipped in (used for client wordmarks). */
+export const FONT_WEIGHT: Record<FontKey, number> = {
+  schibsted: 800, marcellus: 400, jakarta: 800, archivo: 400, unbounded: 800, cormorant: 500, host: 700, quicksand: 700, lora: 600,
+};

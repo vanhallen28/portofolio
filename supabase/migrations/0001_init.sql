@@ -64,6 +64,14 @@ create table if not exists public.case_studies (
   updated_at timestamptz not null default now()
 );
 
+-- Which content updates (supabase/updates/v*.sql) have run, so each one runs only once.
+create table if not exists public.content_updates (
+  version text primary key,
+  applied_at timestamptz not null default now()
+);
+alter table public.content_updates enable row level security;
+revoke all on public.content_updates from anon, authenticated;
+
 create or replace function public.touch_updated_at()
 returns trigger
 language plpgsql
@@ -132,7 +140,7 @@ create policy "admin menulis" on public.case_studies for all to authenticated
 
 -- ── Gambar (Supabase Storage) ──────────────────────────────────────────
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-values ('media', 'media', true, 8388608, array['image/webp', 'image/png', 'image/jpeg', 'image/avif'])
+values ('media', 'media', true, 8388608, array['image/webp', 'image/png', 'image/jpeg', 'image/avif', 'application/pdf'])
 on conflict (id) do update set public = excluded.public, file_size_limit = excluded.file_size_limit, allowed_mime_types = excluded.allowed_mime_types;
 
 drop policy if exists "media: admin melihat" on storage.objects;

@@ -16,6 +16,8 @@ const UI = {
     notFoundTitle: "Ruang ini tidak ada.",
     notFoundText: "Halaman yang Anda cari sudah dipindah atau belum pernah ada. Semua karya ada di beranda.",
     notFoundCta: "Kembali ke beranda",
+    before: "Sebelum:",
+    after: "Sesudah:",
   },
   en: {
     mainNav: "Main",
@@ -30,6 +32,8 @@ const UI = {
     notFoundTitle: "This room doesn't exist.",
     notFoundText: "The page you're looking for has moved or never existed. All the work is on the home page.",
     notFoundCta: "Back to home",
+    before: "Before:",
+    after: "After:",
   },
 } as const;
 

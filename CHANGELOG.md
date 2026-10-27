@@ -3,6 +3,29 @@
 Format: setiap rilis dikirim sebagai `portofolio-vX.Y.Z.zip`. Nomor versi naik setiap kali, jadi zip tidak pernah saling tumpuk.
 Petunjuk pasang per versi: `docs/updates/BACA-INI-vX.Y.Z.txt`.
 
+## v0.2.0 — 28 Oktober 2026
+
+Tampilan yang membantu pemilik bisnis percaya lalu menghubungi.
+
+**Situs**
+- Bilah **Chat WhatsApp** menempel di bawah layar HP; otomatis tersembunyi saat tombol WhatsApp lain (hero, kontak) atau footer sedang terlihat.
+- **Deretan klien** di bawah hero: Aliya Syifaa, Invisual Studio, Biansa, Ciri, Internet Bandung, masing-masing dengan huruf mereknya dan menuju ruangnya.
+- **Kalimat hasil** di ruang proyek (contoh: HRIS, Portal Klien).
+- **FAQ** tampil dengan 6 pertanyaan yang paling sering ditanyakan calon klien (biaya, waktu, ubah isi sendiri, pembayaran, hosting, dukungan).
+- **Riwayat kerja** di bagian Tentang, dan tombol **Unduh CV** begitu file PDF diunggah.
+- **Harga opsional** per layanan dan **perkiraan waktu** per langkah Cara kerja (tampil bila diisi).
+- **Studi kasus berwarna klien**: tujuh halaman lain sekarang memakai warna merek masing-masing, judul mengikuti gaya huruf ruangnya.
+- Blok studi kasus baru: **Hasil (sebelum → sesudah)**, dipakai di HRIS dan Portal Klien.
+- Testimoni menampilkan inisial berwarna proyek terkait.
+
+**Admin**
+- Kolom untuk semua hal di atas, upload **PDF** (CV), editor blok Hasil, tombol **Salin warna ruang proyek**.
+
+**Database**
+- Data dari v0.1.x tetap terbaca (kolom baru punya nilai bawaan).
+- `supabase/updates/v0.2.0.sql`: mengisi konten baru ke database yang sudah berjalan tanpa menimpa hasil edit; berjalan sekali saja (dicatat di tabel baru `content_updates`).
+- Penyimpanan `media` kini menerima PDF (jalankan ulang `0001_init.sql`).
+
 ## v0.1.1 — 28 Oktober 2026
 
 Perbaikan pemasangan.

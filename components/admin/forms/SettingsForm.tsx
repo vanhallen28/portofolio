@@ -4,6 +4,7 @@ import { saveSettingsAction } from "@/app/admin/actions";
 import { SaveBar, useEditor } from "../editor";
 import { Card, LField, TextField, Toggle } from "../fields";
 import { ImageField } from "../ImageField";
+import { PdfField } from "../PdfField";
 
 export function SettingsForm({ initial }: { initial: SiteSettings }) {
   const ed = useEditor(initial, saveSettingsAction);
@@ -34,6 +35,17 @@ export function SettingsForm({ initial }: { initial: SiteSettings }) {
         </div>
         <LField label="Pesan pembuka WhatsApp" value={v.whatsappMessage} onChange={(x) => set("whatsappMessage", x)} multiline rows={2}
           hint="Terisi otomatis saat pengunjung menekan tombol WhatsApp." />
+      </Card>
+
+      <Card title="Tombol WhatsApp di HP" description="Bilah yang menempel di bawah layar HP. Otomatis tersembunyi saat tombol WhatsApp lain sedang terlihat.">
+        <Toggle label="Tampilkan di HP" checked={v.stickyCta.show} onChange={(x) => set("stickyCta", { ...v.stickyCta, show: x })} />
+        {v.stickyCta.show ? <LField label="Teks tombol" value={v.stickyCta.text} onChange={(x) => set("stickyCta", { ...v.stickyCta, text: x })} max={32} /> : null}
+      </Card>
+
+      <Card title="CV" description="Tombol unduh di bagian Tentang. Tidak tampil selama belum ada file.">
+        <PdfField label="File CV (PDF, maks. 8 MB)" value={v.cv.url} onChange={(url) => set("cv", { ...v.cv, url })}
+          hint="Pastikan CV tidak memuat data yang tidak ingin dipublikasikan (alamat rumah, NIK). Mengganti atau menghapus CV di sini tidak menghapus file lamanya; bila perlu, hapus di Supabase → Storage → media → files." />
+        <LField label="Teks tombol" value={v.cv.label} onChange={(x) => set("cv", { ...v.cv, label: x })} max={40} />
       </Card>
 
       <Card title="Bilah info & ketersediaan">

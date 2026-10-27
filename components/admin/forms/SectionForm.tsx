@@ -1,6 +1,7 @@
 "use client";
 import type { L, LineKey, SectionKey, Sections } from "@/lib/content/types";
-import { LINE_KEYS } from "@/lib/content/constants";
+import { FONT_KEYS, LINE_KEYS } from "@/lib/content/constants";
+import { FONT_FAMILY, FONT_LABEL, FONT_WEIGHT } from "@/lib/font-family";
 import { saveSectionAction } from "@/app/admin/actions";
 import { useAdmin } from "../context";
 import { SaveBar, useEditor } from "../editor";
@@ -31,6 +32,25 @@ export function SectionForm<K extends SectionKey>({ sectionKey, initial, lineNam
                 <LField label="Tombol utama (WhatsApp)" value={h.ctaPrimary} onChange={(x) => set({ ctaPrimary: x } as never)} />
                 <LField label="Tombol kedua (ke Karya)" value={h.ctaSecondary} onChange={(x) => set({ ctaSecondary: x } as never)} />
               </div>
+            </Card>
+            <Card title="Deretan klien" description="Nama klien di bawah hero, masing-masing dengan huruf mereknya. Klik nama membawa ke ruangnya."
+              aside={<Toggle label="Tampilkan" checked={h.clients.visible} onChange={(x) => set({ clients: { ...h.clients, visible: x } } as never)} />}>
+              <LField label="Judul kecil" value={h.clients.title} onChange={(x) => set({ clients: { ...h.clients, title: x } } as never)} max={60} />
+              <ListField label="Klien" items={h.clients.items} max={12} addLabel="Tambah klien"
+                onChange={(items) => set({ clients: { ...h.clients, items } } as never)}
+                create={() => ({ name: "Nama klien", font: "schibsted" as const, uppercase: false, projectSlug: "" })}
+                itemTitle={(it) => it.name}
+                render={(it, put) => (
+                  <>
+                    <div className="adm-grid-2">
+                      <TextField label="Nama" value={it.name} onChange={(name) => put({ ...it, name })} max={40} />
+                      <Select label="Huruf" value={it.font} options={FONT_KEYS.map((k) => ({ value: k, label: FONT_LABEL[k] }))} onChange={(font) => put({ ...it, font })} />
+                      <Select label="Tautan ke ruang" value={it.projectSlug} options={[{ value: "", label: "Tanpa tautan" }, ...projectOptions]} onChange={(projectSlug) => put({ ...it, projectSlug })} />
+                    </div>
+                    <Toggle label="Huruf kapital semua" checked={it.uppercase} onChange={(uppercase) => put({ ...it, uppercase })} />
+                    <p className="adm-hint" style={{ fontFamily: FONT_FAMILY[it.font], fontWeight: FONT_WEIGHT[it.font], fontSize: 24, color: "var(--a-ink)", textTransform: it.uppercase ? "uppercase" : "none", letterSpacing: it.uppercase ? "0.08em" : undefined }}>{it.name}</p>
+                  </>
+                )} />
             </Card>
             <Card title="Denah jalur" description="Nama stasiun diatur di tiap proyek (Label denah), nama jalur di menu Jalur & warna.">
               <LField label="Teks di tengah denah" value={h.mapCenter} onChange={(x) => set({ mapCenter: x } as never)} max={20} />
@@ -80,12 +100,14 @@ export function SectionForm<K extends SectionKey>({ sectionKey, initial, lineNam
             <LField label="Label contoh" value={s.proofLabel} onChange={(x) => set({ proofLabel: x } as never)} />
             <ListField label="Daftar layanan" items={s.items} max={8} addLabel="Tambah layanan"
               onChange={(items) => set({ items } as never)}
-              create={() => ({ line: "found" as LineKey, text: emptyL(), proof: [] })}
+              create={() => ({ line: "found" as LineKey, text: emptyL(), proof: [], price: emptyL() })}
               itemTitle={(it) => lineNames[it.line]}
               render={(it, put) => (
                 <>
                   <Select label="Jalur (judul & warna)" value={it.line} options={LINE_KEYS.map((k) => ({ value: k, label: lineNames[k] }))} onChange={(line) => put({ ...it, line })} />
                   <LField label="Penjelasan" value={it.text} onChange={(text) => put({ ...it, text })} multiline rows={3} />
+                  <LField label="Harga (opsional)" value={it.price} onChange={(price) => put({ ...it, price })} max={60}
+                    placeholder={{ id: "Mulai Rp …", en: "From IDR …" }} hint="Kosongkan bila tidak ingin menampilkan harga." />
                   <Checks label="Contoh proyek" values={it.proof} options={projectOptions} onChange={(proof) => put({ ...it, proof })} />
                 </>
               )} />
@@ -99,11 +121,13 @@ export function SectionForm<K extends SectionKey>({ sectionKey, initial, lineNam
             <LField label="Judul bagian" value={p.title} onChange={(x) => set({ title: x } as never)} />
             <ListField label="Langkah" items={p.steps} max={8} addLabel="Tambah langkah"
               onChange={(steps) => set({ steps } as never)}
-              create={() => ({ title: emptyL(), text: emptyL() })}
+              create={() => ({ title: emptyL(), text: emptyL(), duration: emptyL() })}
               itemTitle={(it, i) => `${i + 1}. ${preview(it.title)}`}
               render={(it, put) => (
                 <>
                   <LField label="Judul langkah" value={it.title} onChange={(title) => put({ ...it, title })} />
+                  <LField label="Perkiraan waktu (opsional)" value={it.duration} onChange={(duration) => put({ ...it, duration })} max={40}
+                    placeholder={{ id: "mis. 1–2 minggu", en: "e.g. 1–2 weeks" }} hint="Tampil sebagai label kecil di bawah judul. Kosongkan bila tidak perlu." />
                   <LField label="Penjelasan" value={it.text} onChange={(text) => put({ ...it, text })} multiline rows={3} />
                 </>
               )} />
@@ -146,6 +170,20 @@ export function SectionForm<K extends SectionKey>({ sectionKey, initial, lineNam
               onChange={(skills) => set({ skills } as never)} create={emptyL}
               itemTitle={(it) => preview(it) || "Keahlian baru"}
               render={(it, put) => <LField label="Label" value={it} onChange={put} max={40} />} />
+            <LField label="Judul riwayat kerja" value={a.experienceTitle} onChange={(x) => set({ experienceTitle: x } as never)} max={40} />
+            <ListField label="Riwayat kerja" items={a.experience} max={8} addLabel="Tambah pengalaman"
+              hint="Untuk recruiter. File CV diatur di Pengaturan situs."
+              onChange={(experience) => set({ experience } as never)}
+              create={() => ({ period: emptyL(), role: emptyL(), org: emptyL(), text: emptyL() })}
+              itemTitle={(it) => `${preview(it.period)} · ${preview(it.role)}`}
+              render={(it, put) => (
+                <>
+                  <LField label="Periode" value={it.period} onChange={(period) => put({ ...it, period })} max={30} placeholder={{ id: "2024 – sekarang", en: "2024 – present" }} />
+                  <LField label="Tempat" value={it.org} onChange={(org) => put({ ...it, org })} max={80} />
+                  <LField label="Peran" value={it.role} onChange={(role) => put({ ...it, role })} max={80} />
+                  <LField label="Keterangan" value={it.text} onChange={(text) => put({ ...it, text })} multiline rows={3} />
+                </>
+              )} />
           </Card>
         );
       }

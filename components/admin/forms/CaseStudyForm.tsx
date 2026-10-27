@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import type { Block, CaseStudy, Img, L } from "@/lib/content/types";
+import type { Block, CaseStudy, Img, L, Theme } from "@/lib/content/types";
 import { BLOCK_LABEL, newBlock } from "@/lib/admin/defaults";
 import { saveCaseStudyAction } from "@/app/admin/actions";
 import { SaveBar, useEditor } from "../editor";
@@ -80,10 +80,28 @@ function BlockEditor({ block, onChange }: { block: Block; onChange: (b: Block) =
           <LField label="Dibangun dengan" value={block.stack} onChange={(stack) => onChange({ ...block, stack })} multiline rows={2} />
         </>
       );
+    case "results":
+      return (
+        <>
+          {title}
+          <ListField label="Hasil" items={block.items} max={6} addLabel="Tambah hasil" create={() => ({ before: "", after: "1", label: emptyL() })}
+            hint="Angka nyata saja. Contoh: sebelum 2 hari → sesudah 1 jam, keterangan: waktu menyusun payroll."
+            onChange={(items) => onChange({ ...block, items })} itemTitle={(r) => `${r.before ? `${r.before} → ` : ""}${r.after}`}
+            render={(r, put) => (
+              <div className="adm-grid">
+                <div className="adm-grid-2">
+                  <TextField label="Sebelum (opsional)" value={r.before} max={24} onChange={(before) => put({ ...r, before })} placeholder="mis. 2 hari" />
+                  <TextField label="Sesudah" value={r.after} max={24} onChange={(after) => put({ ...r, after })} placeholder="mis. 1 jam" />
+                </div>
+                <LField label="Keterangan" value={r.label} onChange={(label) => put({ ...r, label })} max={90} />
+              </div>
+            )} />
+        </>
+      );
   }
 }
 
-export function CaseStudyForm({ initial, projectName, viewHref }: { initial: CaseStudy; projectName: string; viewHref: string }) {
+export function CaseStudyForm({ initial, projectName, projectTheme, viewHref }: { initial: CaseStudy; projectName: string; projectTheme: Theme; viewHref: string }) {
   const ed = useEditor(initial, saveCaseStudyAction);
   const v = ed.value;
   const set = ed.setField;
@@ -105,7 +123,15 @@ export function CaseStudyForm({ initial, projectName, viewHref }: { initial: Cas
 
       <Card title="Warna halaman" aside={<Toggle label="Warna khusus" checked={!!v.theme} onChange={(on) => set("theme", on ? v.theme ?? shell : undefined)} />}
         description="Tanpa warna khusus, halaman memakai warna netral situs (ikut mode terang/gelap pengunjung).">
-        {v.theme ? <ThemeField value={v.theme} onChange={(theme) => set("theme", theme)} /> : null}
+        {v.theme ? (
+          <>
+            <div className="adm-image-tools">
+              <button type="button" className="adm-btn adm-btn-small" onClick={() => set("theme", { ...projectTheme })}>Salin warna ruang proyek</button>
+              <span className="adm-hint">Warna dinding ruang yang gelap atau terang sekali kurang nyaman untuk teks panjang; sesuaikan bila perlu.</span>
+            </div>
+            <ThemeField value={v.theme} onChange={(theme) => set("theme", theme)} />
+          </>
+        ) : null}
       </Card>
 
       <Card title="Isi (blok)" description="Susun cerita dari blok. Urutan di sini adalah urutan di halaman.">

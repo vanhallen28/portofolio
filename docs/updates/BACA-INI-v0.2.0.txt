@@ -1,0 +1,106 @@
+PORTOFOLIO v0.2.0 — BACA INI DULU
+================================================================
+
+Yang baru (semuanya bisa diubah di admin):
+
+- Bilah "Chat WhatsApp" yang menempel di bawah layar HP. Otomatis
+  sembunyi saat tombol WhatsApp lain (hero, kontak) atau footer
+  sedang terlihat.
+- Deretan klien di bawah hero, tiap nama memakai huruf mereknya.
+- Kalimat hasil di ruang HRIS dan Portal Klien.
+- FAQ tampil dengan 6 pertanyaan (biaya, waktu, ubah isi sendiri,
+  pembayaran, hosting, dukungan).
+- Riwayat kerja di bagian Tentang + tombol Unduh CV (muncul setelah
+  Anda mengunggah PDF di Pengaturan situs → CV).
+- Kolom harga per layanan dan perkiraan waktu per langkah Cara kerja
+  (kosong = tidak tampil).
+- Studi kasus memakai warna merek kliennya masing-masing.
+- Blok studi kasus baru "Hasil (sebelum → sesudah)".
+
+Tidak ada file yang dihapus.
+
+
+1. PASANG (salin-tempel di Terminal)
+----------------------------------------------------------------
+
+  cd ~/Documents/Virgiawan/PROJECT/portofolio
+  unzip -o ~/Downloads/portofolio-v0.2.0.zip -d .
+  npm install
+  npm run build
+  git add -A
+  git commit -m "v0.2.0: bilah WhatsApp, klien, FAQ, CV, studi kasus berwarna"
+  git push
+
+Push berhasil bila diakhiri "main -> main" dan tidak ada baris
+"error:" atau "fatal:". Cek dengan: git status
+
+
+2. SUPABASE
+----------------------------------------------------------------
+
+A. Supabase BELUM disiapkan:
+   Ikuti README langkah 2–6 seperti biasa. supabase/seed.sql di versi
+   ini sudah berisi semua konten baru. Tidak perlu langkah tambahan.
+
+B. Supabase SUDAH berjalan (sudah menjalankan seed.sql versi lama):
+
+   Urutannya penting:
+   - Tunggu dulu sampai deploy v0.2.0 di Vercel berstatus Ready.
+     (Kode lama belum mengenal blok Hasil; bila SQL dijalankan lebih
+     dulu, dua halaman studi kasus hilang sementara.)
+   - Jalankan SQL SEBELUM mengubah apa pun di admin. (Bila Hero,
+     Tentang, atau proyek disimpan dulu, deretan klien, riwayat kerja,
+     dan kalimat hasil tidak akan terisi otomatis; Anda bisa
+     mengisinya manual di admin.)
+
+   Di Supabase → SQL Editor, jalankan berurutan:
+
+   1) supabase/migrations/0001_init.sql
+      (aman diulang; menambahkan izin upload PDF untuk CV)
+   2) supabase/updates/v0.2.0.sql
+      (mengisi deretan klien, FAQ, riwayat kerja, kalimat hasil,
+       warna studi kasus, dan blok Hasil. Hanya mengisi yang belum
+       ada; hasil edit Anda di admin tidak disentuh. Berjalan sekali
+       saja: menjalankannya lagi tidak mengubah apa pun)
+
+   Di Mac, cara cepat menyalin isinya:
+     pbcopy < supabase/migrations/0001_init.sql
+     pbcopy < supabase/updates/v0.2.0.sql
+
+   Lalu buka admin, simpan apa saja (mis. Pengaturan situs →
+   Simpan) atau tunggu ± 10 menit agar situs memuat isi baru.
+
+
+3. MOHON DICEK
+----------------------------------------------------------------
+
+[ ] FAQ langsung tampil. Jawabannya tanpa angka harga, tapi memuat
+    cara kerja yang mewakili Anda: obrolan pertama gratis, penawaran
+    tertulis berisi rincian per fitur dan jadwal, rilis bertahap,
+    panel admin + panduan, perbaikan dikirim sebagai paket update
+    bernomor, masa dukungan disepakati di penawaran. Ubah atau
+    matikan (admin → FAQ → Tampilkan) bila ada yang tidak sesuai.
+[ ] Riwayat kerja: periode Studio Manager tertulis "Sekarang".
+    Isi tahun mulainya bila mau (admin → Tentang → Riwayat kerja).
+[ ] Kalimat hasil dan blok Hasil memakai angka dari dokumen proyek:
+    HRIS "± 6 aplikasi → 1 login", Portal Klien "66 → 0 uji hak akses
+    yang gagal". Ganti dengan angka hasil bisnis yang lebih kuat
+    bila ada (mis. waktu payroll, jumlah chat masuk).
+[ ] Harga layanan dan perkiraan waktu sengaja dikosongkan. Isi bila
+    ingin ditampilkan.
+[ ] Testimoni masih kosong. Begitu ada 1–3 kutipan klien, isi di
+    admin → Testimoni lalu nyalakan Tampilkan.
+[ ] CV: unggah PDF di Pengaturan situs → CV. Hapus alamat rumah atau
+    NIK dari CV sebelum diunggah; file ini bisa diunduh siapa saja.
+    Mengganti CV tidak menghapus file lama: bila perlu, hapus di
+    Supabase → Storage → media → files.
+[ ] Deretan klien berjudul "Proyek untuk": Aliya Syifaa, Invisual
+    Studio, Biansa, Ciri, Internet Bandung. Ciri masih dalam review
+    klien dan Biansa belum tayang; hapus dari deretan bila klien
+    belum mengizinkan namanya dipajang (admin → Hero & denah).
+
+
+Hasil pemeriksaan sebelum zip dibuat: lint ✓, typecheck ✓,
+54 uji unit & database ✓ (termasuk uji pembaruan database dari
+v0.1.x), 23 uji end-to-end ✓, build produksi ✓, review independen ✓
+(temuannya sudah diperbaiki).

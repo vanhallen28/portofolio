@@ -22,7 +22,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <p>Halaman {workPath("id", p.slug)} dan {workPath("en", p.slug)}. Judul, warna huruf, dan link diambil dari data proyek.</p>
         </div>
       </div>
-      {study ? <CaseStudyForm key={p.slug} initial={study} projectName={p.name} viewHref={workPath("id", p.slug)} /> : <CreateCase projectId={p.id} />}
+      {study ? <CaseStudyForm key={p.slug} initial={study} projectName={p.name} projectTheme={p.theme} viewHref={workPath("id", p.slug)} /> : <CreateCase projectId={p.id} />}
     </>
   );
 }

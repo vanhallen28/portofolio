@@ -203,7 +203,42 @@ try {
     assert(r.ok && r.headers.get("content-type") === "image/png", `og:image ${r.status} ${r.headers.get("content-type")}`);
   });
 
+  await test("deretan klien, FAQ, dan riwayat kerja tampil", async () => {
+    await p.goto(`${BASE}/`);
+    const clients = seed.sections.hero.clients.items.length;
+    assert((await p.locator(".clients-list li").count()) === clients, "jumlah klien salah");
+    assert((await p.locator(".clients-list a").first().getAttribute("href")).startsWith("#ruang-"), "nama klien tidak menuju ruangnya");
+    assert((await p.locator(".faq-list details").count()) === seed.sections.faq.items.length, "FAQ tidak lengkap");
+    assert((await p.locator(".exp-list li").count()) === seed.sections.about.experience.length, "riwayat kerja tidak tampil");
+    const withResult = seed.projects.find((x) => x.result);
+    assert(await p.isVisible(`#ruang-${withResult.slug} .room-result`), "kalimat hasil tidak tampil di ruang");
+  });
+
+  await test("studi kasus memakai warna kliennya dan menampilkan blok hasil", async () => {
+    const cs = seed.caseStudies.find((c) => c.theme && c.blocks.some((b) => b.type === "results"));
+    await p.goto(`${BASE}/karya/${cs.projectSlug}`);
+    const wall = await p.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue("--wall").trim().toUpperCase());
+    assert(wall === cs.theme.wall.toUpperCase(), `--wall ${wall}, harusnya ${cs.theme.wall}`);
+    assert(await p.isVisible(".case-results .res-after"), "blok hasil tidak tampil");
+  });
+
   await p.context().close();
+
+  await test("bilah WhatsApp di HP muncul setelah hero dan sembunyi di kontak", async () => {
+    const m = await page({ viewport: { width: 390, height: 844 }, hasTouch: true });
+    await m.goto(`${BASE}/`);
+    await m.waitForTimeout(500);
+    const hidden = () => m.$eval("[data-sticky-cta]", (el) => el.classList.contains("is-hidden"));
+    assert(await hidden(), "bilah tampil padahal tombol hero masih terlihat");
+    await m.evaluate(() => document.getElementById("karya").scrollIntoView({ behavior: "instant" }));
+    await m.waitForTimeout(700);
+    assert(!(await hidden()), "bilah tidak muncul setelah hero");
+    assert((await m.getAttribute("[data-sticky-cta] a", "href")).startsWith("https://wa.me/"), "link bilah bukan WhatsApp");
+    await m.evaluate(() => document.getElementById("kontak").scrollIntoView({ behavior: "instant" }));
+    await m.waitForTimeout(700);
+    assert(await hidden(), "bilah tidak sembunyi di bagian kontak");
+    await m.context().close();
+  });
 
   await test("menu HP terbuka dan tertutup", async () => {
     const m = await page({ viewport: { width: 390, height: 844 }, hasTouch: true });
@@ -301,6 +336,19 @@ try {
     assert(r.ok && r.headers.get("content-type") === "image/webp", `gambar upload ${r.status}`);
     await saveAndWait(a);
     assert(await pageHas(`${BASE}/`, url), "foto baru tidak tampil di beranda");
+  });
+
+  await test("CV PDF diunggah dan tombol unduhnya tampil", async () => {
+    await a.goto(`${BASE}/admin/settings`);
+    const cv = a.locator(".adm-card").filter({ hasText: "File CV" });
+    await cv.locator('input[type=file]').setInputFiles(path.join(ROOT, "tests/e2e/fixture.pdf"));
+    await a.waitForFunction(() => [...document.querySelectorAll(".adm-card input.adm-input")].some((i) => i.value.endsWith(".pdf")));
+    await saveAndWait(a);
+    const html = await (await fetch(`${BASE}/`)).text();
+    const m = /href="(\/media-local\/[0-9a-f-]+\.pdf)"/.exec(html);
+    assert(m, "tombol CV tidak tampil di beranda");
+    const r = await fetch(`${BASE}${m[1]}`);
+    assert(r.ok && r.headers.get("content-type") === "application/pdf", `PDF ${r.status}`);
   });
 
   await test("data tidak valid ditolak dengan pesan jelas", async () => {

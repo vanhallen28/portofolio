@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import { SiteScript } from "@/components/motion/SiteScript";
 import type { Block, CaseStudy, Content, Img, Lang, Project } from "@/lib/content/types";
+import { luminance } from "@/lib/contrast";
 import { FONT_FAMILY } from "@/lib/font-family";
 import { homePath, t, workPath } from "@/lib/i18n";
 import { caseHref, hostOf, lineMap, roomId } from "@/lib/site";
@@ -69,6 +70,30 @@ function BlockView({ block: b, lang }: { block: Block; lang: Lang }) {
           </ul>
         </section>
       );
+    case "results":
+      return (
+        <section className="case-block case-results">
+          {title}
+          <ul className="results">
+            {b.items.map((it, i) => (
+              <li key={i}>
+                <p className="res-fig">
+                  {it.before ? (
+                    <>
+                      <span className="sr-only">{ui(lang).before} </span>
+                      <span className="res-before">{it.before}</span>
+                      <span className="res-arrow" aria-hidden="true">→</span>
+                      <span className="sr-only"> {ui(lang).after} </span>
+                    </>
+                  ) : null}
+                  <span className="res-after">{it.after}</span>
+                </p>
+                <p className="res-label">{t(it.label, lang)}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      );
     case "numbers":
       return (
         <section className="case-block case-numbers">
@@ -86,7 +111,8 @@ function BlockView({ block: b, lang }: { block: Block; lang: Lang }) {
 function themeCss(study: CaseStudy): string {
   const th = study.theme;
   if (!th) return "";
-  return `:root{--wall:${th.wall};--chrome:${th.wall};--ink:${th.ink};--muted:${th.muted};--accent:${th.accent};--btn-bg:${th.btnBg};--btn-ink:${th.btnInk};color-scheme:light}`;
+  const scheme = luminance(th.wall) < 0.2 ? "dark" : "light"; // scrollbars and form controls match the wall
+  return `:root{--wall:${th.wall};--chrome:${th.wall};--ink:${th.ink};--muted:${th.muted};--accent:${th.accent};--btn-bg:${th.btnBg};--btn-ink:${th.btnInk};color-scheme:${scheme}}`;
 }
 
 export function CaseStudyPage({ content, lang, project: p, study }: Props) {
@@ -99,6 +125,8 @@ export function CaseStudyPage({ content, lang, project: p, study }: Props) {
   const font = {
     "--case-font": FONT_FAMILY[p.titleFont],
     "--case-weight": p.titleStyle.weight,
+    "--case-case": p.titleStyle.uppercase ? "uppercase" : "none",
+    "--case-track": `${p.titleStyle.tracking}em`,
   } as CSSProperties;
 
   return (

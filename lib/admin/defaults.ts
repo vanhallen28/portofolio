@@ -14,7 +14,7 @@ export function newProject(id: string, existing: Project[]): Project {
     meta: l("Bidang klien, tahun", "Client field, year"), text: l(), lines: ["found"],
     theme: { wall: "#F3F3F1", ink: "#151619", muted: "#5C5F65", accent: "#2F6FE4", btnBg: "#151619", btnInk: "#F3F3F1" },
     facts: [], status: null, liveUrl: "", liveLabel: "", liveNote: null, previewUrl: "",
-    layout: "desk-phone", visuals: [], brand: null, pattern: "none",
+    layout: "desk-phone", visuals: [], brand: null, pattern: "none", result: null,
   };
 }
 
@@ -33,6 +33,7 @@ export function newBlock(type: Block["type"]): Block {
     case "flow": return { type, title: l("Alurnya", "The flow"), steps: [l(), l(), l()] };
     case "decisions": return { type, title: l("Keputusan penting", "Key decisions"), items: [{ title: l(), text: l() }] };
     case "numbers": return { type, title: l("Dalam angka", "By the numbers"), facts: [{ value: "1", label: l() }], stack: l("Dibangun dengan ", "Built with ") };
+    case "results": return { type, title: l("Hasilnya", "The outcome"), items: [{ before: "", after: "1", label: l() }] };
   }
 }
 
@@ -42,4 +43,5 @@ export const BLOCK_LABEL: Record<Block["type"], string> = {
   flow: "Alur bernomor",
   decisions: "Keputusan penting",
   numbers: "Angka & stack",
+  results: "Hasil (sebelum → sesudah)",
 };

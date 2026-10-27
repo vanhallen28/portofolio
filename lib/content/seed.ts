@@ -1,4 +1,4 @@
-import type { CaseStudy, Content, Img, L, Line, Project, Sections, SiteSettings } from "./types";
+import type { Block, CaseStudy, Content, Img, L, Line, Project, Sections, SiteSettings, Theme } from "./types";
 import { SEED_CASES } from "./seed-cases";
 
 /* Initial content. Everything here is editable from /admin; this file is only the first fill
@@ -36,6 +36,8 @@ export const seedSettings: SiteSettings = {
     "Portfolio of Virgiawan Listanto, a digital product designer and developer in Bandung. Eight systems that run real businesses.",
   ),
   availability: { show: false, text: l("Menerima proyek baru", "Taking on new projects") },
+  stickyCta: { show: true, text: l("Chat WhatsApp", "Chat on WhatsApp") },
+  cv: { url: "", label: l("Unduh CV (PDF)", "Download CV (PDF)") },
   ui: {
     skip: l("Langsung ke isi", "Skip to content"),
     nav: {
@@ -76,6 +78,17 @@ export const seedSections: Sections = {
       "Denah pameran. Empat sisi bisnis membentuk satu putaran, dan setiap karya adalah stasiun di jalurnya. Pilih stasiun untuk masuk ke ruangnya.",
       "Exhibition map. Four sides of a business form one loop, and each project is a station on its line. Pick a station to enter its room.",
     ),
+    clients: {
+      visible: true,
+      title: l("Proyek untuk", "Projects for"),
+      items: [
+        { name: "Aliya Syifaa", font: "marcellus", uppercase: false, projectSlug: "aliya-syifaa" },
+        { name: "Invisual Studio", font: "host", uppercase: false, projectSlug: "website-invisual" },
+        { name: "Biansa", font: "marcellus", uppercase: true, projectSlug: "biansa" },
+        { name: "Ciri", font: "cormorant", uppercase: true, projectSlug: "ciri" },
+        { name: "Internet Bandung", font: "jakarta", uppercase: false, projectSlug: "internet-bandung" },
+      ],
+    },
   },
   works: {
     title: l("Karya", "Work"),
@@ -100,20 +113,20 @@ export const seedSections: Sections = {
     title: l("Apa yang bisa saya bangun untuk bisnis Anda", "What I can build for your business"),
     proofLabel: l("Contoh:", "See:"),
     items: [
-      { line: "found", text: l("Website dan landing page yang bisa Anda ubah sendiri, siap untuk mesin pencari, dan mengarahkan pengunjung ke WhatsApp.", "Websites and landing pages you can edit yourself, ready for search engines, that send visitors to WhatsApp."), proof: ["website-invisual", "internet-bandung", "aliya-syifaa"] },
-      { line: "sell", text: l("Toko online dengan QRIS, virtual account, dan e-wallet, aplikasi kasir, dan stok yang selalu cocok dengan rak.", "Online stores with QRIS, virtual accounts and e-wallets, point-of-sale apps, and stock that always matches the shelf."), proof: ["biansa", "ciri", "point-pos", "internet-bandung"] },
-      { line: "serve", text: l("Portal klien dan aplikasi pelanggan: pemesanan, persetujuan, tagihan, dan riwayat, semuanya dari HP.", "Client portals and customer apps: bookings, approvals, invoices and history, all from the phone."), proof: ["aliya-syifaa", "portal-klien"] },
-      { line: "run", text: l("Sistem internal: absensi, payroll, tugas tim, keuangan, dan arsip dokumen di balik satu login.", "Internal systems: attendance, payroll, team tasks, finance and documents behind one login."), proof: ["invisual-hris", "point-pos", "portal-klien"] },
+      { line: "found", text: l("Website dan landing page yang bisa Anda ubah sendiri, siap untuk mesin pencari, dan mengarahkan pengunjung ke WhatsApp.", "Websites and landing pages you can edit yourself, ready for search engines, that send visitors to WhatsApp."), proof: ["website-invisual", "internet-bandung", "aliya-syifaa"], price: l("", "") },
+      { line: "sell", text: l("Toko online dengan QRIS, virtual account, dan e-wallet, aplikasi kasir, dan stok yang selalu cocok dengan rak.", "Online stores with QRIS, virtual accounts and e-wallets, point-of-sale apps, and stock that always matches the shelf."), proof: ["biansa", "ciri", "point-pos", "internet-bandung"], price: l("", "") },
+      { line: "serve", text: l("Portal klien dan aplikasi pelanggan: pemesanan, persetujuan, tagihan, dan riwayat, semuanya dari HP.", "Client portals and customer apps: bookings, approvals, invoices and history, all from the phone."), proof: ["aliya-syifaa", "portal-klien"], price: l("", "") },
+      { line: "run", text: l("Sistem internal: absensi, payroll, tugas tim, keuangan, dan arsip dokumen di balik satu login.", "Internal systems: attendance, payroll, team tasks, finance and documents behind one login."), proof: ["invisual-hris", "point-pos", "portal-klien"], price: l("", "") },
     ],
   },
   process: {
     visible: true,
     title: l("Cara kerja", "How we'll work"),
     steps: [
-      { title: l("Ngobrol dulu", "Start with a chat"), text: l("Ceritakan cara bisnis Anda berjalan hari ini, lewat WhatsApp atau tatap muka. Saya petakan bagian mana yang paling layak dibuatkan sistem lebih dulu.", "Tell me how your business runs today, on WhatsApp or in person. I map out which part is most worth turning into a system first.") },
-      { title: l("Rancangan yang bisa diklik", "A design you can click"), text: l("Sebelum kode ditulis, Anda menerima prototipe yang bisa dicoba di HP dan laptop, seperti preview toko Ciri.", "Before any code is written, you get a prototype to try on your phone and laptop, like the Ciri store preview.") },
-      { title: l("Dibangun dan dirilis bertahap", "Built and released in steps"), text: l("Fitur dirilis sedikit demi sedikit supaya Anda bisa mencoba dan memberi masukan sejak awal. Aliya Syifaa melewati 19 versi dalam sembilan hari.", "Features ship a little at a time so you can try them and give feedback early. Aliya Syifaa went through 19 versions in nine days.") },
-      { title: l("Serah terima yang jelas", "A clear handover"), text: l("Anda mendapat panduan berbahasa Indonesia yang bisa diikuti langkah demi langkah, dan panel admin untuk mengurus isi tanpa developer.", "You get a step-by-step guide in Indonesian and an admin panel to manage content without a developer.") },
+      { title: l("Ngobrol dulu", "Start with a chat"), text: l("Ceritakan cara bisnis Anda berjalan hari ini, lewat WhatsApp atau tatap muka. Saya petakan bagian mana yang paling layak dibuatkan sistem lebih dulu.", "Tell me how your business runs today, on WhatsApp or in person. I map out which part is most worth turning into a system first."), duration: l("", "") },
+      { title: l("Rancangan yang bisa diklik", "A design you can click"), text: l("Sebelum kode ditulis, Anda menerima prototipe yang bisa dicoba di HP dan laptop, seperti preview toko Ciri.", "Before any code is written, you get a prototype to try on your phone and laptop, like the Ciri store preview."), duration: l("", "") },
+      { title: l("Dibangun dan dirilis bertahap", "Built and released in steps"), text: l("Fitur dirilis sedikit demi sedikit supaya Anda bisa mencoba dan memberi masukan sejak awal. Aliya Syifaa melewati 19 versi dalam sembilan hari.", "Features ship a little at a time so you can try them and give feedback early. Aliya Syifaa went through 19 versions in nine days."), duration: l("", "") },
+      { title: l("Serah terima yang jelas", "A clear handover"), text: l("Anda mendapat panduan berbahasa Indonesia yang bisa diikuti langkah demi langkah, dan panel admin untuk mengurus isi tanpa developer.", "You get a step-by-step guide in Indonesian and an admin panel to manage content without a developer."), duration: l("", "") },
     ],
   },
   testimonials: { visible: false, title: l("Kata klien", "What clients say"), items: [] },
@@ -127,8 +140,56 @@ export const seedSections: Sections = {
         "Outside the studio I help other businesses, from a home-care service to a clothing label, move their daily work into tidy systems. I handle all of it myself: interface design, code, database, payments and release."),
     ],
     skills: [l("Desain antarmuka", "Interface design"), l("Next.js & React", "Next.js & React"), l("Supabase & PostgreSQL", "Supabase & PostgreSQL"), l("Midtrans & Xendit", "Midtrans & Xendit"), l("Aplikasi PWA", "Installable web apps")],
+    experienceTitle: l("Pengalaman", "Experience"),
+    experience: [
+      {
+        period: l("Sekarang", "Present"), role: l("Studio Manager", "Studio Manager"), org: l("Invisual Studio, Bandung", "Invisual Studio, Bandung"),
+        text: l("Mengurus operasional studio desain sekaligus membangun seluruh sistemnya: website dan CMS, portal klien, dan HRIS yang dipakai 25 orang.",
+          "Running a design studio's operations while building all of its systems: the website and CMS, the client portal, and an HRIS used by 25 people."),
+      },
+      {
+        period: l("2026", "2026"), role: l("Desainer & pengembang mandiri", "Independent designer & developer"), org: l("Proyek klien", "Client projects"),
+        text: l("Sistem untuk Aliya Syifaa, Biansa, dan Internet Bandung, serta prototipe Ciri dan POINT POS: dari desain tampilan sampai database, pembayaran, dan rilis.",
+          "Systems for Aliya Syifaa, Biansa and Internet Bandung, plus the Ciri and POINT POS prototypes: from interface design to database, payments and release."),
+      },
+    ],
   },
-  faq: { visible: false, title: l("Pertanyaan yang sering diajukan", "Frequently asked questions"), items: [] },
+  faq: {
+    visible: true,
+    title: l("Pertanyaan yang sering diajukan", "Frequently asked questions"),
+    items: [
+      {
+        q: l("Berapa biaya membuat sistem untuk bisnis saya?", "How much does a system for my business cost?"),
+        a: l("Tergantung bagian bisnis mana yang perlu dibuatkan sistem. Setelah obrolan pertama yang gratis, Anda menerima penawaran tertulis dengan rincian per fitur dan jadwalnya, jadi angkanya jelas sebelum pekerjaan dimulai.",
+          "It depends on which part of your business needs a system. After a free first chat you get a written quote broken down by feature, with a schedule, so the numbers are clear before any work starts."),
+      },
+      {
+        q: l("Berapa lama pengerjaannya?", "How long does it take?"),
+        a: l("Fitur dirilis bertahap, jadi Anda sudah bisa mencoba bagian pertama sebelum semuanya selesai. Sebagai gambaran, sistem Aliya Syifaa melewati 19 versi dalam sembilan hari pertama. Perkiraan waktu untuk proyek Anda ada di penawaran.",
+          "Features ship in steps, so you can try the first part before everything is finished. For reference, the Aliya Syifaa system went through 19 versions in its first nine days. The estimate for your project is in the quote."),
+      },
+      {
+        q: l("Apakah saya bisa mengubah isi sendiri tanpa developer?", "Can I change the content myself, without a developer?"),
+        a: l("Bisa. Setiap sistem dilengkapi panel admin untuk mengubah teks, harga, gambar, dan data lainnya, plus panduan berbahasa Indonesia yang bisa diikuti langkah demi langkah.",
+          "Yes. Every system comes with an admin panel for text, prices, images and other data, plus a step-by-step guide in Indonesian."),
+      },
+      {
+        q: l("Bisa terima pembayaran QRIS, virtual account, atau e-wallet?", "Can it take QRIS, virtual account or e-wallet payments?"),
+        a: l("Bisa. Toko dan portal yang saya bangun memakai payment gateway seperti Midtrans dan Xendit, dan status lunas baru berubah setelah pembayarannya terkonfirmasi.",
+          "Yes. The stores and portals I build use payment gateways such as Midtrans and Xendit, and an order only counts as paid once the payment is confirmed."),
+      },
+      {
+        q: l("Sistemnya disimpan di mana? Ada biaya bulanan?", "Where is the system hosted? Is there a monthly fee?"),
+        a: l("Biasanya situsnya di Vercel dan databasenya di Supabase. Biayanya mengikuti paket penyedia dan besarnya trafik, dibayar langsung ke penyedia, dan perkiraannya saya cantumkan di penawaran. Saya sarankan akun-akun itu atas nama bisnis Anda, supaya sistemnya sepenuhnya milik Anda.",
+          "Usually the site runs on Vercel and the database on Supabase. The cost follows the provider's plan and your traffic, is paid to the provider directly, and I include an estimate in the quote. I recommend putting those accounts in your business's name, so the system is fully yours."),
+      },
+      {
+        q: l("Bagaimana kalau ada masalah setelah selesai?", "What if something breaks after launch?"),
+        a: l("Setiap perbaikan dikirim sebagai paket update bernomor versi dengan panduan pasangnya, jadi jelas apa yang berubah. Masa dukungan setelah rilis disepakati di penawaran.",
+          "Every fix ships as a numbered update package with install steps, so it's always clear what changed. The support period after launch is agreed in the quote."),
+      },
+    ],
+  },
   contact: {
     title: l("Ceritakan bisnis Anda. Saya balas di WhatsApp.", "Tell me about your business. I'll reply on WhatsApp."),
     button: l("Chat di WhatsApp", "Chat on WhatsApp"),
@@ -136,7 +197,7 @@ export const seedSections: Sections = {
   },
 };
 
-const P = (p: Omit<Project, "published"> & { published?: boolean }): Project => ({ published: true, ...p });
+const P = (p: Omit<Project, "published" | "result"> & { published?: boolean; result?: L | null }): Project => ({ published: true, result: null, ...p });
 
 export const seedProjects: Project[] = [
   P({
@@ -175,6 +236,7 @@ export const seedProjects: Project[] = [
     ],
     status: null, liveUrl: "", liveLabel: "", liveNote: l("Versi live di hris.invisual.studio khusus tim", "The live version at hris.invisual.studio is team only"),
     previewUrl: "/preview/hris.html", layout: "back-desk",
+    result: l("Satu login menggantikan sekitar enam aplikasi langganan yang dulu dipakai terpisah.", "One login replaced about six subscription apps the studio used to run separately."),
     visuals: [
       { role: "back", image: img("hris-heatmap", 1600, 887, "Timesheet heatmap kehadiran harian per karyawan", "Daily attendance timesheet heatmap per employee") },
       { role: "desk", image: img("hris-dasbor", 1600, 903, "Dasbor HR: jumlah hadir, terlambat, WFH, log absensi live", "HR dashboard: present, late, WFH counts and live attendance log") },
@@ -221,6 +283,7 @@ export const seedProjects: Project[] = [
     ],
     status: l("Preview proyek menyusul", "Project preview coming soon"),
     liveUrl: "http://portal.invisual.studio/", liveLabel: "portal.invisual.studio", liveNote: null, previewUrl: "", layout: "two-phones",
+    result: l("Dimulai dari audit keamanan: 66 uji hak akses yang gagal kini semuanya lolos, sebelum fitur baru ditambahkan.", "It started with a security audit: 66 failing access tests now all pass, before any new feature was added."),
     visuals: [
       { role: "phone", image: img("portal-top", 640, 1023, "Beranda portal klien: status proyek dan kartu proyek", "Client portal home: project status and project card") },
       { role: "phone", image: img("portal-progres", 640, 1015, "Progres tahapan, batas feedback 48 jam, sisa revisi", "Stage progress, 48-hour feedback window, revisions left") },
@@ -355,10 +418,48 @@ export const aliyaCase: CaseStudy = {
   ],
 };
 
+/* Each case-study page wears its client's colours, as a light "paper" version of the room
+   (dark, saturated walls are tiring for long reading). Website Invisual keeps its dark brand. */
+const CASE_THEMES: Record<string, Theme> = {
+  "invisual-hris": { wall: "#FFF6E0", ink: "#111111", muted: "#4A4F63", accent: "#204DC6", btnBg: "#204DC6", btnInk: "#FFF6E0" },
+  biansa: { wall: "#F5F1E9", ink: "#2A241D", muted: "#5F5B45", accent: "#6E6A52", btnBg: "#2A241D", btnInk: "#F5F1E9" },
+  "portal-klien": { wall: "#FFF4E0", ink: "#110B28", muted: "#4B4766", accent: "#2243CE", btnBg: "#2243CE", btnInk: "#FFF4E0" },
+  ciri: { wall: "#F6F6F5", ink: "#2F3031", muted: "#5B5F63", accent: "#6B6F73", btnBg: "#2F3031", btnInk: "#F9F9F9" },
+  "website-invisual": { wall: "#101011", ink: "#F2F2F2", muted: "#A6A6AC", accent: "#F65294", btnBg: "#F65294", btnInk: "#101011" },
+  "internet-bandung": { wall: "#FFF5F9", ink: "#26202E", muted: "#5C5566", accent: "#D8006F", btnBg: "#D8006F", btnInk: "#FFFFFF" },
+  "point-pos": { wall: "#FBF8F2", ink: "#2B2620", muted: "#6B6355", accent: "#2F6BFF", btnBg: "#2B2620", btnInk: "#FBF8F2" },
+};
+
+/* Before → after, only where the figures come from the project itself. */
+const CASE_RESULTS: Record<string, Block> = {
+  "invisual-hris": {
+    type: "results", title: l("Hasilnya", "The outcome"),
+    items: [
+      { before: "± 6 aplikasi", after: "1 login", label: l("untuk absensi, tugas, chat, dan berkas studio", "for attendance, tasks, chat and studio files") },
+    ],
+  },
+  "portal-klien": {
+    type: "results", title: l("Hasilnya", "The outcome"),
+    items: [
+      { before: "66 gagal", after: "0 gagal", label: l("uji hak akses yang gagal dari 92 di audit awal, setelah diperbaiki", "failing access tests out of 92 in the first audit, after the fixes") },
+    ],
+  },
+};
+
+function withExtras(c: CaseStudy): CaseStudy {
+  const extra = CASE_RESULTS[c.projectSlug];
+  let blocks = c.blocks;
+  if (extra) {
+    const i = blocks.findIndex((b) => b.type === "numbers");
+    blocks = i < 0 ? [...blocks, extra] : [...blocks.slice(0, i), extra, ...blocks.slice(i)];
+  }
+  return { ...c, theme: c.theme ?? CASE_THEMES[c.projectSlug], blocks };
+}
+
 export const seed: Content = {
   settings: seedSettings,
   sections: seedSections,
   lines: seedLines,
   projects: seedProjects,
-  caseStudies: [aliyaCase, ...SEED_CASES],
+  caseStudies: [aliyaCase, ...SEED_CASES.map(withExtras)],
 };

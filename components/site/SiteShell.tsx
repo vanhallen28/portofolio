@@ -77,6 +77,20 @@ export function SiteShell({ content, lang, idHref, enHref, onHome, children }: P
         {t(s.footer, lang) ? <p>{t(s.footer, lang)}</p> : null}
         <a href="#atas">{t(s.ui.backToTop, lang)}</a>
       </footer>
+
+      {s.stickyCta.show && t(s.stickyCta.text, lang) ? (
+        <>
+          <div className="sticky-cta-space" aria-hidden="true"></div>
+          <div className="sticky-cta" data-sticky-cta>
+            <a className="btn" href={wa} target="_blank" rel="noopener">
+              <svg className="btn-ico" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H11l-4.6 3.8c-.5.4-1.4.1-1.4-.6V16h0A2.5 2.5 0 0 1 4 13.5v-8Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+              </svg>
+              {t(s.stickyCta.text, lang)}
+            </a>
+          </div>
+        </>
+      ) : null}
     </>
   );
 }

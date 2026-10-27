@@ -63,6 +63,7 @@ export function Room({ project: p, index, lines, works, lang, caseLink }: Props)
         <h3 className="room-title" style={titleVars(p)}>{p.name}</h3>
         {t(p.meta, lang) ? <p className="room-meta">{t(p.meta, lang)}</p> : null}
         {t(p.text, lang) ? <p className="room-text">{t(p.text, lang)}</p> : null}
+        {t(p.result, lang) ? <p className="room-result">{t(p.result, lang)}</p> : null}
         {p.facts.length ? (
           <dl className="facts" data-n={p.facts.length}>
             {p.facts.map((f, i) => (

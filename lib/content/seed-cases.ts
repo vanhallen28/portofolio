@@ -152,7 +152,6 @@ export const SEED_CASES: CaseStudy[] = [
         facts: [
           { value: "25", label: { id: "orang memakainya setiap hari", en: "people use it every day" } },
           { value: "8", label: { id: "modul di balik satu login", en: "modules behind one login" } },
-          { value: "6", label: { id: "aplikasi langganan digantikan", en: "subscription apps replaced" } },
           { value: "5", label: { id: "peran pengguna dengan akses berbeda", en: "user roles with different access" } },
         ],
         stack: {
@@ -429,7 +428,7 @@ export const SEED_CASES: CaseStudy[] = [
         type: "numbers",
         title: { id: "Dalam angka", en: "By the numbers" },
         facts: [
-          { value: "145", label: { id: "skenario hak akses diuji", en: "access scenarios tested" } },
+          { value: "145", label: { id: "skenario hak akses kini diuji otomatis", en: "access scenarios now tested automatically" } },
           { value: "3", label: { id: "cara bayar online: QRIS, VA, e-wallet", en: "ways to pay online: QRIS, VA, e-wallet" } },
           { value: "14", label: { id: "hari masa berlaku link persetujuan", en: "days an approval link stays valid" } },
           { value: "4", label: { id: "tahap di papan Kanban studio", en: "stages on the studio's Kanban board" } },

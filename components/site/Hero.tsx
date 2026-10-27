@@ -1,6 +1,8 @@
+import type { CSSProperties } from "react";
 import type { Content, Lang } from "@/lib/content/types";
+import { FONT_FAMILY, FONT_WEIGHT } from "@/lib/font-family";
 import { t } from "@/lib/i18n";
-import { waLink } from "@/lib/site";
+import { roomId, waLink } from "@/lib/site";
 import { TransitMap } from "./TransitMap";
 
 export function Hero({ content, lang }: { content: Content; lang: Lang }) {
@@ -19,6 +21,32 @@ export function Hero({ content, lang }: { content: Content; lang: Lang }) {
         </div>
       </div>
       <TransitMap content={content} lang={lang} />
+    </section>
+  );
+}
+
+/** Row of client wordmarks, each set in the client's own brand font. */
+export function Clients({ content, lang }: { content: Content; lang: Lang }) {
+  const c = content.sections.hero.clients;
+  if (!c.visible || !c.items.length) return null;
+  const live = new Set(content.projects.map((p) => p.slug));
+  return (
+    <section className="clients" aria-labelledby="clients-title">
+      <p className="clients-title" id="clients-title">{t(c.title, lang)}</p>
+      <ul className="clients-list">
+        {c.items.map((it, i) => {
+          const style = { fontFamily: FONT_FAMILY[it.font], fontWeight: FONT_WEIGHT[it.font], textTransform: it.uppercase ? "uppercase" : "none", letterSpacing: it.uppercase ? "0.08em" : undefined } as CSSProperties;
+          return (
+            <li key={i}>
+              {it.projectSlug && live.has(it.projectSlug) ? (
+                <a href={`#${roomId(it.projectSlug)}`} style={style}>{it.name}</a>
+              ) : (
+                <span style={style}>{it.name}</span>
+              )}
+            </li>
+          );
+        })}
+      </ul>
     </section>
   );
 }

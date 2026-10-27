@@ -129,10 +129,10 @@ Setiap `git push` ke `main` otomatis memicu deploy baru. Mengubah variabel lingk
 Masuk di `https://alamat-situs/admin`.
 
 - **Ringkasan**: semua bagian yang bisa diubah dan status setiap proyek.
-- **Pengaturan situs**: nama, kontak, WhatsApp, foto profil, judul & deskripsi untuk Google, bilah info, status ketersediaan.
-- **Beranda**: Hero & denah, Karya, Layanan, Cara kerja, Testimoni, Tentang, FAQ, Kontak, dan Jalur & warna. Setiap teks punya kolom **ID** dan **EN** berdampingan. Testimoni dan FAQ baru tampil di situs setelah sakelar **Tampilkan** aktif dan ada isinya.
-- **Proyek**: urutkan ruang (↑ ↓), tayangkan/sembunyikan, tambah, hapus. Halaman edit proyek punya **pratinjau ruang langsung** dan **cek keterbacaan warna** (WCAG): bila teks terlalu mirip dengan latar, muncul peringatan merah.
-- **Studi kasus**: susun halaman dari blok (prosa, fitur bergambar, alur bernomor, keputusan penting, angka & stack), urutkan, lalu nyalakan **Tayang**.
+- **Pengaturan situs**: nama, kontak, WhatsApp, foto profil, **file CV (PDF)**, **tombol WhatsApp yang menempel di HP**, judul & deskripsi untuk Google, bilah info, status ketersediaan.
+- **Beranda**: Hero & denah (termasuk **deretan klien**), Karya, Layanan (**harga opsional** per layanan), Cara kerja (**perkiraan waktu** per langkah), Testimoni, Tentang (**riwayat kerja**), FAQ, Kontak, dan Jalur & warna. Setiap teks punya kolom **ID** dan **EN** berdampingan. Testimoni dan FAQ baru tampil di situs setelah sakelar **Tampilkan** aktif dan ada isinya.
+- **Proyek**: urutkan ruang (↑ ↓), tayangkan/sembunyikan, tambah, hapus. Halaman edit proyek punya **pratinjau ruang langsung**, **cek keterbacaan warna** (WCAG), dan kolom **Hasil untuk bisnisnya** yang ditonjolkan di ruang.
+- **Studi kasus**: susun halaman dari blok (prosa, fitur bergambar, alur bernomor, keputusan penting, **hasil sebelum → sesudah**, angka & stack), atur warna halaman (atau **salin warna ruang proyek**), lalu nyalakan **Tayang**.
 
 Klik **Simpan & tayangkan** (atau tekan ⌘S / Ctrl+S): perubahan langsung tampil di situs. Gambar yang diunggah otomatis dikecilkan dan diubah ke WebP di browser sebelum dikirim.
 
@@ -172,7 +172,7 @@ git push
 Selalu baca `docs/updates/BACA-INI-vX.Y.Z.txt` dulu. Di situ tertulis:
 
 - apa yang berubah;
-- apakah ada SQL baru yang harus dijalankan di Supabase (file `supabase/migrations/000N_*.sql`);
+- apakah ada SQL yang harus dijalankan di Supabase (`supabase/migrations/…` untuk struktur, `supabase/updates/vX.Y.Z.sql` untuk mengisi konten baru ke database yang sudah berjalan, tanpa menimpa hasil edit Anda);
 - file yang dihapus. `unzip -o` tidak menghapus file lama, jadi perintah `rm` untuk file itu ada di BACA-INI.
 
 Isi yang sudah Anda ubah di admin tersimpan di Supabase, jadi tidak tertimpa oleh update kode.

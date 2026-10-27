@@ -25,6 +25,9 @@ export function buildSeedSql(content: Content): string {
     ),
     "",
     // Only for projects that still exist under that slug (a project renamed or deleted in the admin is left alone).
+    "-- Isi awal ini sudah memuat pembaruan isi v0.2.0.",
+    "insert into public.content_updates (version) values ('0.2.0') on conflict do nothing;",
+    "",
     ...rows.cases.map(
       (r) =>
         `insert into public.case_studies (project_slug, published, data) select ${s(r.project_slug)}, ${r.published}, ${j(r.data)} where exists (select 1 from public.projects where slug = ${s(r.project_slug)}) on conflict (project_slug) do nothing;`,

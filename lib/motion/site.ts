@@ -74,6 +74,7 @@ function initMenu(undo: Cleanup[], reduce: MediaQueryList) {
   if (!btn || !mnav || !head) return;
   const setMenu = (open: boolean) => {
     btn.setAttribute("aria-expanded", String(open));
+    root.classList.toggle("menu-open", open);
     root.style.setProperty("--head-top", `${Math.max(0, head.getBoundingClientRect().bottom)}px`);
     if (open) {
       mnav.hidden = false;
@@ -96,10 +97,33 @@ function initMenu(undo: Cleanup[], reduce: MediaQueryList) {
   on(window, "resize", () => { if (window.innerWidth > 1100 && !mnav.hidden) setMenu(false); }, undo);
   undo.push(() => {
     mnav.hidden = true;
+    root.classList.remove("menu-open");
     btn.setAttribute("aria-expanded", "false");
     root.style.overflow = "";
     root.style.removeProperty("--head-top");
   });
+}
+
+/* ---------- WhatsApp bar on phones (every page) ----------
+   Hidden while another WhatsApp button (hero, contact) or the footer is on screen, so there is
+   never a doubled call to action. Without JavaScript it simply stays visible. */
+function initStickyCta(undo: Cleanup[]) {
+  const bar = $("[data-sticky-cta]");
+  if (!bar) return;
+  if (typeof IntersectionObserver === "undefined") { bar.classList.add("is-ready"); return; }
+  const targets = $$(".hero-actions, .contact-actions, .site-foot");
+  if (!targets.length) { bar.classList.add("is-ready"); return; }
+  const seen = new Set<Element>();
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting) seen.add(e.target);
+      else seen.delete(e.target);
+    }
+    bar.classList.toggle("is-hidden", seen.size > 0);
+    bar.classList.add("is-ready");
+  });
+  for (const t of targets) io.observe(t);
+  undo.push(() => { io.disconnect(); bar.classList.remove("is-hidden", "is-ready"); });
 }
 
 /* ---------- Wall colours ---------- */
@@ -350,6 +374,8 @@ function initHome(undo: Cleanup[], reduce: MediaQueryList) {
       if (!el) continue;
       gsap.from(splitWords(el, local), { yPercent: 110, duration: 0.8, ease: EASE_IN, stagger: 0.05, scrollTrigger: { trigger: el, start: "top 85%", once: true } });
     }
+    const clients = $$(".clients-title, .clients-list li");
+    if (clients.length) gsap.from(clients, { y: 10, opacity: 0, duration: 0.5, ease: EASE_IN, stagger: 0.05, delay: 0.9 });
     if ($(".works-head")) {
       gsap.from(".works-intro, .filters .chip", { y: 14, opacity: 0, duration: 0.5, ease: EASE_IN, stagger: 0.04, scrollTrigger: { trigger: ".works-head", start: "top 75%", once: true } });
     }
@@ -365,7 +391,7 @@ function initHome(undo: Cleanup[], reduce: MediaQueryList) {
       const tl = gsap.timeline({ paused: true });
       tl.from($$(".room-no, .room-lines", room), { y: 10, opacity: 0, duration: 0.4, ease: EASE_IN, stagger: 0.05 }, 0);
       if (words.length) tl.from(words, { yPercent: 110, duration: 0.85, ease: EASE_IN, stagger: 0.06 }, 0.05);
-      const copy = $$(".room-meta, .room-text, .facts > div, .room-actions, .room-links", room);
+      const copy = $$(".room-meta, .room-text, .room-result, .facts > div, .room-actions, .room-links", room);
       if (copy.length) tl.from(copy, { y: 16, opacity: 0, duration: 0.55, ease: EASE_IN, stagger: 0.05 }, 0.25);
       if (desks.length) tl.from(desks, { y: 70, scale: 0.955, opacity: 0, duration: 0.95, ease: EASE_IN, stagger: 0.1, transformOrigin: "50% 100%" }, 0.1);
       if (phones.length) tl.from(phones, { y: 130, rotation: 5, opacity: 0, duration: 1.05, ease: EASE_IN, stagger: 0.1 }, 0.28);
@@ -411,7 +437,7 @@ function initHome(undo: Cleanup[], reduce: MediaQueryList) {
     }
 
     /* 7 · Testimonials and FAQ arrive gently */
-    for (const sel of [".quote", ".faq-list details"]) {
+    for (const sel of [".quote", ".faq-list details", ".exp-list li"]) {
       const items = $$(sel);
       if (items.length) gsap.from(items, { y: 18, opacity: 0, duration: 0.6, ease: EASE_IN, stagger: 0.08, scrollTrigger: { trigger: items[0], start: "top 85%", once: true } });
     }
@@ -487,6 +513,7 @@ export function initSite(page: "home" | "case"): Cleanup {
   const undo: Cleanup[] = [];
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
   initMenu(undo, reduce);
+  initStickyCta(undo);
   if (page === "home") initHome(undo, reduce);
   else initCase(undo);
   /* web fonts change line lengths: measure again once they are in */

@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import type { Content, Lang } from "@/lib/content/types";
 import { t } from "@/lib/i18n";
-import { lineMap, roomId, waLink } from "@/lib/site";
+import { initials, lineMap, roomId, waLink } from "@/lib/site";
 
 type P = { content: Content; lang: Lang };
 
@@ -20,6 +20,7 @@ export function Services({ content, lang }: P) {
             <li key={i} className="svc" data-line={item.line}>
               <h3><i className="ldot" data-line={item.line}></i>{t(lines[item.line]?.name, lang)}</h3>
               <p>{t(item.text, lang)}</p>
+              {t(item.price, lang) ? <p className="svc-price">{t(item.price, lang)}</p> : null}
               {proof.length ? (
                 <p className="svc-proof">
                   {t(s.proofLabel, lang)}{" "}
@@ -49,6 +50,7 @@ export function Process({ content, lang }: P) {
         {s.steps.map((step, i) => (
           <li key={i}>
             <h3>{t(step.title, lang)}</h3>
+            {t(step.duration, lang) ? <p className="step-time">{t(step.duration, lang)}</p> : null}
             <p>{t(step.text, lang)}</p>
           </li>
         ))}
@@ -72,6 +74,8 @@ export function Testimonials({ content, lang }: P) {
             <figure key={i} className="quote">
               <blockquote>{t(q.quote, lang)}</blockquote>
               <figcaption>
+                <span className="q-avatar" aria-hidden="true"
+                  style={project ? { background: project.theme.wall, color: project.theme.ink } : undefined}>{initials(q.name)}</span>
                 <b>{q.name}</b>
                 <span>
                   {t(q.role, lang)}
@@ -104,6 +108,29 @@ export function About({ content, lang }: P) {
           <ul className="skills">
             {s.skills.map((k, i) => <li key={i}>{t(k, lang)}</li>)}
           </ul>
+        ) : null}
+        {s.experience.length ? (
+          <div className="exp">
+            <h3>{t(s.experienceTitle, lang)}</h3>
+            <ol className="exp-list">
+              {s.experience.map((e, i) => (
+                <li key={i}>
+                  <span className="exp-period">{t(e.period, lang)}</span>
+                  <div>
+                    <p className="exp-role"><b>{t(e.role, lang)}</b>{t(e.org, lang) ? <span> · {t(e.org, lang)}</span> : null}</p>
+                    {t(e.text, lang) ? <p className="exp-text">{t(e.text, lang)}</p> : null}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        ) : null}
+        {content.settings.cv.url ? (
+          <p className="about-cv">
+            <a className="btn btn-quiet" href={content.settings.cv.url} target="_blank" rel="noopener" download>
+              {t(content.settings.cv.label, lang) || (lang === "en" ? "Download CV" : "Unduh CV")}
+            </a>
+          </p>
         ) : null}
       </div>
     </section>
