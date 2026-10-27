@@ -13,6 +13,8 @@ const nextConfig: NextConfig = {
   env: { PORTO_VERSION: pkg.version },
   images: { unoptimized: true },
   poweredByHeader: false,
+  // This folder is the project root, even if a stray package-lock.json exists higher up (e.g. in the home folder).
+  turbopack: { root: process.cwd() },
   // The site has several root layouts (Indonesian, English, admin), so unmatched URLs use app/global-not-found.tsx.
   experimental: { globalNotFound: true },
   async headers() {

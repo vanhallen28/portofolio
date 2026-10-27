@@ -1,0 +1,74 @@
+PORTOFOLIO v0.1.1 — BACA INI DULU
+================================================================
+
+Perbaikan pemasangan setelah v0.1.0:
+
+- Push v0.1.0 ke GitHub gagal (HTTP 400), jadi repo di GitHub masih
+  hanya berisi README, dan Vercel tidak punya apa pun untuk
+  ditampilkan (404 NOT_FOUND). Versi ini menambahkan langkah yang
+  membuat push berhasil.
+- vercel.json baru: Vercel selalu membangun proyek ini sebagai
+  Next.js, walaupun proyek Vercel dibuat saat repo masih kosong.
+- Peringatan "Next.js ignored package-lock.json in /Users/macbook"
+  tidak muncul lagi.
+
+Tidak ada SQL baru. Tidak ada file yang dihapus.
+
+
+PASANG (salin-tempel di Terminal)
+----------------------------------------------------------------
+
+  cd ~/Documents/Virgiawan/PROJECT/portofolio
+  unzip -o ~/Downloads/portofolio-v0.1.1.zip -d .
+  npm install
+  git config http.postBuffer 524288000
+  git add -A
+  git commit -m "v0.1.1: perbaikan pemasangan (vercel.json, push)"
+  git push
+
+Push yang berhasil diakhiri baris seperti:
+
+  To https://github.com/vanhallen28/portofolio.git
+     xxxxxxx..yyyyyyy  main -> main
+
+PENTING: bila ada baris "error:" atau "fatal:", push GAGAL, walaupun
+baris terakhirnya "Everything up-to-date". Pastikan dengan:
+
+  git status
+
+Harus berbunyi: Your branch is up to date with 'origin/main'.
+
+Bila masih "RPC failed; HTTP 400":
+
+  git config http.version HTTP/1.1
+  git push
+
+
+SETELAH PUSH BERHASIL
+----------------------------------------------------------------
+
+1. Buka https://github.com/vanhallen28/portofolio: folder app/,
+   lib/, public/, supabase/ harus terlihat.
+2. Vercel → proyek portofolio → Deployments: deploy baru muncul
+   otomatis dan harus berstatus Ready (± 1–2 menit).
+   Bila tidak muncul: Deployments → ⋯ (kanan judul) → Create
+   Deployment → ketik main → Create Deployment. Cek juga
+   Settings → Git: repo vanhallen28/portofolio terhubung.
+   (Jangan pakai Redeploy di sini: itu membangun ulang deploy lama
+   yang isinya hanya README.)
+3. Buka https://vanhallen28-portofolio.vercel.app: beranda tampil.
+   Bila masih 404 atau statusnya Error: Settings → Build and
+   Deployment → Framework Preset = Next.js, semua sakelar Override
+   mati, Root Directory kosong; lalu buat deploy baru seperti di
+   poin 2.
+4. Selama variabel Supabase belum diisi, situs memakai isi awal dan
+   admin menampilkan langkah menghubungkan database. Lanjutkan
+   README langkah 2–5 (Supabase, SQL, akun admin, doctor).
+5. README langkah 6 (Vercel): proyek Vercel Anda SUDAH ADA, jangan
+   Import lagi. Buka Settings → Environment Variables, isi
+   NEXT_PUBLIC_SUPABASE_URL dan NEXT_PUBLIC_SUPABASE_ANON_KEY,
+   lalu Deployments → ⋯ pada deploy teratas → Redeploy.
+
+Catatan: repo GitHub ini publik, jadi kodenya bisa dilihat siapa
+saja. Itu wajar untuk portofolio; tidak ada kunci rahasia di
+dalamnya (.env.local tidak ikut ter-push).

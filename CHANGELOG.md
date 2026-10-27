@@ -3,6 +3,14 @@
 Format: setiap rilis dikirim sebagai `portofolio-vX.Y.Z.zip`. Nomor versi naik setiap kali, jadi zip tidak pernah saling tumpuk.
 Petunjuk pasang per versi: `docs/updates/BACA-INI-vX.Y.Z.txt`.
 
+## v0.1.1 — 28 Oktober 2026
+
+Perbaikan pemasangan.
+
+- `vercel.json` mengunci framework ke Next.js, supaya proyek Vercel yang dibuat saat repo masih kosong tetap membangun situs ini (sebelumnya tampil `404 NOT_FOUND`).
+- `turbopack.root` diatur ke folder proyek: peringatan "Next.js ignored package-lock.json in /Users/…" hilang.
+- README: langkah `git config http.postBuffer` agar `git push` pertama (± 7,5 MB) tidak gagal `HTTP 400`, dan cara memastikan push berhasil.
+
 ## v0.1.0 — 28 Oktober 2026
 
 Rilis pertama.

@@ -48,13 +48,16 @@ Buka:
 
 Tanpa variabel Supabase, situs berjalan dalam **mode lokal**: isi disimpan di file `.data/content.json` di laptop Anda (tidak ikut ke GitHub). Cocok untuk mencoba-coba. Untuk situs sungguhan, lanjutkan ke langkah 2.
 
-Lalu simpan kode ke GitHub:
+Lalu simpan kode ke GitHub. Baris pertama cukup sekali per repo: repo ini berisi file preview yang besar (± 7,5 MB), dan tanpa baris itu `git push` lewat HTTPS bisa gagal dengan `HTTP 400`.
 
 ```bash
+git config http.postBuffer 524288000
 git add -A
 git commit -m "v0.1.0: portofolio + panel admin"
 git push
 ```
+
+Pastikan push benar-benar berhasil: baris terakhirnya berbunyi `main -> main`, dan kode terlihat di https://github.com/vanhallen28/portofolio.
 
 ## 2. Buat proyek Supabase
 
@@ -107,8 +110,8 @@ npm run doctor
 
 ## 6. Deploy ke Vercel
 
-1. https://vercel.com/new → **Import** repo `vanhallen28/portofolio`.
-2. Framework: Next.js (otomatis). Buka **Environment Variables**, tambahkan:
+1. https://vercel.com/new → **Import** repo `vanhallen28/portofolio`. (Bila proyek Vercel-nya sudah ada, jangan Import lagi: langsung ke Settings → Environment Variables, lalu Redeploy.)
+2. Framework: Next.js (sudah dikunci oleh file `vercel.json`). Buka **Environment Variables**, tambahkan:
 
    | Nama | Isi |
    |---|---|
@@ -197,6 +200,9 @@ Isi yang sudah Anda ubah di admin tersimpan di Supabase, jadi tidak tertimpa ole
 | Simpan gagal "tidak tersimpan (sesi admin habis…)" | Keluar lalu masuk lagi. |
 | Ada kotak kuning "data tidak valid" di Ringkasan | Data di database rusak (mis. diedit manual). Buka bagian yang disebut, perbaiki, simpan. |
 | Tombol Preview membuka halaman 404 | File belum ada di `public/preview/` atau belum di-push. Lihat langkah 8. |
+| `git push` gagal: `RPC failed; HTTP 400` | Jalankan `git config http.postBuffer 524288000`, lalu `git push` lagi. Bila masih gagal, tambahkan `git config http.version HTTP/1.1`. |
+| Situs Vercel menampilkan `404 NOT_FOUND` (halaman hitam Vercel) | Kode belum sampai di GitHub (cek push di atas), atau proyek Vercel dibuat saat repo masih kosong. Setelah push berhasil, Vercel otomatis deploy ulang; `vercel.json` memastikan Vercel membangunnya sebagai Next.js. Cek di Vercel → Deployments: status harus **Ready**. |
+| Peringatan `Next.js ignored package-lock.json in /Users/…` | Ada file `package-lock.json` nyasar di folder home. Tidak berbahaya; sejak v0.1.1 peringatan ini tidak muncul lagi. |
 | Upload gambar ditolak | Hanya JPG, PNG, WebP, AVIF, GIF. Jalankan `npm run doctor` untuk memeriksa penyimpanan gambar. |
 
 ## Struktur kode (untuk developer)
