@@ -1,0 +1,18 @@
+import type { z } from "zod";
+import type * as S from "./schema";
+import type { LANGS, LINE_KEYS, SECTION_KEYS } from "./constants";
+
+export type Lang = (typeof LANGS)[number];
+export type LineKey = (typeof LINE_KEYS)[number];
+export type SectionKey = (typeof SECTION_KEYS)[number];
+export type L = z.infer<typeof S.LSchema>;
+export type Img = z.infer<typeof S.ImgSchema>;
+export type Theme = z.infer<typeof S.ThemeSchema>;
+export type Fact = z.infer<typeof S.FactSchema>;
+export type SiteSettings = z.infer<typeof S.SettingsSchema>;
+export type Line = z.infer<typeof S.LineSchema>;
+export type Sections = z.infer<typeof S.SectionsSchema>;
+export type Project = z.infer<typeof S.ProjectSchema>;
+export type Block = z.infer<typeof S.BlockSchema>;
+export type CaseStudy = z.infer<typeof S.CaseStudySchema>;
+export type Content = z.infer<typeof S.ContentSchema>;

@@ -1,0 +1,501 @@
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+/* Motion identity: one personality for the whole site, calm and confident, no bounce on content.
+   Signature ease: power3.out for entrances, power2.inOut for things already on screen.
+   Text rises out of a mask, screens arrive from depth, and wall colours travel outward
+   from the floor-plan dot. Port of the approved preview (portfolio-preview/src/app.js).
+
+   Everything here enhances server-rendered markup that is complete without JavaScript.
+   initSite() returns a cleanup that puts the DOM back the way React rendered it. */
+
+const EASE_IN = "power3.out";
+const EASE_ON = "power2.inOut";
+
+type Theme = { wall: string; ink: string; muted: string; accent: string; btnBg: string; btnInk: string };
+type Cleanup = () => void;
+
+const $ = <T extends Element = HTMLElement>(s: string, c: ParentNode = document) => c.querySelector<T>(s);
+const $$ = <T extends Element = HTMLElement>(s: string, c: ParentNode = document) => Array.from(c.querySelectorAll<T>(s));
+
+/** Wraps each word of `el` in .w > .wi for the mask-rise entrance. The original text nodes are kept
+    so revert() can hand React back the exact nodes it rendered. */
+function splitWords(el: Element | null, undo: Cleanup[]): HTMLElement[] {
+  if (!el || el.hasAttribute("data-split")) return [];
+  el.setAttribute("data-split", "1");
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+  const nodes: Text[] = [];
+  let n: Node | null;
+  while ((n = walker.nextNode())) if (n.nodeValue?.trim()) nodes.push(n as Text);
+  const swaps: { original: Text; parts: Node[] }[] = [];
+  for (const node of nodes) {
+    const parts: Node[] = [];
+    for (const part of (node.nodeValue ?? "").split(/(\s+)/)) {
+      if (!part) continue;
+      if (/^\s+$/.test(part)) { parts.push(document.createTextNode(part)); continue; }
+      const w = document.createElement("span");
+      w.className = "w";
+      const i = document.createElement("span");
+      i.className = "wi";
+      i.textContent = part;
+      w.appendChild(i);
+      parts.push(w);
+    }
+    const parent = node.parentNode!;
+    for (const p of parts) parent.insertBefore(p, node);
+    parent.removeChild(node);
+    swaps.push({ original: node, parts });
+  }
+  undo.push(() => {
+    for (const { original, parts } of swaps) {
+      const first = parts[0];
+      if (first?.parentNode) first.parentNode.insertBefore(original, first);
+      for (const p of parts) p.parentNode?.removeChild(p);
+    }
+    el.removeAttribute("data-split");
+  });
+  return $$(".wi", el);
+}
+
+function on<K extends keyof WindowEventMap>(target: Window, type: K, fn: (e: WindowEventMap[K]) => void, undo: Cleanup[]): void;
+function on<K extends keyof DocumentEventMap>(target: Document, type: K, fn: (e: DocumentEventMap[K]) => void, undo: Cleanup[]): void;
+function on(target: EventTarget, type: string, fn: EventListener, undo: Cleanup[]): void;
+function on(target: EventTarget, type: string, fn: (e: never) => void, undo: Cleanup[]) {
+  target.addEventListener(type, fn as EventListener);
+  undo.push(() => target.removeEventListener(type, fn as EventListener));
+}
+
+/* ---------- Mobile menu (every page) ---------- */
+function initMenu(undo: Cleanup[], reduce: MediaQueryList) {
+  const root = document.documentElement;
+  const btn = $<HTMLButtonElement>(".menu-btn");
+  const mnav = $<HTMLElement>("#mnav");
+  const head = $(".site-head");
+  if (!btn || !mnav || !head) return;
+  const setMenu = (open: boolean) => {
+    btn.setAttribute("aria-expanded", String(open));
+    root.style.setProperty("--head-top", `${Math.max(0, head.getBoundingClientRect().bottom)}px`);
+    if (open) {
+      mnav.hidden = false;
+      root.style.overflow = "hidden";
+      if (!reduce.matches) {
+        gsap.fromTo(mnav, { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power1.out" });
+        gsap.fromTo($$("li a, .btn", mnav), { yPercent: 40, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.5, ease: EASE_IN, stagger: 0.05 });
+      }
+      $<HTMLAnchorElement>("a", mnav)?.focus();
+    } else {
+      mnav.hidden = true;
+      root.style.overflow = "";
+    }
+  };
+  on(btn, "click", () => setMenu(btn.getAttribute("aria-expanded") !== "true"), undo);
+  for (const a of $$("a", mnav)) on(a, "click", () => setMenu(false), undo);
+  on(document, "keydown", (e) => {
+    if (e.key === "Escape" && !mnav.hidden) { setMenu(false); btn.focus(); }
+  }, undo);
+  on(window, "resize", () => { if (window.innerWidth > 1100 && !mnav.hidden) setMenu(false); }, undo);
+  undo.push(() => {
+    mnav.hidden = true;
+    btn.setAttribute("aria-expanded", "false");
+    root.style.overflow = "";
+    root.style.removeProperty("--head-top");
+  });
+}
+
+/* ---------- Wall colours ---------- */
+function themeOf(el: HTMLElement): Theme {
+  const d = el.dataset;
+  return { wall: d.wall!, ink: d.ink!, muted: d.muted!, accent: d.accent!, btnBg: d.btnBg!, btnInk: d.btnInk! };
+}
+
+function createWalls(undo: Cleanup[], reduce: MediaQueryList) {
+  const root = document.documentElement;
+  const metas = $$<HTMLMetaElement>('meta[name="theme-color"]');
+  const metaBefore = metas.map((m) => m.getAttribute("content"));
+  const wipe = document.createElement("div");
+  wipe.className = "wipe";
+  wipe.setAttribute("aria-hidden", "true");
+  document.body.insertBefore(wipe, document.body.firstChild);
+
+  const props = ["--wall", "--chrome", "--ink", "--muted", "--accent", "--btn-bg", "--btn-ink"];
+  const shellTheme = (): Theme => {
+    const cs = getComputedStyle(root);
+    const g = (n: string) => cs.getPropertyValue(n).trim();
+    return { wall: g("--shell-wall"), ink: g("--shell-ink"), muted: g("--shell-muted"), accent: g("--shell-accent"), btnBg: g("--shell-btn-bg"), btnInk: g("--shell-btn-ink") };
+  };
+  let current: string | null = null;
+  let wipeTween: gsap.core.Tween | null = null;
+  let wipeWall = "";
+  const setVars = (t: Theme) => {
+    root.style.setProperty("--wall", t.wall); root.style.setProperty("--chrome", t.wall);
+    root.style.setProperty("--ink", t.ink); root.style.setProperty("--muted", t.muted);
+    root.style.setProperty("--accent", t.accent); root.style.setProperty("--btn-bg", t.btnBg); root.style.setProperty("--btn-ink", t.btnInk);
+  };
+  const finishWipe = () => {
+    if (!wipeTween) return;
+    wipeTween.kill(); wipeTween = null;
+    root.style.setProperty("--wall", wipeWall);
+    wipe.style.clipPath = "circle(0px at 0 0)";
+  };
+  /** origin: viewport point the new wall colour spreads from. */
+  const apply = (t: Theme | null, instant = false, origin?: { x: number; y: number } | null) => {
+    if (!t?.wall) return;
+    const key = t.wall + t.ink;
+    if (current === key && !instant) return;
+    current = key;
+    for (const m of metas) m.setAttribute("content", t.wall);
+    if (instant || reduce.matches) {
+      finishWipe(); gsap.killTweensOf(root, props.join(","));
+      setVars(t);
+      return;
+    }
+    finishWipe();
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const o = origin ?? { x: vw * 0.86, y: vh * 0.5 };
+    const r = Math.hypot(Math.max(o.x, vw - o.x), Math.max(o.y, vh - o.y)) + 2;
+    const st = { r: 0 };
+    wipe.style.background = t.wall; wipeWall = t.wall;
+    wipeTween = gsap.to(st, {
+      r, duration: 0.85, ease: EASE_ON,
+      onUpdate: () => { wipe.style.clipPath = `circle(${st.r.toFixed(1)}px at ${o.x.toFixed(1)}px ${o.y.toFixed(1)}px)`; },
+      onComplete: () => { root.style.setProperty("--wall", t.wall); wipe.style.clipPath = "circle(0px at 0 0)"; wipeTween = null; },
+    });
+    gsap.to(root, { "--ink": t.ink, "--muted": t.muted, "--accent": t.accent, "--btn-bg": t.btnBg, "--btn-ink": t.btnInk, "--chrome": t.wall, duration: 0.7, ease: EASE_ON, overwrite: "auto" });
+  };
+  let shell = shellTheme();
+  apply(shell, true);
+  const mqDark = window.matchMedia("(prefers-color-scheme: dark)");
+  const onScheme = () => {
+    finishWipe();
+    for (const p of props) root.style.removeProperty(p);
+    shell = shellTheme(); current = null; apply(shell, true);
+    ScrollTrigger.refresh();
+  };
+  mqDark.addEventListener("change", onScheme);
+  undo.push(() => {
+    mqDark.removeEventListener("change", onScheme);
+    wipeTween?.kill();
+    gsap.killTweensOf(root);
+    for (const p of props) root.style.removeProperty(p);
+    wipe.remove();
+    metas.forEach((m, i) => { const c = metaBefore[i]; if (c !== null) m.setAttribute("content", c); });
+  });
+  return { apply, shell: () => shell };
+}
+
+/* ---------- Home page ---------- */
+function initHome(undo: Cleanup[], reduce: MediaQueryList) {
+  const root = document.documentElement;
+  const walls = createWalls(undo, reduce);
+  const rooms = $$<HTMLElement>(".room");
+  const chips = $$<HTMLButtonElement>("[data-filter]");
+  const plan = $(".plan");
+  const planLinks = $$<HTMLAnchorElement>(".plan a");
+
+  /* Filters */
+  const setFilter = (line: string) => {
+    for (const c of chips) c.setAttribute("aria-pressed", String(c.dataset.filter === line));
+    for (const r of rooms) {
+      const visible = line === "all" || ` ${r.dataset.lines} `.includes(` ${line} `);
+      r.hidden = !visible;
+      $(`.plan a[data-room="${r.dataset.room}"]`)?.parentElement?.classList.toggle("off", !visible);
+    }
+    ScrollTrigger.refresh();
+    if (!reduce.matches) gsap.fromTo(rooms.filter((r) => !r.hidden).slice(0, 2), { opacity: 0.2 }, { opacity: 1, duration: 0.4, ease: "power1.out" });
+  };
+  for (const c of chips) on(c, "click", () => setFilter(c.dataset.filter!), undo);
+  for (const a of $$<SVGAElement>("[data-filter-link]")) on(a, "click", () => setFilter(a.dataset.filterLink!), undo);
+  undo.push(() => {
+    for (const r of rooms) r.hidden = false;
+    for (const c of chips) c.setAttribute("aria-pressed", String(c.dataset.filter === "all"));
+    for (const li of $$(".plan li.off")) li.classList.remove("off");
+  });
+
+  /* Map hover lights up the station's lines */
+  const map = $(".map");
+  for (const st of $$<SVGAElement>(".map .st")) {
+    const lines = (st.dataset.lines ?? "").split(" ");
+    const lit = () => {
+      map?.classList.add("is-focus");
+      for (const ln of $$<SVGPathElement>(".map .ln")) ln.classList.toggle("on", lines.includes(ln.dataset.line ?? ""));
+    };
+    const unlit = () => map?.classList.remove("is-focus");
+    on(st, "mouseenter", lit, undo); on(st, "focus", lit, undo);
+    on(st, "mouseleave", unlit, undo); on(st, "blur", unlit, undo);
+    on(st, "click", () => setFilter("all"), undo);
+  }
+
+  /* Walls follow the room under the 55% line; the floor plan marks it */
+  const originFor = (room: HTMLElement | null) => {
+    const dot = room && $(`.plan a[data-room="${room.dataset.room}"] .plan-n`);
+    const b = dot?.getBoundingClientRect();
+    if (b && b.width) return { x: b.left + b.width / 2, y: b.top + b.height / 2 };
+    return { x: window.innerWidth * 0.86, y: window.innerHeight * 0.5 };
+  };
+  const markPlan = (room: HTMLElement | null) => {
+    for (const a of planLinks) a.classList.toggle("cur", !!room && a.dataset.room === room.dataset.room);
+  };
+
+  const ctx = gsap.context(() => {
+    for (const room of rooms) {
+      const t = themeOf(room);
+      ScrollTrigger.create({
+        trigger: room, start: "top 55%", end: "bottom 55%",
+        onToggle: (self) => { if (!self.isActive) return; markPlan(room); walls.apply(t, false, originFor(room)); },
+      });
+    }
+    const toShell = (s: ScrollTrigger) => {
+      if (!s.isActive) return;
+      markPlan(null);
+      walls.apply(walls.shell(), false, { x: window.innerWidth / 2, y: s.direction > 0 ? 0 : window.innerHeight });
+    };
+    for (const sel of [".hero", ".works-head"]) if ($(sel)) ScrollTrigger.create({ trigger: sel, start: "top 55%", end: "bottom 55%", onToggle: toShell });
+    const afterWorks = $(".works")?.nextElementSibling;
+    if (afterWorks) ScrollTrigger.create({ trigger: afterWorks, start: "top 55%", endTrigger: ".site-foot", end: "bottom bottom", onToggle: toShell });
+    const works = $(".works"), worksHead = $(".works-head");
+    if (works && worksHead && plan) {
+      ScrollTrigger.create({
+        trigger: works, start: () => `top+=${worksHead.offsetHeight} center`, end: "bottom center",
+        onToggle: (s) => plan.classList.toggle("on", s.isActive),
+      });
+    }
+    /* reading progress */
+    gsap.to(root, { "--p": 1, ease: "none", scrollTrigger: { trigger: document.body, start: "top top", end: "bottom bottom", scrub: 0.3 } });
+  });
+  undo.push(() => { ctx.revert(); plan?.classList.remove("on"); markPlan(null); root.style.removeProperty("--p"); });
+
+  /* Safety net: after any jump or refresh, read the wall from what sits under the 55% line */
+  const syncTheme = () => {
+    const line = window.innerHeight * 0.55;
+    let hit: HTMLElement | null = null;
+    for (const r of rooms) {
+      if (r.hidden) continue;
+      const b = r.getBoundingClientRect();
+      if (b.top <= line && b.bottom > line) hit = r;
+    }
+    markPlan(hit);
+    walls.apply(hit ? themeOf(hit) : walls.shell(), false, hit ? originFor(hit) : null);
+  };
+  const onRefresh = (): void => { requestAnimationFrame(syncTheme); };
+  ScrollTrigger.addEventListener("scrollEnd", syncTheme);
+  ScrollTrigger.addEventListener("refresh", onRefresh);
+  undo.push(() => { ScrollTrigger.removeEventListener("scrollEnd", syncTheme); ScrollTrigger.removeEventListener("refresh", onRefresh); });
+
+  /* Motion: skipped entirely when the visitor prefers reduced motion */
+  const mm = gsap.matchMedia();
+  mm.add({ motion: "(prefers-reduced-motion: no-preference)", wide: "(min-width: 768px)" }, (mctx) => {
+    if (!mctx.conditions?.motion) return;
+    const wide = !!mctx.conditions.wide;
+    const local: Cleanup[] = [];
+
+    /* 1 · Hero: the one orchestrated load moment */
+    const heroWords = splitWords($("#hero-title"), local);
+    const intro = gsap.timeline({ delay: 0.1 });
+    intro.from(".hero-role, .avail", { y: 12, opacity: 0, duration: 0.5, ease: EASE_IN, stagger: 0.06 })
+      .from(heroWords, { yPercent: 110, duration: 0.8, ease: EASE_IN, stagger: 0.035 }, 0.1)
+      .from(".hero-lede, .hero-actions", { y: 18, opacity: 0, duration: 0.6, ease: EASE_IN, stagger: 0.08 }, 0.55);
+    const lines = $$<SVGPathElement>(".map .ln");
+    if (lines.length) {
+      for (const ln of lines) { const L = ln.getTotalLength(); gsap.set(ln, { strokeDasharray: L, strokeDashoffset: L }); }
+      gsap.set(".map .st .dot", { scale: 0, transformOrigin: "50% 50%" });
+      gsap.set(".map .sname, .map .lname, .map .mc-big, .map .train, .map figcaption", { opacity: 0 });
+      const draw = gsap.timeline({ delay: 0.35 });
+      draw.to(".map .mc-big", { opacity: 1, duration: 0.4 });
+      for (const name of ["found", "sell", "run", "serve"]) {
+        draw.to(`.map .ln[data-line="${name}"]`, { strokeDashoffset: 0, duration: 0.45, ease: "power1.inOut" }, ">-0.05");
+        draw.to(`.map .lname[data-line="${name}"]`, { opacity: 1, duration: 0.3 }, "<0.15");
+      }
+      if ($(".map .st")) {
+        draw.to(".map .st .dot", { scale: 1, duration: 0.35, ease: "back.out(2)", stagger: 0.05 }, "-=0.2")
+          .to(".map .sname", { opacity: 1, duration: 0.3, stagger: 0.04 }, "<0.1");
+      }
+      draw.to(".map .train", { opacity: 1, duration: 0.4 }, "-=0.1").to(".map figcaption", { opacity: 1, duration: 0.4 }, "<");
+    }
+
+    /* 2 · Ambient: two trains travel the loop; a station brightens as one passes */
+    const loop = $<SVGPathElement>(".map .loop");
+    const trains = $$<SVGRectElement>(".map .train");
+    if (loop && trains.length) {
+      const LEN = loop.getTotalLength(), PERIOD = 26;
+      let run = true;
+      const t0 = performance.now();
+      const stations = $$<SVGCircleElement>(".map .st .dot").map((d) => ({ el: d, x: +d.getAttribute("cx")!, y: +d.getAttribute("cy")!, hot: false }));
+      const tick = (): void => {
+        if (!run) return;
+        const t = (performance.now() - t0) / 1000 / PERIOD;
+        const near = new Set<number>();
+        trains.forEach((tr, i) => {
+          const s = ((t + i / trains.length) % 1) * LEN;
+          const p = loop.getPointAtLength(s), q = loop.getPointAtLength((s + 1) % LEN);
+          const a = (Math.atan2(q.y - p.y, q.x - p.x) * 180) / Math.PI;
+          tr.setAttribute("transform", `translate(${p.x.toFixed(2)} ${p.y.toFixed(2)}) rotate(${a.toFixed(1)})`);
+          stations.forEach((st, k) => { if (Math.abs(st.x - p.x) < 16 && Math.abs(st.y - p.y) < 16) near.add(k); });
+        });
+        stations.forEach((st, k) => {
+          const hot = near.has(k);
+          if (hot !== st.hot) {
+            st.hot = hot;
+            gsap.to(st.el, { scale: hot ? 1.35 : 1, duration: hot ? 0.25 : 0.5, ease: hot ? "power2.out" : "power2.inOut", overwrite: "auto" });
+          }
+        });
+      };
+      gsap.ticker.add(tick);
+      local.push(() => { gsap.ticker.remove(tick); for (const tr of trains) tr.removeAttribute("transform"); });
+      ScrollTrigger.create({ trigger: ".hero", start: "top bottom", end: "bottom top", onToggle: (s) => { run = s.isActive; } });
+    }
+
+    /* 3 · Section headings rise word by word as they arrive */
+    for (const sel of [".works-head h2", "#svc-title", "#proc-title", "#testi-title", "#about-title", "#faq-title"]) {
+      const el = $(sel);
+      if (!el) continue;
+      gsap.from(splitWords(el, local), { yPercent: 110, duration: 0.8, ease: EASE_IN, stagger: 0.05, scrollTrigger: { trigger: el, start: "top 85%", once: true } });
+    }
+    if ($(".works-head")) {
+      gsap.from(".works-intro, .filters .chip", { y: 14, opacity: 0, duration: 0.5, ease: EASE_IN, stagger: 0.04, scrollTrigger: { trigger: ".works-head", start: "top 75%", once: true } });
+    }
+
+    /* 4 · Rooms: title rises, copy follows, numbers count, screens arrive from depth */
+    for (const room of rooms) {
+      const words = splitWords($(".room-title", room), local);
+      const shots = $$(".room-visual .shot, .brand-card", room);
+      const phones = shots.filter((s) => s.classList.contains("shot-phone"));
+      const desks = shots.filter((s) => !phones.includes(s));
+      const arch = $(".arch", room);
+      const swatches = $$(".swatches li", room);
+      const tl = gsap.timeline({ paused: true });
+      tl.from($$(".room-no, .room-lines", room), { y: 10, opacity: 0, duration: 0.4, ease: EASE_IN, stagger: 0.05 }, 0);
+      if (words.length) tl.from(words, { yPercent: 110, duration: 0.85, ease: EASE_IN, stagger: 0.06 }, 0.05);
+      const copy = $$(".room-meta, .room-text, .facts > div, .room-actions, .room-links", room);
+      if (copy.length) tl.from(copy, { y: 16, opacity: 0, duration: 0.55, ease: EASE_IN, stagger: 0.05 }, 0.25);
+      if (desks.length) tl.from(desks, { y: 70, scale: 0.955, opacity: 0, duration: 0.95, ease: EASE_IN, stagger: 0.1, transformOrigin: "50% 100%" }, 0.1);
+      if (phones.length) tl.from(phones, { y: 130, rotation: 5, opacity: 0, duration: 1.05, ease: EASE_IN, stagger: 0.1 }, 0.28);
+      if (arch) tl.fromTo(arch, { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.9, ease: EASE_IN, clearProps: "clipPath" }, 0.3);
+      if (swatches.length) tl.from(swatches, { scale: 0.4, opacity: 0, duration: 0.45, ease: "back.out(1.6)", stagger: 0.04 }, 0.6);
+      for (const dt of $$("dt", room)) {
+        const text = dt.firstChild;
+        if (!(text instanceof Text)) continue;
+        const original = text.nodeValue ?? "";
+        const m = /^(\d+)(.*)$/.exec(original.trim());
+        if (!m || +m[1] < 2) continue;
+        const n = +m[1], suffix = m[2], o = { v: 0 };
+        tl.to(o, { v: n, duration: 1.1, ease: "power2.out", onUpdate: () => { text.nodeValue = Math.round(o.v) + suffix; } }, 0.4);
+        local.push(() => { text.nodeValue = original; });
+      }
+      const st = ScrollTrigger.create({ trigger: room, start: "top 72%", once: true, onEnter: () => tl.play() });
+      /* a room already above the viewport (deep link, reload) is shown finished, never left hidden */
+      requestAnimationFrame(() => { if (st.progress > 0 || room.getBoundingClientRect().top < window.innerHeight * 0.72) tl.play(); });
+      /* depth: phones drift faster than desktops while the room scrolls past */
+      if (wide) {
+        for (const shot of shots) {
+          const d = shot.classList.contains("shot-phone") ? 70 : 26;
+          gsap.fromTo(shot, { "--py": `${d}px` }, { "--py": `${-d}px`, ease: "none", scrollTrigger: { trigger: room, start: "top bottom", end: "bottom top", scrub: true } });
+        }
+      }
+    }
+
+    /* 5 · Services: each line draws itself, like a route on the map */
+    const svcs = $$(".svc");
+    if (svcs.length) {
+      gsap.set(svcs, { "--draw": 0 });
+      gsap.timeline({ scrollTrigger: { trigger: ".svc-list", start: "top 80%", once: true } })
+        .to(svcs, { "--draw": 1, duration: 0.7, ease: EASE_ON, stagger: 0.14 }, 0)
+        .from($$(".svc h3, .svc p"), { y: 14, opacity: 0, duration: 0.5, ease: EASE_IN, stagger: 0.04 }, 0.2);
+    }
+
+    /* 6 · Process: the route between steps fills in as you read down */
+    const steps = $$(".steps li");
+    if (steps.length) {
+      gsap.set(steps, { "--draw": 0 });
+      gsap.to(steps, { "--draw": 1, ease: "none", stagger: 0.5, scrollTrigger: { trigger: ".steps", start: "top 75%", end: "bottom 55%", scrub: 0.6 } });
+      gsap.from(steps, { y: 18, opacity: 0, duration: 0.6, ease: EASE_IN, stagger: 0.12, scrollTrigger: { trigger: ".steps", start: "top 80%", once: true } });
+    }
+
+    /* 7 · Testimonials and FAQ arrive gently */
+    for (const sel of [".quote", ".faq-list details"]) {
+      const items = $$(sel);
+      if (items.length) gsap.from(items, { y: 18, opacity: 0, duration: 0.6, ease: EASE_IN, stagger: 0.08, scrollTrigger: { trigger: items[0], start: "top 85%", once: true } });
+    }
+
+    /* 8 · About: the portrait opens like an iris */
+    const portrait = $(".portrait");
+    const about = $(".about");
+    if (about) {
+      const abTl = gsap.timeline({ scrollTrigger: { trigger: about, start: "top 70%", once: true } });
+      if (portrait) {
+        abTl.fromTo(portrait, { clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(71% at 50% 50%)", duration: 1.0, ease: EASE_ON, clearProps: "clipPath" });
+        const pImg = $("img", portrait);
+        if (pImg) abTl.from(pImg, { scale: 1.18, duration: 1.4, ease: EASE_IN }, 0);
+      }
+      const copy = $$(".about-copy p, .skills li");
+      if (copy.length) abTl.from(copy, { y: 14, opacity: 0, duration: 0.5, ease: EASE_IN, stagger: 0.05 }, 0.35);
+    }
+
+    /* 9 · Contact: the closing line arrives word by word, then the ways to reach me */
+    const contact = $(".contact");
+    if (contact) {
+      const cWords = splitWords($("#contact-title"), local);
+      gsap.timeline({ scrollTrigger: { trigger: contact, start: "top 70%", once: true } })
+        .from(cWords, { yPercent: 110, duration: 0.9, ease: EASE_IN, stagger: 0.05 })
+        .from(".contact .btn-big", { y: 20, opacity: 0, duration: 0.6, ease: EASE_IN }, 0.45)
+        .from(".contact-list li", { y: 12, opacity: 0, duration: 0.5, ease: EASE_IN, stagger: 0.06 }, 0.55);
+    }
+
+    return () => {
+      for (const u of local.reverse()) u();
+    };
+  });
+  undo.push(() => mm.revert());
+}
+
+/* ---------- Case study page ---------- */
+function initCase(undo: Cleanup[]) {
+  const view = $('[data-view="case"]');
+  if (!view) return;
+  const mm = gsap.matchMedia();
+  mm.add("(prefers-reduced-motion: no-preference)", () => {
+    const local: Cleanup[] = [];
+    const words = splitWords($(".case-title", view), local);
+    const tl = gsap.timeline();
+    if (words.length) tl.fromTo(words, { yPercent: 110 }, { yPercent: 0, duration: 0.85, ease: EASE_IN, stagger: 0.06 });
+    tl.fromTo($$(".crumb, .case-sub, .case-actions, .case-label > div", view), { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: EASE_IN, stagger: 0.04 }, 0.15);
+    const cover = $(".case-cover", view);
+    if (cover) tl.fromTo(cover, { y: 60, scale: 0.97, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.95, ease: EASE_IN }, 0.3);
+    for (const b of $$(".case-block", view)) {
+      gsap.from(b.children, { y: 24, opacity: 0, duration: 0.7, ease: EASE_IN, stagger: 0.08, scrollTrigger: { trigger: b, start: "top 80%", once: true } });
+    }
+    for (const dt of $$(".case-numbers dt", view)) {
+      const text = dt.firstChild;
+      if (!(text instanceof Text)) continue;
+      const original = text.nodeValue ?? "";
+      const m = /^(\d+)(.*)$/.exec(original.trim());
+      if (!m || +m[1] < 2) continue;
+      const o = { v: 0 };
+      gsap.to(o, { v: +m[1], duration: 1.1, ease: "power2.out", onUpdate: () => { text.nodeValue = Math.round(o.v) + m[2]; }, scrollTrigger: { trigger: dt, start: "top 85%", once: true } });
+      local.push(() => { text.nodeValue = original; });
+    }
+    return () => { for (const u of local.reverse()) u(); };
+  });
+  const root = document.documentElement;
+  const ctx = gsap.context(() => {
+    gsap.to(root, { "--p": 1, ease: "none", scrollTrigger: { trigger: document.body, start: "top top", end: "bottom bottom", scrub: 0.3 } });
+  });
+  undo.push(() => { mm.revert(); ctx.revert(); root.style.removeProperty("--p"); });
+}
+
+export function initSite(page: "home" | "case"): Cleanup {
+  gsap.registerPlugin(ScrollTrigger);
+  const undo: Cleanup[] = [];
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  initMenu(undo, reduce);
+  if (page === "home") initHome(undo, reduce);
+  else initCase(undo);
+  /* web fonts change line lengths: measure again once they are in */
+  let alive = true;
+  document.fonts?.ready.then(() => { if (alive) ScrollTrigger.refresh(); });
+  undo.push(() => { alive = false; });
+  return () => {
+    for (const u of undo.reverse()) {
+      try { u(); } catch { /* keep cleaning up */ }
+    }
+  };
+}

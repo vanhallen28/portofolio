@@ -1,0 +1,194 @@
+{
+ "aliya-admin": {
+  "url": "/media/seed/aliya-admin.webp",
+  "width": 1600,
+  "height": 911,
+  "kb": 63
+ },
+ "aliya-statistik": {
+  "url": "/media/seed/aliya-statistik.webp",
+  "width": 1600,
+  "height": 903,
+  "kb": 62
+ },
+ "aliya-hp-beranda": {
+  "url": "/media/seed/aliya-hp-beranda.webp",
+  "width": 390,
+  "height": 844,
+  "kb": 26
+ },
+ "aliya-hp-jadwal": {
+  "url": "/media/seed/aliya-hp-jadwal.webp",
+  "width": 390,
+  "height": 844,
+  "kb": 13
+ },
+ "aliya-hp-layanan": {
+  "url": "/media/seed/aliya-hp-layanan.webp",
+  "width": 390,
+  "height": 844,
+  "kb": 27
+ },
+ "aliya-web": {
+  "url": "/media/seed/aliya-web.webp",
+  "width": 1400,
+  "height": 1280,
+  "kb": 61
+ },
+ "aliya-laptop": {
+  "url": "/media/seed/aliya-laptop.webp",
+  "width": 1280,
+  "height": 800,
+  "kb": 35
+ },
+ "hris-dasbor": {
+  "url": "/media/seed/hris-dasbor.webp",
+  "width": 1600,
+  "height": 903,
+  "kb": 96
+ },
+ "hris-heatmap": {
+  "url": "/media/seed/hris-heatmap.webp",
+  "width": 1600,
+  "height": 887,
+  "kb": 81
+ },
+ "hris-keuangan": {
+  "url": "/media/seed/hris-keuangan.webp",
+  "width": 1600,
+  "height": 901,
+  "kb": 66
+ },
+ "portal-top": {
+  "url": "/media/seed/portal-top.webp",
+  "width": 640,
+  "height": 1023,
+  "kb": 61
+ },
+ "portal-progres": {
+  "url": "/media/seed/portal-progres.webp",
+  "width": 640,
+  "height": 1015,
+  "kb": 56
+ },
+ "ciri-home": {
+  "url": "/media/seed/ciri-home.webp",
+  "width": 1600,
+  "height": 1000,
+  "kb": 89
+ },
+ "ciri-produk": {
+  "url": "/media/seed/ciri-produk.webp",
+  "width": 1600,
+  "height": 1000,
+  "kb": 59
+ },
+ "ciri-katalog": {
+  "url": "/media/seed/ciri-katalog.webp",
+  "width": 1600,
+  "height": 1000,
+  "kb": 83
+ },
+ "ciri-hp": {
+  "url": "/media/seed/ciri-hp.webp",
+  "width": 600,
+  "height": 1298,
+  "kb": 43
+ },
+ "ciri-hp-home": {
+  "url": "/media/seed/ciri-hp-home.webp",
+  "width": 600,
+  "height": 1298,
+  "kb": 62
+ },
+ "web-contact": {
+  "url": "/media/seed/web-contact.webp",
+  "width": 1600,
+  "height": 1000,
+  "kb": 44
+ },
+ "web-brief": {
+  "url": "/media/seed/web-brief.webp",
+  "width": 1440,
+  "height": 1300,
+  "kb": 26
+ },
+ "web-hp": {
+  "url": "/media/seed/web-hp.webp",
+  "width": 600,
+  "height": 1298,
+  "kb": 35
+ },
+ "intbdg-paket": {
+  "url": "/media/seed/intbdg-paket.webp",
+  "width": 1600,
+  "height": 1000,
+  "kb": 67
+ },
+ "intbdg-form": {
+  "url": "/media/seed/intbdg-form.webp",
+  "width": 1600,
+  "height": 1000,
+  "kb": 29
+ },
+ "intbdg-hp": {
+  "url": "/media/seed/intbdg-hp.webp",
+  "width": 600,
+  "height": 1298,
+  "kb": 44
+ },
+ "intbdg-admin": {
+  "url": "/media/seed/intbdg-admin.webp",
+  "width": 1280,
+  "height": 789,
+  "kb": 32
+ },
+ "point-kasir": {
+  "url": "/media/seed/point-kasir.webp",
+  "width": 1600,
+  "height": 1000,
+  "kb": 37
+ },
+ "point-hp": {
+  "url": "/media/seed/point-hp.webp",
+  "width": 600,
+  "height": 1298,
+  "kb": 30
+ },
+ "point-opsi": {
+  "url": "/media/seed/point-opsi.webp",
+  "width": 1600,
+  "height": 1000,
+  "kb": 18
+ },
+ "point-dashboard": {
+  "url": "/media/seed/point-dashboard.webp",
+  "width": 1600,
+  "height": 1000,
+  "kb": 28
+ },
+ "point-inventori": {
+  "url": "/media/seed/point-inventori.webp",
+  "width": 1600,
+  "height": 1000,
+  "kb": 30
+ },
+ "point-barista": {
+  "url": "/media/seed/point-barista.webp",
+  "width": 1600,
+  "height": 1000,
+  "kb": 15
+ },
+ "point-opname": {
+  "url": "/media/seed/point-opname.webp",
+  "width": 1600,
+  "height": 1000,
+  "kb": 21
+ },
+ "profile": {
+  "url": "/media/seed/profile.webp",
+  "width": 880,
+  "height": 880,
+  "kb": 29
+ }
+}

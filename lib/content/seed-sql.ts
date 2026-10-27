@@ -1,0 +1,34 @@
+import { ContentSchema } from "./schema";
+import { contentToRows } from "./rows";
+import type { Content } from "./types";
+
+/* Builds supabase/seed.sql. Every insert is `on conflict do nothing`, so running the seed again
+   never overwrites anything already edited in the admin. */
+export function buildSeedSql(content: Content): string {
+  const rows = contentToRows(ContentSchema.parse(content));
+  const j = (v: unknown) => `'${JSON.stringify(v).replace(/'/g, "''")}'::jsonb`;
+  const s = (v: string) => `'${v.replace(/'/g, "''")}'`;
+  return [
+    "-- Isi awal portofolio. Dibuat otomatis oleh `npm run seed:sql` dari lib/content/seed.ts — jangan diedit manual.",
+    "-- Aman dijalankan ulang: baris yang sudah ada (termasuk hasil edit di admin) tidak ditimpa.",
+    "-- Catatan: proyek awal yang sudah Anda HAPUS di admin akan muncul lagi bila file ini dijalankan ulang.",
+    "",
+    `insert into public.site_settings (id, data) values (1, ${j(rows.settings)}) on conflict (id) do nothing;`,
+    "",
+    ...rows.sections.map((r) => `insert into public.sections (key, data) values (${s(r.key)}, ${j(r.data)}) on conflict (key) do nothing;`),
+    "",
+    ...rows.lines.map((r) => `insert into public.lines (key, sort, data) values (${s(r.key)}, ${r.sort}, ${j(r.data)}) on conflict (key) do nothing;`),
+    "",
+    ...rows.projects.map(
+      (r) =>
+        `insert into public.projects (id, slug, sort, published, data) values (${s(r.id)}, ${s(r.slug)}, ${r.sort}, ${r.published}, ${j(r.data)}) on conflict do nothing;`,
+    ),
+    "",
+    // Only for projects that still exist under that slug (a project renamed or deleted in the admin is left alone).
+    ...rows.cases.map(
+      (r) =>
+        `insert into public.case_studies (project_slug, published, data) select ${s(r.project_slug)}, ${r.published}, ${j(r.data)} where exists (select 1 from public.projects where slug = ${s(r.project_slug)}) on conflict (project_slug) do nothing;`,
+    ),
+    "",
+  ].join("\n");
+}

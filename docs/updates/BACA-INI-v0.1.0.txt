@@ -1,0 +1,98 @@
+PORTOFOLIO v0.1.0 — BACA INI DULU
+================================================================
+
+Ini rilis pertama: situs portofolio + panel admin.
+Zip ini berisi seluruh kode proyek. Pasang ke repo GitHub
+vanhallen28/portofolio dengan perintah di bawah.
+
+
+1. PASANG (salin-tempel di Terminal)
+----------------------------------------------------------------
+
+Pertama kali (repo belum ada di laptop):
+
+  cd ~/Documents/Virgiawan/PROJECT
+  git clone https://github.com/vanhallen28/portofolio.git
+  cd portofolio
+  unzip -o ~/Downloads/portofolio-v0.1.0.zip -d .
+  npm install
+  npm run dev
+
+Buka http://localhost:3000 (situs) dan http://localhost:3000/admin
+(kata sandi mode lokal: portofolio-lokal). Bila sudah oke:
+
+  git add -A
+  git commit -m "v0.1.0: portofolio + panel admin"
+  git push
+
+Catatan: README.md dari GitHub akan tertimpa README baru. Itu memang
+disengaja.
+
+
+2. SAMBUNGKAN KE SUPABASE & VERCEL
+----------------------------------------------------------------
+
+Ikuti README.md langkah 2 sampai 6:
+
+  2. Buat proyek Supabase baru (region Singapore)
+  3. SQL Editor: jalankan supabase/migrations/0001_init.sql,
+     lalu supabase/seed.sql
+  4. Buat akun admin + jalankan SQL insert into public.admins
+  5. Isi .env.local, lalu: npm run doctor   (semua harus ✓)
+  6. Import repo di Vercel + isi 2–3 variabel lingkungan, Deploy
+
+Tidak ada file yang dihapus di versi ini.
+
+
+3. MOHON DICEK SEBELUM SITUS DIBAGIKAN
+----------------------------------------------------------------
+
+Semua isi bisa diubah di admin. Yang paling penting untuk dicek:
+
+[ ] Studi kasus 7 proyek (selain Aliya Syifaa) adalah DRAF yang
+    disusun dari kode & dokumen proyeknya. Baca setiap halaman
+    /karya/<slug> dan sesuaikan. Angka yang tampil:
+    - Invisual HRIS : 25 orang, 8 modul, 6 aplikasi langganan
+                      digantikan, 5 peran pengguna
+    - Biansa        : 34 halaman, 4 gaya beranda, 4 lapis cek,
+                      5 cara bayar. Klien ditulis "Biansa Style";
+                      disebut berawal dari template "POINT Store"
+    - Portal Klien  : 145 skenario hak akses, 3 cara bayar, link
+                      persetujuan berlaku 14 hari, 4 tahap Kanban
+    - Ciri          : 13 perhiasan, 35 halaman, 8 artikel journal
+    - Website Invisual: 22 halaman, 14 poin SEO, 20+ paket update
+    - Internet Bandung: 8 panel admin, 4 jenis tombol WhatsApp
+                      dilacak (tanpa nama/logo operator)
+    - POINT POS     : 6 modul, 4 cara bayar, PB1 11%
+[ ] Angka di beranda: 25 pengguna HRIS, 19 versi dalam 9 hari
+    (Aliya), Biansa di Tasikmalaya.
+[ ] Semua screenshot sudah memakai data samaran. Gambar baru yang
+    diunggah dari admin juga harus samaran.
+[ ] File preview yang Anda kirim tampil apa adanya. Mohon pastikan
+    dua hal ini boleh dipublikasikan:
+    - preview Aliya Syifaa memuat nomor WhatsApp 0823-1937-9203
+      dan akun @aliyasyifaa.terapi;
+    - banner hero di preview Internet Bandung bertuliskan
+      "Koneksi MaXimal Harga Minimal". Bila itu materi kampanye
+      operator, kirimkan banner pengganti dan saya tukar.
+[ ] Testimoni, FAQ, dan status "Menerima proyek baru" masih
+    kosong/mati. Isi lewat admin bila sudah ada.
+[ ] Portal Klien: file preview HTML menyusul. Caranya ada di
+    README langkah 8.
+
+
+4. ISI PAKET
+----------------------------------------------------------------
+
+app/            halaman situs (ID & EN) dan panel admin
+components/     komponen tampilan
+lib/            konten, penyimpanan, animasi, SEO
+supabase/       SQL database (migrasi + isi awal)
+public/preview/ 7 file HTML preview proyek
+public/media/   gambar awal (WebP)
+tests/          uji otomatis
+docs/           spesifikasi, rencana, dan catatan rilis ini
+
+Hasil pemeriksaan sebelum zip dibuat: lint ✓, typecheck ✓,
+uji unit & SQL ✓, uji end-to-end ✓, build produksi ✓,
+review independen ✓ (temuannya sudah diperbaiki).

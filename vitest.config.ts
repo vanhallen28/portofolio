@@ -1,0 +1,7 @@
+import { defineConfig } from "vitest/config";
+import path from "node:path";
+
+export default defineConfig({
+  resolve: { alias: { "@": path.resolve(__dirname, ".") } },
+  test: { include: ["tests/unit/**/*.test.ts", "tests/sql/**/*.test.ts"], environment: "node", passWithNoTests: true, testTimeout: 30000 },
+});
