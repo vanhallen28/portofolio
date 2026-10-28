@@ -132,7 +132,7 @@ a:hover { color: #1a4fd6; }
 .chart__bars { flex: 1; display: flex; align-items: flex-end; gap: 8px; margin-top: 12px; min-height: 0; }
 .bar { flex: 1; background: var(--track); border-radius: 99px; min-height: 4px; }
 .bar--peak { background: var(--blue); }
-.chart__axis { display: flex; justify-content: space-between; font: 400 10.5px var(--sans); color: #cfc6b3; margin-top: 8px; }
+.chart__axis { display: flex; gap: 8px; text-align: center; font: 400 10.5px var(--sans); color: #cfc6b3; margin-top: 8px; }
 .dash-bottom { display: grid; grid-template-columns: 1.4fr 1fr; gap: 12px; height: 190px; flex: none; }
 .panel { background: var(--surface); border-radius: 18px; padding: 14px 18px; box-shadow: var(--sh-card); display: flex; flex-direction: column; overflow: hidden; }
 .panel__title { font: 500 13px var(--sans); margin-bottom: 8px; }
@@ -229,7 +229,7 @@ a:hover { color: #1a4fd6; }
 .receipt__row { display: flex; justify-content: space-between; font: 400 12.5px var(--sans); color: #5c554a; }
 .receipt__divider { border-top: 1px dashed #d9cfbb; margin: 4px 0; }
 .receipt__total { display: flex; justify-content: space-between; font: 600 15px var(--sans); }
-.ba-list { background: var(--bg); border-radius: 16px; padding: 6px 18px; display: flex; flex-direction: column; max-height: 240px; overflow-y: auto; }
+.ba-list { background: var(--bg); border-radius: 16px; padding: 6px 18px; display: flex; flex-direction: column; max-height: 320px; overflow-y: auto; }
 .ba-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--track); font: 400 13px var(--sans); }
 
 input[type='range'] { -webkit-appearance: none; appearance: none; height: 6px; border-radius: 99px; background: var(--track); outline: none; }
@@ -292,6 +292,7 @@ input[type='range']::-moz-range-thumb { width: 20px; height: 20px; border: none;
   .stat-grid { grid-template-columns: repeat(2, 1fr); }
   .dash-bottom { grid-template-columns: 1fr; height: auto; }
   .chart { min-height: 220px; }
+  .chart__bars { flex: none; height: 150px; }
   .tablecard { min-height: auto; flex: none; }
   .tablescroll { overflow-x: auto; }
   .tableinner { min-width: 680px; }
@@ -308,6 +309,7 @@ input[type='range']::-moz-range-thumb { width: 20px; height: 20px; border: none;
   .stat-grid { grid-template-columns: 1fr 1fr; }
   .prodgrid { grid-template-columns: 1fr 1fr; }
 }
+.chart__axis span { flex: 1; }
 </style>
 </head>
 <body>
@@ -443,6 +445,16 @@ function totals(){
   const tax=Math.round(sub*state.pajak/100);
   return {sub,tax,tot:sub+tax};
 }
+// everything an order needs at once: ingredients (in usage units) and finished items
+function orderFits(lines){
+  const need=new Map(), fin=new Map();
+  lines.forEach(o=>{ const p=prod(o.sku); if(!p) return;
+    if(p.stockMode==='finished') fin.set(p.sku,(fin.get(p.sku)||0)+o.qty);
+    else effectiveRecipe(o).forEach(it=>need.set(it.ingredientSku,(need.get(it.ingredientSku)||0)+it.qty*o.qty)); });
+  for(const [sku,q] of need){ const i=ing(sku); if(!i||q>i.stock*i.usageFactor+1e-9) return false; }
+  for(const [sku,q] of fin){ const p=prod(sku); if(!p||q>p.stock) return false; }
+  return true;
+}
 function lowStock(){
   return [
     ...state.products.filter(p=>!p.archived&&isLow(p)).map(p=>({name:p.name,label:p.stockMode==='finished'?(p.stock+' tersisa'):(makeableCount(p)+' bisa dibuat')})),
@@ -480,15 +492,15 @@ function add(sku,opts){
   if(avail<=0) return flash('Bahan tidak cukup untuk '+p.name);
   const sig=lineSig(line);
   const ex=state.order.find(o=>lineSig(o)===sig);
-  const cur=ex?ex.qty:0;
-  if(cur>=avail) return flash('Ketersediaan '+p.name+' tersisa '+avail);
+  const next=ex?state.order.map(o=>o===ex?{...o,qty:o.qty+1}:o):[...state.order,line];
+  if(!orderFits(next)) return flash('Bahan tidak cukup untuk '+p.name);
   if(ex) ex.qty++; else { line.lineId=uid('ln'); state.order.push(line); }
   render();
 }
 function chgLine(lineId,d){
   const o=state.order.find(x=>x.lineId===lineId); if(!o) return;
   o.qty+=d;
-  if(d>0){ const p=prod(o.sku); const avail=p.stockMode==='finished'?p.stock:makeableForRecipe(effectiveRecipe(o)); if(o.qty>avail) o.qty=avail; }
+  if(d>0&&!orderFits(state.order)){ o.qty-=d; return flash('Bahan tidak cukup untuk '+prod(o.sku).name); }
   state.order=state.order.filter(x=>x.qty>0);
   render();
 }
@@ -496,6 +508,7 @@ function confirmPay(){
   const t=totals();
   if(state.order.length===0) return;
   if(state.payMethod==='Tunai'&&state.cash<t.tot) return;
+  if(!orderFits(state.order)) return flash('Bahan tidak cukup — periksa pesanan');
   const now=new Date(); const time=String(now.getHours()).padStart(2,'0')+'.'+String(now.getMinutes()).padStart(2,'0');
   const items=state.order.map(o=>{ const p=prod(o.sku); const lbl=optionsLabel(o); return {name:p.name,qty:o.qty,amt:linePrice(o)*o.qty,optionsLabel:lbl||undefined,note:o.note}; });
   // ingredient deduction (recipe products), 3-dp precision
@@ -524,13 +537,15 @@ function kdsAct(id){
   render();
 }
 // opname
-function startOp(){ state.op={items:state.ingredients.map(i=>({sku:i.sku,fisik:''}))}; state.showBA=false; render(); }
-function opParsed(){ if(!state.op) return []; return state.op.items.map(it=>{ const i=ing(it.sku); const v=it.fisik.trim()===''?null:parseFloat(it.fisik.replace(',','.')); return {ing:i,fisik:v,raw:it.fisik,ok:v!==null&&!isNaN(v)}; }); }
+function startOp(){ state.op={items:state.ingredients.map(i=>({sku:i.sku,fisik:''})),sys:Object.fromEntries(state.ingredients.map(i=>[i.sku,i.stock])),blind:state.blind}; state.showBA=false; render(); }
+function opParsed(){ if(!state.op) return []; return state.op.items.map(it=>{ const i=ing(it.sku); const v=it.fisik.trim()===''?null:parseFloat(it.fisik.replace(',','.')); return {ing:i,sys:state.op.sys[it.sku],fisik:v,raw:it.fisik,ok:v!==null&&!isNaN(v)}; }); }
+const r3=n=>Math.round(n*1000)/1000;
 function finishOp(){ const parsed=opParsed(); if(state.op&&parsed.filter(p=>p.ok).length===parsed.length){ state.showBA=true; render(); } }
 function applyOp(){
   const parsed=opParsed();
-  state.ingredients.forEach(i=>{ const p=parsed.find(x=>x.ing.sku===i.sku); if(p&&p.ok) i.stock=p.fisik; });
-  const diffs=parsed.filter(p=>p.ok&&p.fisik!==p.ing.stock).length;
+  const diffs=parsed.filter(p=>p.ok&&r3(p.fisik-p.sys)!==0).length;
+  // adjust by the difference, so sales made while the count was running stay deducted
+  state.ingredients.forEach(i=>{ const p=parsed.find(x=>x.ing.sku===i.sku); if(p&&p.ok) i.stock=Math.max(0,r3(i.stock+(p.fisik-p.sys))); });
   const id='SO-'+String(8+(state.opLog.length-2)).padStart(4,'0');
   const date=new Date().toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});
   state.opLog.unshift({id,title:'Mingguan — bahan & kemasan',date,diffs});
@@ -589,7 +604,7 @@ const ACTS={
   osclose:()=>{state.os=null;render();},
   ospick:(a,el)=>{ state.os.options[el.getAttribute('data-g')]=el.getAttribute('data-c'); render(); },
   ostoggle:(a,el)=>{ const id=el.getAttribute('data-a'); const s=state.os.addOnIds; const i=s.indexOf(id); if(i>=0)s.splice(i,1);else s.push(id); render(); },
-  osadd:()=>{ const o=state.os; add(o.sku,{options:o.options,addOnIds:o.addOnIds,note:o.note}); state.os=null; },
+  osadd:()=>{ const o=state.os; state.os=null; add(o.sku,{options:o.options,addOnIds:o.addOnIds,note:o.note}); render(); },
   // editor
   npopen:a=>openEditor(a||null), npclose:()=>{state.npOpen=false;state.editingSku=null;state.ed=null;render();},
   npsave:()=>saveProduct(), npdel:a=>deleteProduct(a), nparch:a=>archiveProduct(a),
@@ -764,7 +779,7 @@ function dashHtml(){
     </div>
     <div class="chart"><div class="chart__head"><span>Penjualan per jam</span><span>Puncak ${(8+peakI)}.00 · ${f(maxH)}</span></div>
       <div class="chart__bars">${bars}</div>
-      <div class="chart__axis"><span>08</span><span>10</span><span>12</span><span>14</span><span>16</span><span>18</span><span>19</span></div></div>
+      <div class="chart__axis">${state.hourly.map((_,i)=>`<span>${i%2===0?String(8+i).padStart(2,'0'):''}</span>`).join('')}</div></div>
     <div class="dash-bottom">
       <div class="panel"><div class="panel__title">Transaksi terakhir</div><div class="panel__list">${recent}</div></div>
       <div class="panel"><div class="panel__title">Perlu restock</div><div class="panel__list">${lowRows}</div></div>
@@ -867,14 +882,14 @@ function riwayatHtml(){
     <div class="tfoot">${state.trx.length} transaksi tercatat hari ini · total ${f(sum)}</div></div></div>`;
 }
 function opHtml(){
-  const badge='MINGGUAN · '+(state.blind?'BLIND COUNT':'COUNT TERBUKA');
+  const blindNow=state.op?state.op.blind:state.blind; const badge='MINGGUAN · '+(blindNow?'BLIND COUNT':'COUNT TERBUKA');
   const head=`<header class="topbar"><span class="topbar__title">Stock Opname</span><span class="spacer"></span>${state.op?`<span class="badge" style="color:var(--blue);background:var(--blue-tint);font-size:10.5px">${badge}</span>`:''}</header>`;
   const nextId='SO-'+String(8+(state.opLog.length-2)).padStart(4,'0');
   if(!state.op){
     const log=state.opLog.map(l=>`<div style="display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--divider);font:400 13px var(--sans)"><span class="mono" style="color:var(--faint)">${l.id}</span><span style="flex:1;font:500 14px var(--serif)">${esc(l.title)}</span><span style="color:var(--muted)">${l.date}</span><span class="${l.diffs===0?'badge badge--ok':'badge badge--danger'}">${l.diffs===0?'Semua sesuai':l.diffs+' selisih'}</span></div>`).join('');
     return `<div class="mod">${head}<div class="op-start">
       <div class="op-card"><span class="op-card__title">Mulai sesi baru</span>
-        <span class="op-note">Sesi <strong style="color:var(--ink)">${nextId}</strong> · Mingguan — semua bahan &amp; kemasan (${state.ingredients.length} SKU). Stok sistem dibekukan selama penghitungan.</span>
+        <span class="op-note">Sesi <strong style="color:var(--ink)">${nextId}</strong> · Mingguan — semua bahan &amp; kemasan (${state.ingredients.length} SKU). Stok sistem dibekukan saat sesi dimulai; dengan blind count, selisih baru terlihat di berita acara.</span>
         <div class="toggle-row" data-act="blind"><span class="toggle${state.blind?' toggle--on':''}"><span class="toggle__knob"></span></span><span style="flex:1"><span style="display:block;font:500 13px var(--sans)">Blind count</span><span style="font:400 11.5px var(--sans);color:var(--faint)">Stok sistem disembunyikan saat input</span></span></div>
         <div class="btn btn--blue" style="padding:14px 0;font:600 13.5px var(--sans)" data-act="startop">Mulai penghitungan</div>
         <span class="op-note--faint">Saran ritme: spot-check harian bahan kritis saat closing · mingguan penuh · blind count bulanan.</span></div>
@@ -883,9 +898,10 @@ function opHtml(){
   const parsed=opParsed(); const counted=parsed.filter(p=>p.ok).length; const allc=counted===parsed.length;
   const cols='130px 1.7fr 110px 150px 110px';
   const rows=parsed.map(p=>{
-    const sys=state.blind?'•••':(p.ing.stock+' '+p.ing.unit);
+    const sys=state.op.blind?'•••':(p.sys+' '+p.ing.unit);
     let diff='—',ds='font:500 11px var(--sans);color:var(--disc-faint)';
-    if(p.ok){ const d=Math.round((p.fisik-p.ing.stock)*10)/10; diff=(d>0?'+':'')+d; ds=diffStyle(p.fisik-p.ing.stock); }
+    if(p.ok&&state.op.blind){ diff='tercatat'; }
+    else if(p.ok){ const d=r3(p.fisik-p.sys); diff=(d>0?'+':'')+d; ds=diffStyle(d); }
     return `<div class="trow" style="grid-template-columns:${cols}"><span class="mono" style="color:var(--faint)">${p.ing.sku}</span>
       <span style="font:500 14px var(--serif)">${esc(p.ing.name)} <span style="font:400 11.5px var(--sans);color:var(--faint2)">${p.ing.unit}</span></span>
       <span style="text-align:right;color:var(--muted)">${sys}</span>
@@ -927,9 +943,9 @@ function payModal(){
 function baModal(){
   if(!state.showBA) return '';
   const parsed=opParsed(); const nextId='SO-'+String(8+(state.opLog.length-2)).padStart(4,'0');
-  const diffs=parsed.filter(p=>p.ok&&p.fisik!==p.ing.stock);
+  const diffs=parsed.filter(p=>p.ok&&r3(p.fisik-p.sys)!==0);
   const sum=diffs.length===0?'Seluruh hitungan fisik cocok dengan stok sistem.':diffs.length+' SKU selisih dari '+parsed.length+' item dihitung. Terapkan untuk menyesuaikan stok sistem ke hasil fisik.';
-  const body=diffs.length===0?`<div style="padding:14px 0;font:400 13px var(--sans);color:var(--ok-fg)">Semua stok sesuai sistem ✓</div>`:diffs.map(p=>{const d=Math.round((p.fisik-p.ing.stock)*10)/10;return `<div class="ba-row"><span style="flex:1;font:500 14px var(--serif)">${esc(p.ing.name)}</span><span style="color:var(--muted)">${p.ing.stock} → ${p.fisik} ${p.ing.unit}</span><span class="${diffStyle(d)}">${(d>0?'+':'')+d}</span></div>`;}).join('');
+  const body=diffs.length===0?`<div style="padding:14px 0;font:400 13px var(--sans);color:var(--ok-fg)">Semua stok sesuai sistem ✓</div>`:diffs.map(p=>{const d=r3(p.fisik-p.sys);return `<div class="ba-row"><span style="flex:1;font:500 14px var(--serif)">${esc(p.ing.name)}</span><span style="color:var(--muted)">${p.sys} → ${p.fisik} ${p.ing.unit}</span><span class="${diffStyle(d)}">${(d>0?'+':'')+d}</span></div>`;}).join('');
   return `<div class="overlay"><div class="modal modal--wide"><div class="modal__head"><span class="modal__title">Berita acara — ${nextId}</span><span class="close" data-act="closeba">✕</span></div>
     <span style="font:400 12.5px var(--sans);color:var(--muted)">${sum}</span><div class="ba-list">${body}</div>
     <div class="btn-row"><span class="btn btn--ghost" style="flex:1;padding:13px 0;font:500 12.5px var(--sans)" data-act="closeba">Kembali</span><span class="btn btn--blue" style="flex:1.4;padding:13px 0;font:600 12.5px var(--sans)" data-act="applyop">Terapkan penyesuaian stok</span></div></div></div>`;

@@ -1,0 +1,52 @@
+PORTOFOLIO v0.2.3 — BACA INI DULU
+================================================================
+
+Prototipe POINT POS (/preview/point-pos.html) diperbaiki supaya
+cocok dengan studi kasusnya dan dengan paket Behance POINT POS.
+
+- Lembar opsi menu (ukuran, suhu, add-on) menutup setelah "Tambah".
+- Kasir mengecek bahan untuk seluruh pesanan, jadi tidak bisa
+  menjual minuman yang bahannya sudah habis dipakai baris lain.
+- Stock opname: stok sistem dikunci saat sesi dimulai; dengan blind
+  count, selisih baru terlihat di berita acara; stok disesuaikan
+  sebesar selisihnya; riwayat sesi mencatat jumlah selisih dengan
+  benar.
+- Grafik penjualan per jam tampil di HP.
+
+Yang berubah: public/preview/point-pos.html, CHANGELOG.md,
+package.json (versi), dan catatan ini. Tidak ada perubahan database,
+tidak ada file yang dihapus.
+
+
+1. PASANG (salin-tempel di Terminal)
+----------------------------------------------------------------
+
+  cd ~/Documents/Virgiawan/PROJECT/portofolio
+  unzip -o ~/Downloads/portofolio-v0.2.3.zip -d .
+  npm install
+  npm run build
+  git add -A
+  git commit -m "v0.2.3: perbaikan prototipe POINT POS"
+  git push
+
+Push berhasil bila diakhiri "main -> main" dan tidak ada baris
+"error:" atau "fatal:". Cek dengan: git status
+
+
+2. CEK SETELAH DEPLOY
+----------------------------------------------------------------
+
+Tunggu deploy di Vercel berstatus Ready, lalu buka
+/preview/point-pos.html dan coba:
+
+  - Ketuk Caramel Macchiato → Tambah. Lembar opsi langsung menutup.
+  - Buka Stock Opname → Mulai penghitungan, isi angka fisik. Kolom
+    Selisih menulis "tercatat", bukan angkanya. Tekan "Selesaikan &
+    buat berita acara": selisih baru muncul di situ.
+  - Buka Dashboard di HP: grafik per jam punya batang yang tinggi
+    rendahnya terlihat.
+
+Tidak perlu menjalankan apa pun di Supabase.
+
+Setelah v0.2.3 tayang, paket Behance POINT POS boleh dipublikasikan
+(lihat langkah 0 di PANDUAN-UPLOAD paket itu).

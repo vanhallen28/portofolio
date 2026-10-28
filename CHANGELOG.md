@@ -3,6 +3,15 @@
 Format: setiap rilis dikirim sebagai `portofolio-vX.Y.Z.zip`. Nomor versi naik setiap kali, jadi zip tidak pernah saling tumpuk.
 Petunjuk pasang per versi: `docs/updates/BACA-INI-vX.Y.Z.txt`.
 
+## v0.2.3 — 29 Oktober 2026
+
+Prototipe POINT POS diperbaiki supaya sesuai dengan studi kasusnya.
+
+- **Lembar opsi menutup** setelah "Tambah" ditekan. Sebelumnya lembar opsi tetap tampil sampai layar diklik lagi, dan mengetuk pilihan di lembar itu bisa memunculkan galat.
+- **Kasir mengecek bahan untuk seluruh pesanan.** Sebelumnya tiap baris dicek sendiri-sendiri, jadi beberapa menu yang memakai bahan yang sama (mis. susu) bisa terjual melebihi stok. Sekarang menu yang bahannya tidak cukup ditolak dengan pesan "Bahan tidak cukup", dan pembayaran mengecek sekali lagi.
+- **Stock opname:** stok sistem dikunci saat sesi dimulai. Dengan blind count, selisih juga disembunyikan sampai berita acara. Berita acara menampilkan selisih sampai 3 angka di belakang koma (sama seperti stok), memuat semua 6 bahan tanpa perlu digulir, dan stok disesuaikan sebesar selisihnya, jadi penjualan selama penghitungan tetap terpotong. Riwayat sesi kini mencatat jumlah selisih dengan benar (sebelumnya selalu "Semua sesuai").
+- **Grafik penjualan per jam** tampil di HP (sebelumnya batangnya rata), dan label jamnya tepat di bawah batangnya.
+
 ## v0.2.2 — 28 Oktober 2026
 
 Biansa dengan foto produk asli.
