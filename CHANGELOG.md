@@ -3,6 +3,19 @@
 Format: setiap rilis dikirim sebagai `portofolio-vX.Y.Z.zip`. Nomor versi naik setiap kali, jadi zip tidak pernah saling tumpuk.
 Petunjuk pasang per versi: `docs/updates/BACA-INI-vX.Y.Z.txt`.
 
+## v0.2.2 — 28 Oktober 2026
+
+Biansa dengan foto produk asli.
+
+- **Preview Biansa** kini memakai 7 foto produk asli dari Biansa Style di beranda (tiga gaya), katalog, halaman produk, keranjang, wishlist, lookbook, jurnal, dan admin. Foto disimpan sebagai file kecil di `public/preview/biansa/` (± 1 MB total).
+- Katalog contoh di preview disesuaikan dengan fotonya: Outer Piping (Espresso, Karamel, Blush), Setelan Peplum (Maroon, Hitam), Setelan Monokrom, Daster Rayon (Navy, Hitam). Halaman produk menampilkan Outer Piping Espresso dengan galeri 4 foto dan 6 pilihan warna. Angka stok, terlaris, dan stok menipis di admin ikut dicocokkan.
+- Alamat email dan domain yang mirip asli di preview Biansa diganti alamat contoh.
+- **Ruang Biansa** di beranda sekarang menampilkan layar desktop dan HP (sebelumnya kartu merek tanpa layar).
+- **Studi kasus Biansa** mendapat gambar sampul dan gambar di tiap fitur: halaman produk, tas belanja dan checkout di HP, dasbor admin, dan editor blog.
+- `supabase/updates/v0.2.2.sql`: memasang layar dan gambar Biansa ke database yang sudah berjalan, tanpa menimpa yang sudah Anda ubah di admin; berjalan sekali saja.
+- `supabase/seed.sql` yang dijalankan ulang di database yang sudah berisi tidak lagi menandai pembaruan isi (v0.2.0, v0.2.2) sebagai sudah dijalankan, jadi file pembaruannya tetap bisa dipakai.
+- Preview Aliya Syifaa: tanggal dan jam di tabel admin tidak lagi menempel ("28 Okt 2026 · 08:00", sebelumnya "28 Okt 202608:00").
+
 ## v0.2.1 — 28 Oktober 2026
 
 - Membuka studi kasus lain (kartu "Ruang berikutnya", tombol "Lihat studi kasus" di ruang, atau menu) sekarang selalu mulai dari atas halaman. Sebelumnya halaman baru terbuka di posisi gulir halaman sebelumnya.

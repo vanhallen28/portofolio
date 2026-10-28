@@ -190,5 +190,47 @@
   "width": 880,
   "height": 880,
   "kb": 29
+ },
+ "biansa-beranda": {
+  "url": "/media/seed/biansa-beranda.webp",
+  "width": 1600,
+  "height": 1000,
+  "kb": 47
+ },
+ "biansa-produk": {
+  "url": "/media/seed/biansa-produk.webp",
+  "width": 1600,
+  "height": 1144,
+  "kb": 49
+ },
+ "biansa-dasbor": {
+  "url": "/media/seed/biansa-dasbor.webp",
+  "width": 1600,
+  "height": 1144,
+  "kb": 34
+ },
+ "biansa-blog-admin": {
+  "url": "/media/seed/biansa-blog-admin.webp",
+  "width": 1600,
+  "height": 1000,
+  "kb": 26
+ },
+ "biansa-hp-produk": {
+  "url": "/media/seed/biansa-hp-produk.webp",
+  "width": 600,
+  "height": 1300,
+  "kb": 35
+ },
+ "biansa-hp-tas": {
+  "url": "/media/seed/biansa-hp-tas.webp",
+  "width": 600,
+  "height": 1300,
+  "kb": 28
+ },
+ "biansa-hp-checkout": {
+  "url": "/media/seed/biansa-hp-checkout.webp",
+  "width": 600,
+  "height": 1300,
+  "kb": 18
  }
 }

@@ -19,15 +19,18 @@ export function buildSeedSql(content: Content): string {
     "",
     ...rows.lines.map((r) => `insert into public.lines (key, sort, data) values (${s(r.key)}, ${r.sort}, ${j(r.data)}) on conflict (key) do nothing;`),
     "",
+    // A fresh database gets the starter content that already includes these updates, so they are recorded as done.
+    // Only when there are no projects yet: running seed.sql again on a live database must not mark an update
+    // as done that never reached its (already existing, therefore untouched) rows.
+    "-- Isi awal ini sudah memuat pembaruan isi v0.2.0 dan v0.2.2 (dicatat hanya pada database yang masih kosong).",
+    "insert into public.content_updates (version) select v from (values ('0.2.0'), ('0.2.2')) as x(v) where not exists (select 1 from public.projects) on conflict do nothing;",
+    "",
     ...rows.projects.map(
       (r) =>
         `insert into public.projects (id, slug, sort, published, data) values (${s(r.id)}, ${s(r.slug)}, ${r.sort}, ${r.published}, ${j(r.data)}) on conflict do nothing;`,
     ),
     "",
     // Only for projects that still exist under that slug (a project renamed or deleted in the admin is left alone).
-    "-- Isi awal ini sudah memuat pembaruan isi v0.2.0.",
-    "insert into public.content_updates (version) values ('0.2.0') on conflict do nothing;",
-    "",
     ...rows.cases.map(
       (r) =>
         `insert into public.case_studies (project_slug, published, data) select ${s(r.project_slug)}, ${r.published}, ${j(r.data)} where exists (select 1 from public.projects where slug = ${s(r.project_slug)}) on conflict (project_slug) do nothing;`,

@@ -1,0 +1,83 @@
+PORTOFOLIO v0.2.2 — BACA INI DULU
+================================================================
+
+Biansa sekarang memakai foto produk asli dari Biansa Style.
+
+- Preview Biansa (/preview/biansa.html): 7 foto asli dipakai di
+  beranda (editorial, etalase, lookbook), katalog, halaman produk,
+  keranjang, wishlist, jurnal, dan admin. Nama produk, harga, stok,
+  dan pesanan di preview tetap data contoh, tetapi kini cocok dengan
+  fotonya (Outer Piping, Setelan Peplum, Setelan Monokrom, Daster
+  Rayon).
+- Ruang Biansa di beranda menampilkan layar desktop + HP, bukan lagi
+  kartu merek.
+- Studi kasus Biansa punya gambar sampul dan gambar di tiap fitur.
+- Preview Aliya Syifaa: tanggal dan jam di tabel admin tidak lagi
+  menempel (sekarang "28 Okt 2026 · 08:00").
+
+File baru: public/preview/biansa/ (27 potongan dari 7 foto tadi),
+7 gambar layar public/media/seed/biansa-*.webp, dan
+supabase/updates/v0.2.2.sql (plus uji dan catatan ini).
+Tidak ada file yang dihapus.
+
+Penting: foto-foto ini memperlihatkan wajah model. Pastikan klien
+mengizinkan foto tersebut tampil di portofolio sebelum Anda push.
+
+
+1. PASANG (salin-tempel di Terminal)
+----------------------------------------------------------------
+
+  cd ~/Documents/Virgiawan/PROJECT/portofolio
+  unzip -o ~/Downloads/portofolio-v0.2.2.zip -d .
+  npm install
+  npm run build
+  git add -A
+  git commit -m "v0.2.2: foto asli Biansa di preview, ruang, dan studi kasus"
+  git push
+
+Push berhasil bila diakhiri "main -> main" dan tidak ada baris
+"error:" atau "fatal:". Cek dengan: git status
+
+Preview Biansa dan perbaikan Aliya langsung tampil setelah deploy;
+keduanya tidak memakai database.
+
+
+2. SUPABASE (untuk ruang dan studi kasus Biansa)
+----------------------------------------------------------------
+
+A. Supabase BELUM disiapkan:
+   Ikuti README seperti biasa. supabase/seed.sql di versi ini sudah
+   berisi layar dan gambar Biansa. Tidak perlu langkah tambahan.
+
+B. Supabase SUDAH berjalan:
+
+   - Tunggu dulu sampai deploy v0.2.2 di Vercel berstatus Ready
+     (gambarnya baru ada setelah deploy).
+   - Di Supabase → SQL Editor, jalankan:
+
+       supabase/updates/v0.2.2.sql
+
+     Di Mac, cara cepat menyalin isinya:
+       pbcopy < supabase/updates/v0.2.2.sql
+
+     SQL ini hanya mengisi yang masih kosong: ruang Biansa yang masih
+     kartu merek tanpa layar, studi kasus tanpa sampul, dan fitur
+     tanpa gambar. Yang sudah Anda ubah di admin tidak disentuh.
+     Berjalan sekali saja; menjalankannya lagi tidak mengubah apa pun.
+
+   - Lalu buka admin, simpan apa saja (mis. Pengaturan situs →
+     Simpan) atau tunggu ± 10 menit agar situs memuat isi baru.
+
+   Tidak ada migrasi struktur (supabase/migrations) di versi ini.
+
+
+3. MOHON DICEK
+----------------------------------------------------------------
+
+[ ] Beranda → ruang Biansa: layar desktop beranda toko dan layar HP
+    halaman produk Outer Piping Espresso.
+[ ] /karya/biansa: gambar sampul di atas, lalu gambar di keempat
+    fitur (halaman produk, tas belanja + checkout di HP, dasbor,
+    editor blog).
+[ ] Tombol "Preview proyek" Biansa: foto asli tampil di tampilan
+    Desktop dan Mobile (tombol di atas preview).

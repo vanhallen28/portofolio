@@ -257,7 +257,11 @@ export const seedProjects: Project[] = [
       { value: "4", label: l("lapis cek sebelum status lunas", "checks before an order is paid") },
     ],
     status: l("Belum tayang, menunggu keputusan klien", "Not live yet, awaiting the client's go-ahead"),
-    liveUrl: "", liveLabel: "", liveNote: null, previewUrl: "/preview/biansa.html", layout: "brand-card", visuals: [],
+    liveUrl: "", liveLabel: "", liveNote: null, previewUrl: "/preview/biansa.html", layout: "desk-phone",
+    visuals: [
+      { role: "desk", image: img("biansa-beranda", 1600, 1000, "Beranda Biansa: model memakai outer karamel dalam bingkai lengkung, judul Nyaman itu tidak harus mahal", "Biansa homepage: a model in a caramel outer inside an arched frame, headline Nyaman itu tidak harus mahal") },
+      { role: "phone", image: img("biansa-hp-produk", 600, 1300, "Halaman produk Outer Piping Espresso versi HP: foto utama dan deretan thumbnail galeri", "Outer Piping Espresso product page on phone: main photo and the gallery thumbnails") },
+    ],
     brand: {
       logoUrl: "/media/seed/biansa-logo.svg",
       swatches: [

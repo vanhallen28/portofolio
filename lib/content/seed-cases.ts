@@ -176,7 +176,15 @@ export const SEED_CASES: CaseStudy[] = [
       role: { id: "Desain, pengembangan, database, pembayaran", en: "Design, development, database, payments" },
       year: "2026",
     },
-    cover: null,
+    cover: {
+      url: "/media/seed/biansa-beranda.webp",
+      alt: {
+        id: "Beranda Biansa: model memakai outer karamel dalam bingkai lengkung, dengan judul Nyaman itu tidak harus mahal",
+        en: "Biansa homepage: a model in a caramel outer inside an arched frame, under the headline Nyaman itu tidak harus mahal",
+      },
+      width: 1600,
+      height: 1000,
+    },
     blocks: [
       {
         type: "prose",
@@ -202,7 +210,17 @@ export const SEED_CASES: CaseStudy[] = [
               id: "Pemilik memilih satu dari empat gaya beranda: editorial, etalase, marquee, atau mozaik. Pembeli menyaring dan mengurutkan produk, melihat galeri foto dan pilihan warna, tahu ukuran mana yang habis, dan membuka panduan ukuran tanpa pindah halaman.",
               en: "The owner picks one of four homepage styles: editorial, shop window, marquee or mosaic. Shoppers filter and sort products, browse the photo gallery and colour options, see which sizes are sold out, and open the size guide without leaving the page.",
             },
-            images: [],
+            images: [
+              {
+                url: "/media/seed/biansa-produk.webp",
+                alt: {
+                  id: "Halaman produk Outer Piping Espresso: galeri foto dengan thumbnail, enam pilihan warna, ukuran XXL habis, dan sisa stok",
+                  en: "Outer Piping Espresso product page: photo gallery with thumbnails, six colour options, size XXL sold out, and the stock left",
+                },
+                width: 1600,
+                height: 1144,
+              },
+            ],
           },
           {
             title: { id: "Checkout tanpa akun", en: "Guest checkout" },
@@ -210,7 +228,26 @@ export const SEED_CASES: CaseStudy[] = [
               id: "Pembeli bisa checkout tanpa membuat akun, lalu membayar lewat virtual account, GoPay, ShopeePay, atau QRIS. Transfer bank manual juga diterima dan ditandai lunas oleh admin. Harga sudah termasuk PPN 11%, dan setiap pesanan bisa dilacak lewat timeline status.",
               en: "Shoppers can check out without an account and pay by virtual account, GoPay, ShopeePay or QRIS. Manual bank transfers work too, marked as paid by the admin. Prices include 11% VAT, and every order can be followed on a status timeline.",
             },
-            images: [],
+            images: [
+              {
+                url: "/media/seed/biansa-hp-tas.webp",
+                alt: {
+                  id: "Tas belanja di HP: tiga produk dengan ukuran dan jumlahnya, lalu ringkasan",
+                  en: "Shopping bag on a phone: three products with their sizes and quantities, then the summary",
+                },
+                width: 600,
+                height: 1300,
+              },
+              {
+                url: "/media/seed/biansa-hp-checkout.webp",
+                alt: {
+                  id: "Checkout tanpa akun di HP: nama, nomor WhatsApp, dan alamat pengiriman",
+                  en: "Guest checkout on a phone: name, WhatsApp number and delivery address",
+                },
+                width: 600,
+                height: 1300,
+              },
+            ],
           },
           {
             title: { id: "Pesanan dan stok", en: "Orders and stock" },
@@ -218,7 +255,17 @@ export const SEED_CASES: CaseStudy[] = [
               id: "Admin menyaring pesanan menurut tahap: belum bayar, perlu dibuat, perlu dikirim, dan terkirim, lalu mengisi nomor resi. Stok bisa diisi massal dari file Excel, dengan pratinjau sebelum disimpan. Dasbor menampilkan omzet, jumlah terjual, dan stok menipis.",
               en: "The admin filters orders by stage: unpaid, to make, to ship and shipped, then adds the tracking number. Stock can be bulk-imported from an Excel file, with a preview before saving. The dashboard shows revenue, units sold and low stock.",
             },
-            images: [],
+            images: [
+              {
+                url: "/media/seed/biansa-dasbor.webp",
+                alt: {
+                  id: "Dasbor admin Biansa: pendapatan 30 hari, pesanan, produk terjual, stok menipis, terlaris, dan pesanan terbaru",
+                  en: "Biansa admin dashboard: 30-day revenue, orders, units sold, low stock, best sellers and latest orders",
+                },
+                width: 1600,
+                height: 1144,
+              },
+            ],
           },
           {
             title: { id: "Isi toko di tangan pemilik", en: "Content in the owner's hands" },
@@ -226,7 +273,17 @@ export const SEED_CASES: CaseStudy[] = [
               id: "Pemilik mengubah beranda, halaman, dan blog sendiri. Pajak, ongkir, dan promo diatur dengan pratinjau keranjang yang langsung berubah, dan 200 aksi admin terakhir tercatat di log audit.",
               en: "The owner edits the homepage, pages and blog directly. Tax, shipping and promos are set with a live cart preview, and the last 200 admin actions are kept in an audit log.",
             },
-            images: [],
+            images: [
+              {
+                url: "/media/seed/biansa-blog-admin.webp",
+                alt: {
+                  id: "Editor blog di admin: judul, slug, ringkasan, dan gambar sampul tulisan",
+                  en: "Blog editor in the admin: the post's title, slug, summary and cover image",
+                },
+                width: 1600,
+                height: 1000,
+              },
+            ],
           },
         ],
       },
