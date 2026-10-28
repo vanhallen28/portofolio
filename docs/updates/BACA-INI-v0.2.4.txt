@@ -1,0 +1,89 @@
+PORTOFOLIO v0.2.4 — BACA INI DULU
+================================================================
+
+- Logo VL di pojok kiri atas diganti avatar karakter. Lingkaran di
+  belakangnya berganti warna mengikuti ruang karya yang sedang
+  dibaca (Aliya emas, HRIS kuning, Biansa zaitun, Portal Klien
+  hijau muda, Ciri abu, Website Invisual pink, Internet Bandung
+  kuning jingga, POINT POS biru), lalu kembali pink di luar ruang karya.
+  Di halaman studi kasus, warnanya mengikuti proyek itu.
+- Ikon tab browser ikut memakai avatar.
+- Foto di bagian About tampil di tengah di HP.
+- Ruang Biansa: lihat langkah 2. Layar desktop dan HP-nya sudah ada
+  di kode, tetapi database Anda masih menyimpan versi lama (kartu
+  merek tanpa layar), jadi perlu satu SQL dijalankan.
+
+Yang berubah: komponen header, gaya situs, animasi warna ruang,
+public/brand/avatar.webp (baru), app/icon.svg, CHANGELOG.md,
+package.json (versi), dan catatan ini. Tidak ada file yang dihapus,
+tidak ada migrasi struktur database.
+
+
+1. PASANG (salin-tempel di Terminal)
+----------------------------------------------------------------
+
+  cd ~/Documents/Virgiawan/PROJECT/portofolio
+  unzip -o ~/Downloads/portofolio-v0.2.4.zip -d .
+  npm install
+  npm run build
+  git add -A
+  git commit -m "v0.2.4: avatar header, foto About di tengah, ruang Biansa"
+  git push
+
+Push berhasil bila diakhiri "main -> main" dan tidak ada baris
+"error:" atau "fatal:". Cek dengan: git status
+
+
+2. SUPABASE: ISI RUANG BIANSA (sekali saja)
+----------------------------------------------------------------
+
+Di situs live, ruang Biansa masih menampilkan kartu merek dan kotak
+"14 store and admin screens in the UI preview" karena
+supabase/updates/v0.2.2.sql belum dijalankan di database Anda.
+
+a. Tunggu deploy v0.2.4 di Vercel berstatus Ready.
+
+b. Di Terminal, salin isi SQL-nya:
+
+     pbcopy < supabase/updates/v0.2.2.sql
+
+c. Buka Supabase → SQL Editor → New query, tempel (Cmd+V), Run.
+   Hasilnya: "Pembaruan isi v0.2.2 selesai."
+
+   SQL ini hanya mengisi yang masih kosong: ruang Biansa yang masih
+   kartu merek tanpa layar, sampul studi kasus Biansa, dan gambar
+   di fitur-fiturnya. Yang sudah Anda ubah di admin tidak disentuh.
+   Menjalankannya lagi tidak mengubah apa pun.
+
+d. Cek hasilnya, masih di SQL Editor:
+
+     select slug, data->>'layout' as layout,
+            jsonb_array_length(coalesce(data->'visuals','[]'::jsonb)) as layar
+     from public.projects
+     where id = '5a58e7d3-0970-5cba-8abd-ffb43dc286b5';
+
+   Benar bila hasilnya: layout = desk-phone, layar = 2.
+
+   Kalau tidak ada baris yang muncul, atau layout masih brand-card,
+   kirimkan hasil query ini ke saya:
+
+     select id, slug, data->>'layout' from public.projects order by sort;
+     select * from public.content_updates;
+
+e. Buka admin dan simpan apa saja (mis. Pengaturan situs → Simpan),
+   atau tunggu ± 10 menit, supaya situs memuat isi baru.
+
+
+3. MOHON DICEK (buka di HP)
+----------------------------------------------------------------
+
+[ ] Pojok kiri atas: avatar karakter, bukan VL. Gulir pelan dari
+    ruang Aliya ke POINT POS: lingkaran di belakang avatar berganti
+    warna di tiap ruang, lalu pink lagi di About.
+[ ] About: foto di tengah layar.
+[ ] Ruang Biansa: teks, angka, tombol, lalu layar desktop beranda
+    toko dan layar HP halaman produk Outer Piping Espresso, sama
+    seperti ruang lainnya.
+[ ] /karya/biansa: gambar sampul di atas dan gambar di fitur-fiturnya.
+[ ] Tab browser: ikon avatar (kadang baru berganti setelah cache
+    browser dibersihkan atau dibuka di tab penyamaran).

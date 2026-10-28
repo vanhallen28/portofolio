@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Content, Lang } from "@/lib/content/types";
 import { homePath, t } from "@/lib/i18n";
-import { anchor, initials, lineColorCss, waLink } from "@/lib/site";
+import { anchor, lineColorCss, waLink } from "@/lib/site";
 import { ui } from "@/lib/ui";
 
 /** On the home page a plain #anchor (smooth in-page scroll); elsewhere a client-side link to /#section. */
@@ -43,7 +43,8 @@ export function SiteShell({ content, lang, idHref, enHref, onHome, children }: P
 
       <header className="site-head" id="atas">
         <Link className="brand" href={homePath(lang)} aria-label={ui(lang).homeLabel(s.name)}>
-          <span className="brand-mark" aria-hidden="true">{initials(s.name)}</span>
+          {/* Character avatar; its circle takes the colour of the room being read (see --avatar-bg). */}
+          <span className="brand-mark brand-avatar" aria-hidden="true"><img src="/brand/avatar.webp" alt="" width={80} height={80} decoding="async" /></span>
           <span className="brand-name">{s.name}</span>
         </Link>
         <nav className="nav" aria-label={ui(lang).mainNav}>

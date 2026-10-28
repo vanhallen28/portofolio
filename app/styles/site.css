@@ -2,6 +2,7 @@
 :root{
   --shell-wall:#F3F3F1; --shell-ink:#151619; --shell-muted:#5C5F65; --shell-accent:#151619;
   --shell-btn-bg:#151619; --shell-btn-ink:#F3F3F1;
+  --shell-avatar:#FA0087; --avatar-bg:var(--shell-avatar);
   --wall:var(--shell-wall); --ink:var(--shell-ink); --muted:var(--shell-muted); --accent:var(--shell-accent);
   --btn-bg:var(--shell-btn-bg); --btn-ink:var(--shell-btn-ink);
   --rule:color-mix(in srgb, var(--ink) 16%, transparent);
@@ -74,6 +75,8 @@ button{font:inherit; color:inherit}
   border-bottom:1px solid var(--rule)}
 .brand{display:flex; align-items:center; gap:10px; text-decoration:none; font-weight:700; letter-spacing:-0.01em; white-space:nowrap}
 .brand-mark{display:grid; place-items:center; width:34px; height:34px; border-radius:50%; background:var(--ink); color:var(--wall); font-size:13px; font-weight:800; letter-spacing:.02em}
+.brand-avatar{width:42px; height:42px; background:var(--avatar-bg); overflow:hidden; box-shadow:0 0 0 1.5px color-mix(in srgb, var(--ink) 14%, transparent); flex:none}
+.brand-avatar img{display:block; width:100%; height:100%}
 .nav{display:flex; gap:4px; margin-left:auto}
 .nav a{padding:8px 12px; border-radius:999px; text-decoration:none; font-size:15px; font-weight:500}
 .nav a:hover{background:var(--soft)}
@@ -362,7 +365,7 @@ html:not(.js) .room{--wall:var(--r-wall); --ink:var(--r-ink); --muted:var(--r-mu
   .steps{grid-template-columns:repeat(2, minmax(0,1fr)); row-gap:40px}
   .steps li:nth-child(2)::after{display:none}
   .about{grid-template-columns:1fr}
-  .portrait{max-width:280px; margin:0}
+  .portrait{max-width:280px; margin:0 auto}
   .case-block{grid-template-columns:1fr}
   .case-numbers .stack{grid-column:1}
   .case-label{grid-template-columns:repeat(3, minmax(0,1fr))}
@@ -393,7 +396,7 @@ html:not(.js) .room{--wall:var(--r-wall); --ink:var(--r-ink); --muted:var(--r-mu
   .comp-two-phones .shot{width:46%}
   .brand-card{grid-column:1 / -1}
   .arch,.comp-brand-card .shot{grid-column:1 / -1; grid-row:2}
-  .arch{min-height:200px; border-radius:999px 999px 18px 18px}
+  .arch{min-height:0; border-radius:14px; padding:14px 18px; justify-content:flex-start; text-align:left}
   .site-foot a{margin-left:0}
 }
 @media (prefers-reduced-motion: reduce){

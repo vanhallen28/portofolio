@@ -3,6 +3,15 @@
 Format: setiap rilis dikirim sebagai `portofolio-vX.Y.Z.zip`. Nomor versi naik setiap kali, jadi zip tidak pernah saling tumpuk.
 Petunjuk pasang per versi: `docs/updates/BACA-INI-vX.Y.Z.txt`.
 
+## v0.2.4 — 29 Oktober 2026
+
+Avatar karakter di header, foto About di tengah, dan ruang Biansa yang berisi.
+
+- **Avatar karakter menggantikan logo VL** di pojok kiri atas, di beranda dan halaman studi kasus. Lingkaran di belakangnya mengikuti warna ruang yang sedang dibaca: berganti pelan saat Anda menggulir dari satu karya ke karya berikutnya, lalu kembali pink di About, Layanan, dan Kontak. Di halaman studi kasus, warnanya mengikuti warna proyek itu.
+- **Ikon tab browser** ikut memakai avatar (lingkaran pink).
+- **Foto About di HP** kini di tengah (sebelumnya rata kiri).
+- **Ruang Biansa:** kotak "layar di preview" yang kosong di HP dirapikan supaya tidak tampil sebagai lengkungan besar tanpa isi. Layar desktop dan HP Biansa sudah ada sejak v0.2.2, tetapi database yang sudah berjalan baru menampilkannya setelah `supabase/updates/v0.2.2.sql` dijalankan (lihat BACA-INI-v0.2.4).
+
 ## v0.2.3 — 29 Oktober 2026
 
 Prototipe POINT POS diperbaiki supaya sesuai dengan studi kasusnya.

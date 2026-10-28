@@ -112,7 +112,7 @@ function themeCss(study: CaseStudy): string {
   const th = study.theme;
   if (!th) return "";
   const scheme = luminance(th.wall) < 0.2 ? "dark" : "light"; // scrollbars and form controls match the wall
-  return `:root{--wall:${th.wall};--chrome:${th.wall};--ink:${th.ink};--muted:${th.muted};--accent:${th.accent};--btn-bg:${th.btnBg};--btn-ink:${th.btnInk};color-scheme:${scheme}}`;
+  return `:root{--wall:${th.wall};--chrome:${th.wall};--ink:${th.ink};--muted:${th.muted};--accent:${th.accent};--avatar-bg:${th.accent};--btn-bg:${th.btnBg};--btn-ink:${th.btnInk};color-scheme:${scheme}}`;
 }
 
 export function CaseStudyPage({ content, lang, project: p, study }: Props) {

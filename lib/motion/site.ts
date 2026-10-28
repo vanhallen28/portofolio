@@ -12,7 +12,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 const EASE_IN = "power3.out";
 const EASE_ON = "power2.inOut";
 
-type Theme = { wall: string; ink: string; muted: string; accent: string; btnBg: string; btnInk: string };
+/** avatar: the circle behind the header character — the room's accent, or the shell pink. */
+type Theme = { wall: string; ink: string; muted: string; accent: string; btnBg: string; btnInk: string; avatar: string };
 type Cleanup = () => void;
 
 const $ = <T extends Element = HTMLElement>(s: string, c: ParentNode = document) => c.querySelector<T>(s);
@@ -129,7 +130,7 @@ function initStickyCta(undo: Cleanup[]) {
 /* ---------- Wall colours ---------- */
 function themeOf(el: HTMLElement): Theme {
   const d = el.dataset;
-  return { wall: d.wall!, ink: d.ink!, muted: d.muted!, accent: d.accent!, btnBg: d.btnBg!, btnInk: d.btnInk! };
+  return { wall: d.wall!, ink: d.ink!, muted: d.muted!, accent: d.accent!, btnBg: d.btnBg!, btnInk: d.btnInk!, avatar: d.accent! };
 }
 
 function createWalls(undo: Cleanup[], reduce: MediaQueryList) {
@@ -141,11 +142,11 @@ function createWalls(undo: Cleanup[], reduce: MediaQueryList) {
   wipe.setAttribute("aria-hidden", "true");
   document.body.insertBefore(wipe, document.body.firstChild);
 
-  const props = ["--wall", "--chrome", "--ink", "--muted", "--accent", "--btn-bg", "--btn-ink"];
+  const props = ["--wall", "--chrome", "--ink", "--muted", "--accent", "--btn-bg", "--btn-ink", "--avatar-bg"];
   const shellTheme = (): Theme => {
     const cs = getComputedStyle(root);
     const g = (n: string) => cs.getPropertyValue(n).trim();
-    return { wall: g("--shell-wall"), ink: g("--shell-ink"), muted: g("--shell-muted"), accent: g("--shell-accent"), btnBg: g("--shell-btn-bg"), btnInk: g("--shell-btn-ink") };
+    return { wall: g("--shell-wall"), ink: g("--shell-ink"), muted: g("--shell-muted"), accent: g("--shell-accent"), btnBg: g("--shell-btn-bg"), btnInk: g("--shell-btn-ink"), avatar: g("--shell-avatar") };
   };
   let current: string | null = null;
   let wipeTween: gsap.core.Tween | null = null;
@@ -154,6 +155,7 @@ function createWalls(undo: Cleanup[], reduce: MediaQueryList) {
     root.style.setProperty("--wall", t.wall); root.style.setProperty("--chrome", t.wall);
     root.style.setProperty("--ink", t.ink); root.style.setProperty("--muted", t.muted);
     root.style.setProperty("--accent", t.accent); root.style.setProperty("--btn-bg", t.btnBg); root.style.setProperty("--btn-ink", t.btnInk);
+    root.style.setProperty("--avatar-bg", t.avatar);
   };
   const finishWipe = () => {
     if (!wipeTween) return;
@@ -184,7 +186,7 @@ function createWalls(undo: Cleanup[], reduce: MediaQueryList) {
       onUpdate: () => { wipe.style.clipPath = `circle(${st.r.toFixed(1)}px at ${o.x.toFixed(1)}px ${o.y.toFixed(1)}px)`; },
       onComplete: () => { root.style.setProperty("--wall", t.wall); wipe.style.clipPath = "circle(0px at 0 0)"; wipeTween = null; },
     });
-    gsap.to(root, { "--ink": t.ink, "--muted": t.muted, "--accent": t.accent, "--btn-bg": t.btnBg, "--btn-ink": t.btnInk, "--chrome": t.wall, duration: 0.7, ease: EASE_ON, overwrite: "auto" });
+    gsap.to(root, { "--ink": t.ink, "--muted": t.muted, "--accent": t.accent, "--btn-bg": t.btnBg, "--btn-ink": t.btnInk, "--chrome": t.wall, "--avatar-bg": t.avatar, duration: 0.7, ease: EASE_ON, overwrite: "auto" });
   };
   let shell = shellTheme();
   apply(shell, true);
