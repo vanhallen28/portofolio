@@ -25,7 +25,8 @@ const JS_FLAG = "document.documentElement.classList.add('js')";
 
 export function PublicHtml({ lang, children }: { lang: Lang; children: React.ReactNode }) {
   return (
-    <html lang={lang} className={fontVariables} suppressHydrationWarning>
+    // data-scroll-behavior: Next.js switches the CSS smooth scrolling off while it changes page.
+    <html lang={lang} className={fontVariables} data-scroll-behavior="smooth" suppressHydrationWarning>
       {/* App Router root layout: a plain <head> is the documented way to add an inline script. */}
       {/* eslint-disable-next-line @next/next/no-head-element */}
       <head>

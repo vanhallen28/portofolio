@@ -3,6 +3,13 @@
 Format: setiap rilis dikirim sebagai `portofolio-vX.Y.Z.zip`. Nomor versi naik setiap kali, jadi zip tidak pernah saling tumpuk.
 Petunjuk pasang per versi: `docs/updates/BACA-INI-vX.Y.Z.txt`.
 
+## v0.2.1 — 28 Oktober 2026
+
+- Membuka studi kasus lain (kartu "Ruang berikutnya", tombol "Lihat studi kasus" di ruang, atau menu) sekarang selalu mulai dari atas halaman. Sebelumnya halaman baru terbuka di posisi gulir halaman sebelumnya.
+- Tombol Back browser tetap kembali ke posisi semula, dan link ke bagian tertentu (mis. Karya) tetap menuju bagiannya.
+- Menu header di halaman studi kasus (Karya, Layanan, …) kini berpindah tanpa memuat ulang dan berhenti tepat di bagiannya.
+- "Kembali ke atas" di footer kini benar-benar sampai ke paling atas.
+
 ## v0.2.0 — 28 Oktober 2026
 
 Tampilan yang membantu pemilik bisnis percaya lalu menghubungi.

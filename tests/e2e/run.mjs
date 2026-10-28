@@ -192,6 +192,51 @@ try {
     assert(g.status === 404, `URL acak → ${g.status}`);
   });
 
+  await test("membuka studi kasus lain selalu mulai dari atas", async () => {
+    await p.goto(`${BASE}/karya/${firstSlug}`);
+    await p.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await p.waitForTimeout(400);
+    const from = p.url();
+    await p.click(".next-room");
+    await p.waitForURL((u) => u.toString() !== from);
+    await p.waitForTimeout(600);
+    const y = await p.evaluate(() => window.scrollY);
+    assert(y < 5, `halaman baru terbuka di posisi ${y}px, bukan di atas`);
+    // From a room on the home page, too.
+    await p.goto(`${BASE}/`);
+    await p.evaluate((id) => document.getElementById(id).scrollIntoView({ behavior: "instant" }), `ruang-${seed.projects[2].slug}`);
+    await p.waitForTimeout(900);
+    await p.click(`#ruang-${seed.projects[2].slug} .room-actions a.btn-quiet`);
+    await p.waitForURL(`**/karya/${seed.projects[2].slug}`);
+    await p.waitForTimeout(600);
+    const y2 = await p.evaluate(() => window.scrollY);
+    assert(y2 < 5, `studi kasus dari ruang terbuka di posisi ${y2}px`);
+    // The header link from a case study goes to the Karya section of the home page.
+    await p.click('.site-head .nav a[href="/#karya"]');
+    await p.waitForURL("**/#karya");
+    await p.waitForTimeout(900);
+    const off = await p.evaluate(() => Math.abs(document.getElementById("karya").getBoundingClientRect().top));
+    assert(off < 120, `menu Karya tidak berhenti di bagian Karya (selisih ${Math.round(off)}px)`);
+    await p.goBack();
+    await p.waitForTimeout(600);
+    // Footer "back to top" really reaches the top.
+    await p.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await p.waitForTimeout(300);
+    await p.click(".site-foot a[href='#top']");
+    await p.waitForTimeout(1600);
+    assert(await p.evaluate(() => window.scrollY) < 5, "Kembali ke atas tidak sampai ke atas");
+    await p.goto(`${BASE}/`);
+    await p.evaluate((id) => document.getElementById(id).scrollIntoView({ behavior: "instant" }), `ruang-${seed.projects[2].slug}`);
+    await p.waitForTimeout(900);
+    await p.click(`#ruang-${seed.projects[2].slug} .room-actions a.btn-quiet`);
+    await p.waitForURL(`**/karya/${seed.projects[2].slug}`);
+    await p.waitForTimeout(600);
+    // Back keeps the spot in the list of rooms.
+    await p.goBack();
+    await p.waitForTimeout(900);
+    assert(await p.evaluate(() => window.scrollY) > 200, "tombol Back tidak kembali ke posisi ruang");
+  });
+
   await test("SEO: sitemap, robots, gambar kartu link", async () => {
     const sm = await (await fetch(`${BASE}/sitemap.xml`)).text();
     assert(sm.includes("/en</loc>") && sm.includes(`/karya/${firstSlug}`), "sitemap kurang lengkap");

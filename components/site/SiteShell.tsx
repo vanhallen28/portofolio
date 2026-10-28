@@ -4,6 +4,11 @@ import { homePath, t } from "@/lib/i18n";
 import { anchor, initials, lineColorCss, waLink } from "@/lib/site";
 import { ui } from "@/lib/ui";
 
+/** On the home page a plain #anchor (smooth in-page scroll); elsewhere a client-side link to /#section. */
+function NavLink({ href, onHome, children }: { href: string; onHome: boolean; children: React.ReactNode }) {
+  return onHome ? <a href={href}>{children}</a> : <Link href={href}>{children}</Link>;
+}
+
 type Props = {
   content: Content;
   lang: Lang;
@@ -43,7 +48,7 @@ export function SiteShell({ content, lang, idHref, enHref, onHome, children }: P
         </Link>
         <nav className="nav" aria-label={ui(lang).mainNav}>
           {links.map((l) => (
-            <a key={l.id} href={anchor(lang, onHome, l.id)}>{l.label}</a>
+            <NavLink key={l.id} href={anchor(lang, onHome, l.id)} onHome={onHome}>{l.label}</NavLink>
           ))}
         </nav>
         <div className="head-actions">
@@ -63,9 +68,9 @@ export function SiteShell({ content, lang, idHref, enHref, onHome, children }: P
       <nav className="mnav" id="mnav" aria-label={t(s.ui.menu, lang)} hidden>
         <ul>
           {links.map((l) => (
-            <li key={l.id}><a href={anchor(lang, onHome, l.id)}>{l.label}</a></li>
+            <li key={l.id}><NavLink href={anchor(lang, onHome, l.id)} onHome={onHome}>{l.label}</NavLink></li>
           ))}
-          <li><a href={anchor(lang, onHome, "kontak")}>{t(nav.contact, lang)}</a></li>
+          <li><NavLink href={anchor(lang, onHome, "kontak")} onHome={onHome}>{t(nav.contact, lang)}</NavLink></li>
         </ul>
         <a className="btn btn-big" href={wa} target="_blank" rel="noopener">{t(content.sections.contact.button, lang)}</a>
       </nav>
@@ -75,7 +80,8 @@ export function SiteShell({ content, lang, idHref, enHref, onHome, children }: P
       <footer className="site-foot">
         <p>© {year} {s.name}</p>
         {t(s.footer, lang) ? <p>{t(s.footer, lang)}</p> : null}
-        <a href="#atas">{t(s.ui.backToTop, lang)}</a>
+        {/* "#top" is the document's top in every browser (the header is sticky, so #atas barely moved). */}
+        <a href="#top">{t(s.ui.backToTop, lang)}</a>
       </footer>
 
       {s.stickyCta.show && t(s.stickyCta.text, lang) ? (
