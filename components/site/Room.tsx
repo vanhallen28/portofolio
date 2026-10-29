@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import { TITLE_SIZE_CSS } from "@/lib/content/constants";
+import { AUTO_MOTIONS, TITLE_SIZE_CSS } from "@/lib/content/constants";
 import type { Lang, Line, LineKey, Project, Sections } from "@/lib/content/types";
 import { FONT_FAMILY } from "@/lib/font-family";
 import { t } from "@/lib/i18n";
@@ -34,6 +34,11 @@ export function titleVars(p: Project): CSSProperties {
   } as CSSProperties;
 }
 
+/** The scroll effect the room's screens use; "auto" cycles by position so neighbouring rooms differ. */
+export function roomMotion(p: Project, index: number): string {
+  return p.motion && p.motion !== "auto" ? p.motion : AUTO_MOTIONS[(Math.max(index, 1) - 1) % AUTO_MOTIONS.length];
+}
+
 export function NewTabIcon() {
   return (
     <svg className="btn-ico" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
@@ -49,7 +54,7 @@ export function Room({ project: p, index, lines, works, lang, caseLink }: Props)
   const note = t(p.liveNote, lang);
   return (
     <article
-      className="room" id={roomId(p.slug)} data-room={p.slug} data-lines={p.lines.join(" ")} data-pattern={p.pattern}
+      className="room" id={roomId(p.slug)} data-room={p.slug} data-lines={p.lines.join(" ")} data-pattern={p.pattern} data-motion={roomMotion(p, index)}
       data-wall={th.wall} data-ink={th.ink} data-muted={th.muted} data-accent={th.accent} data-btn-bg={th.btnBg} data-btn-ink={th.btnInk}
       style={roomVars(p)}
     >

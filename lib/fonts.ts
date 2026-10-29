@@ -12,6 +12,10 @@ export const fontShell = localFont({
   display: "swap",
 });
 
+/* Hero poster: condensed display caps and the italic serif phrase between them. Preloaded: they are the first thing on screen. */
+export const fontDisplay = localFont({ src: "../app/fonts/anton-latin-400-normal.woff2", weight: "400", variable: "--f-display", display: "swap" });
+export const fontItalic = localFont({ src: "../app/fonts/instrument-serif-latin-400-italic.woff2", weight: "400", style: "italic", variable: "--f-italic", display: "swap" });
+
 /* Title fonts borrowed from each client's brand. Not preloaded: they appear further down the page. */
 const marcellus = localFont({ src: "../app/fonts/marcellus-latin-400-normal.woff2", weight: "400", variable: "--f-marcellus", display: "swap", preload: false });
 const jakarta = localFont({
@@ -36,4 +40,4 @@ const quicksand = localFont({ src: "../app/fonts/quicksand-latin-700-normal.woff
 const lora = localFont({ src: "../app/fonts/lora-latin-600-normal.woff2", weight: "600", variable: "--f-lora", display: "swap", preload: false });
 
 /** Class names to put on <html> so every font variable is defined. */
-export const fontVariables = [fontShell, marcellus, jakarta, archivo, unbounded, cormorant, host, quicksand, lora].map((f) => f.variable).join(" ");
+export const fontVariables = [fontShell, fontDisplay, fontItalic, marcellus, jakarta, archivo, unbounded, cormorant, host, quicksand, lora].map((f) => f.variable).join(" ");

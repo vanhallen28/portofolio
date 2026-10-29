@@ -1,0 +1,66 @@
+PORTOFOLIO v0.2.5 — BACA INI DULU
+================================================================
+
+Hero beranda diganti gaya poster, sesuai mockup "Hero Portofolio —
+Konsep Tipografi Besar". Bagian lain tidak berubah: Karya, ruang
+yang berganti warna saat digulir, Layanan, Cara kerja, About, FAQ,
+Kontak, dan halaman studi kasus tetap seperti sebelumnya.
+
+- Judul besar: SISTEM yang menjalankan BISNIS ANDA
+  (EN: SYSTEMS that run your BUSINESS).
+- Putaran empat jalur menimpa judul. Garisnya tergambar saat
+  halaman dibuka, kereta berjalan, dan nama proyek muncul saat
+  stasiun disorot.
+- Garis kolom tipis, daftar "Yang bisa saya bangun" di kanan atas,
+  dan lencana avatar berputar yang menuju Karya.
+
+Zip ini berisi seluruh proyek, termasuk perubahan v0.2.4 (avatar di
+header, foto About di tengah). Kalau v0.2.4 belum dipasang, cukup
+pasang yang ini.
+
+Yang berubah: komponen hero dan denah, gaya situs, animasi pembuka,
+form admin Hero, 2 file font baru (app/fonts), isi bawaan, uji.
+Tidak ada file yang dihapus, tidak ada migrasi database.
+
+
+1. PASANG (salin-tempel di Terminal)
+----------------------------------------------------------------
+
+  cd ~/Documents/Virgiawan/PROJECT/portofolio
+  unzip -o ~/Downloads/portofolio-v0.2.5.zip -d .
+  npm install
+  npm run build
+  git add -A
+  git commit -m "v0.2.5: hero gaya poster"
+  git push
+
+Push berhasil bila diakhiri "main -> main" dan tidak ada baris
+"error:" atau "fatal:". Cek dengan: git status
+
+
+2. SUPABASE
+----------------------------------------------------------------
+
+Tidak perlu menjalankan SQL untuk hero baru. Database yang sudah
+berjalan otomatis memakai isi bawaan judul poster sampai Anda
+mengubahnya di Admin → Bagian → Hero → "Judul poster".
+
+Ruang Biansa masih kosong di situs live? Jalankan langkah 2 di
+docs/updates/BACA-INI-v0.2.4.txt (supabase/updates/v0.2.2.sql).
+
+
+3. MOHON DICEK SETELAH DEPLOY
+----------------------------------------------------------------
+
+[ ] Desktop: judul poster besar, putaran berwarna melingkari
+    "ANDA", lalu paragraf, dua tombol, dan lencana avatar. Di layar
+    laptop (mis. 1366 × 768) tombolnya tetap terlihat tanpa menggulir.
+[ ] Arahkan kursor ke bulatan stasiun: nama proyek muncul dan
+    jalurnya menyala. Klik: pindah ke ruang proyek itu.
+[ ] HP: SISTEM / yang menjalankan / BISNIS / ANDA bersusun, putaran
+    melingkari ANDA, tidak ada geser ke samping.
+[ ] Gulir ke Karya: ruang berganti warna seperti sebelumnya, dan
+    lingkaran avatar di header ikut warna ruang.
+[ ] Tombol EN: SYSTEMS that run your BUSINESS.
+[ ] Admin → Bagian → Hero: kartu "Judul poster" ada. Ubah satu
+    kata, simpan, lalu cek beranda (± 10 menit atau setelah simpan).

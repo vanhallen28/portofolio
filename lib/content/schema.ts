@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { FONT_KEYS, LAYOUTS, LINE_KEYS, MAP_SLOTS, PATTERNS, SECTION_KEYS, TITLE_SIZES, VISUAL_ROLES } from "./constants";
+import { FONT_KEYS, LAYOUTS, LINE_KEYS, MAP_SLOTS, PATTERNS, ROOM_MOTIONS, SECTION_KEYS, TITLE_SIZES, VISUAL_ROLES } from "./constants";
 
 const hex = z.string().regex(/^#[0-9a-fA-F]{6}$/, "Warna harus berformat #RRGGBB");
 const url = z.string().max(2048);
@@ -64,6 +64,20 @@ export const ClientSchema = z.object({
 });
 export const HeroSchema = z.object({
   role: LSchema, title: LSchema, lede: LSchema, ctaPrimary: LSchema, ctaSecondary: LSchema, mapCenter: LSchema, mapCaption: LSchema,
+  /** Poster headline: display caps on two lines, with an italic phrase after the first. The full sentence in
+      `title` stays in the heading for search engines and screen readers. Both lines empty = the plain title. */
+  display: z.object({ top: LSchema, italic: LSchema, bottom: LSchema }).default(() => ({
+    top: { id: "Sistem", en: "Systems" },
+    italic: { id: "yang menjalankan", en: "that run your" },
+    bottom: { id: "Bisnis Anda", en: "business" },
+  })),
+  /** Small capitals at the top right of the hero: what you build, in one line. Text before a colon is the label. */
+  offer: LSchema.default(() => ({
+    id: "Yang bisa saya bangun: website & landing page, toko online & kasir, portal klien, absensi & payroll",
+    en: "What I build: websites & landing pages, online stores & point of sale, client portals, attendance & payroll",
+  })),
+  /** Text running around the round badge that leads to the work; {n} becomes the number of projects. */
+  badge: LSchema.default(() => ({ id: "Masuk ke pameran • {n} ruang karya •", en: "Enter the exhibition • {n} rooms •" })),
   /** Row of client wordmarks under the hero. */
   clients: z.object({ visible: z.boolean(), title: LSchema, items: z.array(ClientSchema).max(12) }).default({ visible: false, title: emptyL(), items: [] }),
 });
@@ -130,6 +144,8 @@ export const ProjectSchema = z.object({
   visuals: z.array(z.object({ role: z.enum(VISUAL_ROLES), image: ImgSchema })).max(3),
   brand: z.object({ logoUrl: url, swatches: z.array(z.object({ name: short, color: hex })).max(8), note: LSchema }).nullable(),
   pattern: z.enum(PATTERNS),
+  /** Scroll effect for the room's screens (rows from before v0.2.6 get "auto"). */
+  motion: z.enum(ROOM_MOTIONS).default("auto"),
   /** One sentence about the business outcome, highlighted in the room. */
   result: LSchema.nullable().default(null),
 });

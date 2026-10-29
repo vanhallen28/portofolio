@@ -1,0 +1,67 @@
+PORTOFOLIO v0.2.6 — BACA INI DULU
+================================================================
+
+Layar desktop dan HP di setiap ruang karya kini bergerak saat
+digulir, dan tiap proyek punya efek sendiri:
+
+  01 Aliya Syifaa      Gerbang    naik dari bawah lewat bentuk lengkung
+  02 Invisual HRIS     Geser      panel masuk dari dua sisi berlawanan
+  03 Biansa            Tirai      terbuka dari tengah, HP berayun
+  04 Portal Klien      Kipas      HP bertumpuk lalu menyebar
+  05 Ciri              Fokus      dari buram menjadi tajam
+  06 Website Invisual  Putar 3D   terangkat dan berputar
+  07 Internet Bandung  Sinyal     membesar, HP jatuh memantul
+  08 POINT POS         Cetak      keluar baris demi baris seperti struk
+
+Efeknya mengikuti gulir dua arah (mundur lagi saat digulir ke atas),
+lalu layar tetap bergerak pelan selama ruangnya dilewati. Teks ruang,
+warna dinding, hero, dan bagian lain tidak berubah.
+
+Zip ini berisi seluruh proyek, termasuk v0.2.4 dan v0.2.5. Kalau
+versi itu belum dipasang, cukup pasang yang ini.
+
+Yang berubah: animasi situs, gaya situs, komponen ruang, form admin
+Proyek, isi bawaan, uji. Tidak ada file yang dihapus, tidak ada
+migrasi database.
+
+
+1. PASANG (salin-tempel di Terminal)
+----------------------------------------------------------------
+
+  cd ~/Documents/Virgiawan/PROJECT/portofolio
+  unzip -o ~/Downloads/portofolio-v0.2.6.zip -d .
+  npm install
+  npm run build
+  git add -A
+  git commit -m "v0.2.6: efek gulir berbeda di setiap ruang karya"
+  git push
+
+Push berhasil bila diakhiri "main -> main" dan tidak ada baris
+"error:" atau "fatal:". Cek dengan: git status
+
+
+2. SUPABASE
+----------------------------------------------------------------
+
+Tidak perlu menjalankan SQL. Proyek di database Anda otomatis
+memakai "Otomatis", yang dengan urutan ruang sekarang menghasilkan
+efek seperti daftar di atas.
+
+Mau mengganti efek satu ruang? Admin → Proyek → (nama proyek) →
+Tampilan visual → "Efek layar saat digulir" → Simpan.
+Catatan: "Otomatis" memilih berdasarkan urutan. Kalau urutan ruang
+diubah, efeknya ikut bergeser; pilih efek tertentu bila ingin tetap.
+
+Ruang Biansa masih kosong di situs live? Jalankan langkah 2 di
+docs/updates/BACA-INI-v0.2.4.txt (supabase/updates/v0.2.2.sql).
+
+
+3. MOHON DICEK SETELAH DEPLOY
+----------------------------------------------------------------
+
+[ ] Laptop: gulir pelan dari Karya sampai POINT POS. Tiap ruang
+    punya gerakan layar yang berbeda; gulir balik ke atas, layarnya
+    mundur.
+[ ] HP: sama, dan halaman tidak bisa digeser ke samping.
+[ ] Admin → Proyek → salah satu proyek: pilihan "Efek layar saat
+    digulir" ada di kartu Tampilan visual.

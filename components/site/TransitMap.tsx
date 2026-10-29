@@ -3,19 +3,21 @@ import { t } from "@/lib/i18n";
 import { lineMap, roomId, stations } from "@/lib/site";
 import { ui } from "@/lib/ui";
 
-/* Fixed geometry of the loop (viewBox 50 48 580 470), drawn in the order found → sell → run → serve. */
+/* The business loop drawn over the hero headline. Fixed geometry: a wide rounded loop
+   (100–540 × 130–430, corner radius 64) drawn in the order found → sell → run → serve. */
 const PATHS: Record<LineKey, string> = {
-  found: "M168.75 128.75 A64 64 0 0 1 214 110 L426 110 A64 64 0 0 1 471.25 128.75",
-  sell: "M471.25 128.75 A64 64 0 0 1 490 174 L490 386 A64 64 0 0 1 471.25 431.25",
-  run: "M471.25 431.25 A64 64 0 0 1 426 450 L214 450 A64 64 0 0 1 168.75 431.25",
-  serve: "M168.75 431.25 A64 64 0 0 1 150 386 L150 174 A64 64 0 0 1 168.75 128.75",
+  found: "M118.75 148.75 A64 64 0 0 1 164 130 L476 130 A64 64 0 0 1 521.25 148.75",
+  sell: "M521.25 148.75 A64 64 0 0 1 540 194 L540 366 A64 64 0 0 1 521.25 411.25",
+  run: "M521.25 411.25 A64 64 0 0 1 476 430 L164 430 A64 64 0 0 1 118.75 411.25",
+  serve: "M118.75 411.25 A64 64 0 0 1 100 366 L100 194 A64 64 0 0 1 118.75 148.75",
 };
-const LOOP = "M214 110 L426 110 A64 64 0 0 1 490 174 L490 386 A64 64 0 0 1 426 450 L214 450 A64 64 0 0 1 150 386 L150 174 A64 64 0 0 1 214 110 Z";
+const LOOP = "M164 130 L476 130 A64 64 0 0 1 540 194 L540 366 A64 64 0 0 1 476 430 L164 430 A64 64 0 0 1 100 366 L100 194 A64 64 0 0 1 164 130 Z";
+/* Line names sit just outside the loop, clear of the stations. */
 const NAME_POS: Record<LineKey, { x: number; y: number; rotate?: number }> = {
-  found: { x: 320, y: 150 },
-  sell: { x: 450, y: 280, rotate: 90 },
-  run: { x: 320, y: 424 },
-  serve: { x: 190, y: 280, rotate: -90 },
+  found: { x: 230, y: 113 },
+  sell: { x: 561, y: 280, rotate: 90 },
+  run: { x: 410, y: 461 },
+  serve: { x: 79, y: 280, rotate: -90 },
 };
 const ORDER: LineKey[] = ["found", "sell", "run", "serve"];
 
@@ -24,7 +26,7 @@ export function TransitMap({ content, lang }: { content: Content; lang: Lang }) 
   const hero = content.sections.hero;
   return (
     <figure className="map" aria-labelledby="map-cap">
-      <svg className="map-svg" viewBox="50 48 580 470" role="group" aria-labelledby="map-title map-desc">
+      <svg className="map-svg" viewBox="60 92 520 380" role="group" aria-labelledby="map-title map-desc">
         <title id="map-title">{ui(lang).mapTitle}</title>
         <desc id="map-desc">{t(hero.mapCaption, lang)}</desc>
         <g className="map-lines" fill="none" strokeWidth="14" strokeLinecap="butt">
@@ -47,20 +49,17 @@ export function TransitMap({ content, lang }: { content: Content; lang: Lang }) 
             );
           })}
         </g>
-        <g className="map-center" aria-hidden="true">
-          <text x="320" y="282" textAnchor="middle" className="mc-big">{t(hero.mapCenter, lang)}</text>
-        </g>
         <g className="map-stations">
           {stations(content.projects).map(({ project: p, geo }) => (
             <a key={p.id} href={`#${roomId(p.slug)}`} className={geo.major ? "st st-x" : "st"} data-room={p.slug} data-lines={p.lines.join(" ")} aria-label={p.name}>
               <circle className="hit" cx={geo.cx} cy={geo.cy} r={geo.major ? 30 : 28} />
               <circle className="dot" cx={geo.cx} cy={geo.cy} r={geo.major ? 15 : 10} />
-              <text x={geo.label.x} y={geo.label.y} textAnchor={geo.label.anchor} className="sname">{p.mapLabel || p.name}</text>
+              <text x={geo.label.x} y={geo.label.y} textAnchor={geo.label.anchor} className="sname" aria-hidden="true">{p.mapLabel || p.name}</text>
             </a>
           ))}
         </g>
       </svg>
-      <figcaption id="map-cap">{t(hero.mapCaption, lang)}</figcaption>
+      <figcaption id="map-cap" className="sr-only">{t(hero.mapCaption, lang)}</figcaption>
     </figure>
   );
 }

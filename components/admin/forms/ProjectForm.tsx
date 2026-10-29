@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import { FONT_KEYS, LAYOUTS, LINE_KEYS, PATTERNS, TITLE_SIZES, VISUAL_ROLES } from "@/lib/content/constants";
+import { FONT_KEYS, LAYOUTS, LINE_KEYS, PATTERNS, ROOM_MOTIONS, TITLE_SIZES, VISUAL_ROLES } from "@/lib/content/constants";
 import type { Line, LineKey, Project, Sections } from "@/lib/content/types";
 import { FONT_FAMILY, FONT_LABEL } from "@/lib/font-family";
 import { saveProjectAction } from "@/app/admin/actions";
@@ -28,6 +28,17 @@ const LAYOUT_LABEL: Record<(typeof LAYOUTS)[number], string> = {
   "back-desk": "Dua layar desktop bertumpuk (+ HP opsional)",
   "two-phones": "Dua layar HP berdampingan",
   "brand-card": "Kartu merek: logo, warna produk, catatan",
+};
+const MOTION_LABEL: Record<(typeof ROOM_MOTIONS)[number], string> = {
+  auto: "Otomatis (berbeda dari ruang di sebelahnya)",
+  arch: "Gerbang: layar terbuka dari bawah berbentuk lengkung",
+  slide: "Geser: layar masuk dari samping, lalu bergeser berlawanan",
+  curtain: "Tirai: layar terbuka dari tengah, HP berayun",
+  spread: "Kipas: layar bertumpuk di tengah lalu menyebar",
+  focus: "Fokus: dari buram menjadi tajam",
+  tilt: "Putar 3D: layar terangkat dan berputar",
+  signal: "Sinyal: layar membesar, HP jatuh memantul",
+  print: "Cetak: layar keluar baris demi baris seperti struk",
 };
 const ROLE_LABEL: Record<(typeof VISUAL_ROLES)[number], string> = { desk: "Layar desktop", phone: "Layar HP", back: "Layar desktop di belakang" };
 const PATTERN_LABEL: Record<(typeof PATTERNS)[number], string> = { none: "Polos", checker: "Kotak-kotak halus", glow: "Cahaya di pojok kanan atas" };
@@ -131,6 +142,8 @@ export function ProjectForm({ initial, index, lines, works, slots, takenSlugs, p
 
           <Card title="Tampilan visual">
             <Select label="Tata letak" value={p.layout} options={LAYOUTS.map((k) => ({ value: k, label: LAYOUT_LABEL[k] }))} onChange={(v) => set("layout", v)} />
+            <Select label="Efek layar saat digulir" value={p.motion} options={ROOM_MOTIONS.map((k) => ({ value: k, label: MOTION_LABEL[k] }))} onChange={(v) => set("motion", v)}
+              hint="Gerakan layar desktop dan HP saat ruang ini masuk ke layar. Tidak berjalan bila pengunjung memilih gerak dikurangi." />
             {p.layout === "brand-card" ? (
               <div className="adm-grid">
                 <ImageField label="Logo" urlOnly value={p.brand ? { url: p.brand.logoUrl, alt: emptyL(), width: 1, height: 1 } : null}

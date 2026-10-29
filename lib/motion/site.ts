@@ -1,10 +1,11 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import type { AUTO_MOTIONS } from "@/lib/content/constants";
 
 /* Motion identity: one personality for the whole site, calm and confident, no bounce on content.
    Signature ease: power3.out for entrances, power2.inOut for things already on screen.
-   Text rises out of a mask, screens arrive from depth, and wall colours travel outward
-   from the floor-plan dot. Port of the approved preview (portfolio-preview/src/app.js).
+   Text rises out of a mask, wall colours travel outward from the floor-plan dot, and each
+   room's screens have their own scroll effect (SCREEN_EFFECTS), picked per project. Port of the approved preview (portfolio-preview/src/app.js).
 
    Everything here enhances server-rendered markup that is complete without JavaScript.
    initSite() returns a cleanup that puts the DOM back the way React rendered it. */
@@ -209,6 +210,79 @@ function createWalls(undo: Cleanup[], reduce: MediaQueryList) {
   return { apply, shell: () => shell };
 }
 
+/* ---------- Room screens: one scroll effect per room ---------- */
+/* Each effect fills a scrubbed entrance timeline (the screens arrive as the room scrolls in and leave
+   again when scrolling back up) and returns the drift each screen keeps while the room scrolls past.
+   Entrances use transform, opacity, clip-path and filter; drifts use --px/--py/--rz (CSS translate and
+   rotate), so the two never fight over one property. */
+type ScreenEffect = (typeof AUTO_MOTIONS)[number];
+type ScreenSet = { desks: HTMLElement[]; phones: HTMLElement[]; all: HTMLElement[]; box: HTMLElement };
+type Drift = { el: HTMLElement; px?: number; py?: number; rz?: number };
+/* clip-path fully open: larger than the screen so its shadow is not cut off */
+const OPEN = "inset(-30% -30% -30% -30% round 0% 0% 0% 0%)";
+const clip = (top: number, right: number, bottom: number, left: number, r = "0% 0% 0% 0%") => `inset(${top}% ${right}% ${bottom}% ${left}% round ${r})`;
+const drift = (els: HTMLElement[], d: Omit<Drift, "el">, alt?: Omit<Drift, "el">) => els.map((el, i) => ({ el, ...(alt && i % 2 ? alt : d) }));
+
+const SCREEN_EFFECTS: Record<ScreenEffect, (s: ScreenSet, tl: gsap.core.Timeline) => Drift[]> = {
+  /* Gerbang: the desktop rises through an arch; the phone settles in softly */
+  arch: ({ desks, phones }, tl) => {
+    if (desks.length) tl.fromTo(desks, { clipPath: clip(100, 0, 0, 0, "50% 50% 0% 0%"), y: 40 }, { clipPath: OPEN, y: 0, duration: 1, ease: "power2.out", stagger: 0.15 }, 0);
+    if (phones.length) tl.fromTo(phones, { y: 80, scale: 0.94, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.8, ease: "power2.out", stagger: 0.1 }, 0.35);
+    return [...drift(desks, { py: 20 }), ...drift(phones, { py: 60 })];
+  },
+  /* Geser: panels wipe in from opposite sides, then keep sliding against each other */
+  slide: ({ desks, phones }, tl) => {
+    desks.forEach((el, i) => {
+      const left = i % 2 === 0;
+      tl.fromTo(el, { x: left ? -90 : 90, clipPath: left ? clip(0, 100, 0, 0) : clip(0, 0, 0, 100) }, { x: 0, clipPath: OPEN, duration: 1, ease: "power3.out" }, i * 0.15);
+    });
+    if (phones.length) tl.fromTo(phones, { x: 140, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: "power3.out", stagger: 0.1 }, 0.3);
+    return [...drift(desks, { px: 26 }, { px: -26 }), ...drift(phones, { py: 50 })];
+  },
+  /* Tirai: the desktop opens from the middle like curtains; the phone swings in from its top edge */
+  curtain: ({ desks, phones }, tl) => {
+    if (desks.length) tl.fromTo(desks, { clipPath: clip(0, 50, 0, 50), scale: 1.04 }, { clipPath: OPEN, scale: 1, duration: 1, ease: "power2.inOut", stagger: 0.12 }, 0);
+    if (phones.length) tl.fromTo(phones, { rotation: -14, y: -30, opacity: 0, transformOrigin: "50% 0%" }, { rotation: 0, y: 0, opacity: 1, duration: 0.9, ease: "back.out(1.4)", stagger: 0.1 }, 0.3);
+    return [...drift(desks, { py: 18 }), ...drift(phones, { py: 40, rz: 3 })];
+  },
+  /* Kipas: the screens start stacked in the middle and fan out to their places */
+  spread: ({ all, box }, tl) => {
+    const toCenter = (el: HTMLElement) => box.clientWidth / 2 - (el.offsetLeft + el.offsetWidth / 2);
+    tl.fromTo(all, { x: (_i: number, el: HTMLElement) => toCenter(el), rotation: (i: number) => (i % 2 ? -8 : 8), scale: 0.9, opacity: 0.4 },
+      { x: 0, rotation: 0, scale: 1, opacity: 1, duration: 1, ease: "power3.out", stagger: 0.05 }, 0);
+    return drift(all, { py: 30 }, { py: 70 });
+  },
+  /* Fokus: blurred and close, then sharp, like a lens finding focus */
+  focus: ({ desks, phones }, tl) => {
+    if (desks.length) tl.fromTo(desks, { filter: "blur(16px)", scale: 1.08, opacity: 0.25 }, { filter: "blur(0px)", scale: 1, opacity: 1, duration: 1, ease: "power2.out", stagger: 0.12 }, 0);
+    if (phones.length) tl.fromTo(phones, { filter: "blur(12px)", y: 50, opacity: 0 }, { filter: "blur(0px)", y: 0, opacity: 1, duration: 0.8, ease: "power2.out" }, 0.25);
+    return [...drift(desks, { py: 14 }), ...drift(phones, { py: 55 })];
+  },
+  /* Putar 3D: the desktop lifts up from its bottom edge, the phone turns toward you */
+  tilt: ({ desks, phones }, tl) => {
+    if (desks.length) tl.fromTo(desks, { rotationX: 32, y: 70, opacity: 0, transformPerspective: 1400, transformOrigin: "50% 100%" },
+      { rotationX: 0, y: 0, opacity: 1, transformPerspective: 1400, duration: 1, ease: "power3.out", stagger: 0.12 }, 0);
+    if (phones.length) tl.fromTo(phones, { rotationY: -38, x: 70, opacity: 0, transformPerspective: 1000, transformOrigin: "0% 50%" },
+      { rotationY: 0, x: 0, opacity: 1, transformPerspective: 1000, duration: 0.9, ease: "power3.out" }, 0.3);
+    return [...drift(desks, { py: 24 }), ...drift(phones, { py: 70, rz: -4 })];
+  },
+  /* Sinyal: the desktop pops up to size, the phone drops in and bounces */
+  signal: ({ desks, phones }, tl) => {
+    if (desks.length) tl.fromTo(desks, { scale: 0.72, opacity: 0, transformOrigin: "50% 50%" }, { scale: 1, opacity: 1, duration: 0.9, ease: "back.out(1.7)", stagger: 0.12 }, 0);
+    if (phones.length) {
+      tl.fromTo(phones, { y: -160 }, { y: 0, duration: 1, ease: "bounce.out" }, 0.25)
+        .fromTo(phones, { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "none" }, 0.25);
+    }
+    return [...drift(desks, { py: 12 }), ...drift(phones, { py: 95 })];
+  },
+  /* Cetak: each screen comes out line by line, like a receipt from the printer */
+  print: ({ desks, phones }, tl) => {
+    if (desks.length) tl.fromTo(desks, { clipPath: clip(0, 0, 100, 0), y: -24 }, { clipPath: OPEN, y: 0, duration: 1, ease: "steps(14)", stagger: 0.15 }, 0);
+    if (phones.length) tl.fromTo(phones, { clipPath: clip(0, 0, 100, 0), y: -16 }, { clipPath: OPEN, y: 0, duration: 0.8, ease: "steps(10)" }, 0.45);
+    return [...drift(desks, { py: 20 }), ...drift(phones, { py: 60 })];
+  },
+};
+
 /* ---------- Home page ---------- */
 function initHome(undo: Cleanup[], reduce: MediaQueryList) {
   const root = document.documentElement;
@@ -315,27 +389,24 @@ function initHome(undo: Cleanup[], reduce: MediaQueryList) {
     const local: Cleanup[] = [];
 
     /* 1 · Hero: the one orchestrated load moment */
-    const heroWords = splitWords($("#hero-title"), local);
+    /* The poster caps rise word by word; the loop then draws itself around them. */
+    const heroWords = splitWords($(".hero-big") ?? $("#hero-title"), local);
     const intro = gsap.timeline({ delay: 0.1 });
-    intro.from(".hero-role, .avail", { y: 12, opacity: 0, duration: 0.5, ease: EASE_IN, stagger: 0.06 })
-      .from(heroWords, { yPercent: 110, duration: 0.8, ease: EASE_IN, stagger: 0.035 }, 0.1)
-      .from(".hero-lede, .hero-actions", { y: 18, opacity: 0, duration: 0.6, ease: EASE_IN, stagger: 0.08 }, 0.55);
+    intro.from(".hero-role, .avail, .hero-offer", { y: 12, opacity: 0, duration: 0.5, ease: EASE_IN, stagger: 0.06 })
+      .from(heroWords, { yPercent: 110, duration: 0.9, ease: EASE_IN, stagger: 0.06 }, 0.1)
+      .from(".hero-lede, .hero-actions, .hero-badge", { y: 18, opacity: 0, duration: 0.6, ease: EASE_IN, stagger: 0.08 }, 0.6);
     const lines = $$<SVGPathElement>(".map .ln");
     if (lines.length) {
       for (const ln of lines) { const L = ln.getTotalLength(); gsap.set(ln, { strokeDasharray: L, strokeDashoffset: L }); }
       gsap.set(".map .st .dot", { scale: 0, transformOrigin: "50% 50%" });
-      gsap.set(".map .sname, .map .lname, .map .mc-big, .map .train, .map figcaption", { opacity: 0 });
-      const draw = gsap.timeline({ delay: 0.35 });
-      draw.to(".map .mc-big", { opacity: 1, duration: 0.4 });
+      gsap.set(".map .lname, .map .train", { opacity: 0 });
+      const draw = gsap.timeline({ delay: 0.55 });
       for (const name of ["found", "sell", "run", "serve"]) {
         draw.to(`.map .ln[data-line="${name}"]`, { strokeDashoffset: 0, duration: 0.45, ease: "power1.inOut" }, ">-0.05");
         draw.to(`.map .lname[data-line="${name}"]`, { opacity: 1, duration: 0.3 }, "<0.15");
       }
-      if ($(".map .st")) {
-        draw.to(".map .st .dot", { scale: 1, duration: 0.35, ease: "back.out(2)", stagger: 0.05 }, "-=0.2")
-          .to(".map .sname", { opacity: 1, duration: 0.3, stagger: 0.04 }, "<0.1");
-      }
-      draw.to(".map .train", { opacity: 1, duration: 0.4 }, "-=0.1").to(".map figcaption", { opacity: 1, duration: 0.4 }, "<");
+      if ($(".map .st")) draw.to(".map .st .dot", { scale: 1, duration: 0.35, ease: "back.out(2)", stagger: 0.05 }, "-=0.2");
+      draw.to(".map .train", { opacity: 1, duration: 0.4 }, "-=0.1");
     }
 
     /* 2 · Ambient: two trains travel the loop; a station brightens as one passes */
@@ -395,8 +466,6 @@ function initHome(undo: Cleanup[], reduce: MediaQueryList) {
       if (words.length) tl.from(words, { yPercent: 110, duration: 0.85, ease: EASE_IN, stagger: 0.06 }, 0.05);
       const copy = $$(".room-meta, .room-text, .room-result, .facts > div, .room-actions, .room-links", room);
       if (copy.length) tl.from(copy, { y: 16, opacity: 0, duration: 0.55, ease: EASE_IN, stagger: 0.05 }, 0.25);
-      if (desks.length) tl.from(desks, { y: 70, scale: 0.955, opacity: 0, duration: 0.95, ease: EASE_IN, stagger: 0.1, transformOrigin: "50% 100%" }, 0.1);
-      if (phones.length) tl.from(phones, { y: 130, rotation: 5, opacity: 0, duration: 1.05, ease: EASE_IN, stagger: 0.1 }, 0.28);
       if (arch) tl.fromTo(arch, { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.9, ease: EASE_IN, clearProps: "clipPath" }, 0.3);
       if (swatches.length) tl.from(swatches, { scale: 0.4, opacity: 0, duration: 0.45, ease: "back.out(1.6)", stagger: 0.04 }, 0.6);
       for (const dt of $$("dt", room)) {
@@ -412,11 +481,20 @@ function initHome(undo: Cleanup[], reduce: MediaQueryList) {
       const st = ScrollTrigger.create({ trigger: room, start: "top 72%", once: true, onEnter: () => tl.play() });
       /* a room already above the viewport (deep link, reload) is shown finished, never left hidden */
       requestAnimationFrame(() => { if (st.progress > 0 || room.getBoundingClientRect().top < window.innerHeight * 0.72) tl.play(); });
-      /* depth: phones drift faster than desktops while the room scrolls past */
-      if (wide) {
-        for (const shot of shots) {
-          const d = shot.classList.contains("shot-phone") ? 70 : 26;
-          gsap.fromTo(shot, { "--py": `${d}px` }, { "--py": `${-d}px`, ease: "none", scrollTrigger: { trigger: room, start: "top bottom", end: "bottom top", scrub: true } });
+      /* the screens: this room's own effect, tied to the scroll in both directions */
+      const visual = $(".room-visual", room);
+      if (visual && shots.length) {
+        const effect = SCREEN_EFFECTS[room.dataset.motion as ScreenEffect] ?? SCREEN_EFFECTS.arch;
+        const enter = gsap.timeline({ scrollTrigger: { trigger: visual, start: "top 92%", end: "top 30%", scrub: 0.6, invalidateOnRefresh: true } });
+        const drifts = effect({ desks, phones, all: shots, box: visual }, enter);
+        /* depth while the room scrolls past; gentler on phones' small screens */
+        const k = wide ? 1 : 0.5;
+        for (const d of drifts) {
+          const from: gsap.TweenVars = {}, to: gsap.TweenVars = {};
+          if (d.px) { from["--px"] = `${d.px * k}px`; to["--px"] = `${-d.px * k}px`; }
+          if (d.py) { from["--py"] = `${d.py * k}px`; to["--py"] = `${-d.py * k}px`; }
+          if (d.rz) { from["--rz"] = `${d.rz}deg`; to["--rz"] = `${-d.rz}deg`; }
+          gsap.fromTo(d.el, from, { ...to, ease: "none", scrollTrigger: { trigger: room, start: "top bottom", end: "bottom top", scrub: true } });
         }
       }
     }

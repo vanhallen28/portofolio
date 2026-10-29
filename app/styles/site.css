@@ -86,39 +86,69 @@ button{font:inherit; color:inherit}
 .lang a:hover{color:var(--ink)}
 .lang a[aria-current="true"]{background:var(--ink); color:var(--wall)}
 
-/* ---------- Hero ---------- */
-.hero{max-width:var(--max); margin:0 auto; padding:clamp(40px, 8vh, 96px) var(--gutter) clamp(56px, 10vh, 120px);
-  display:grid; grid-template-columns:minmax(0, 1.08fr) minmax(0, .92fr); gap:clamp(32px, 5vw, 80px); align-items:center}
-.hero-role{font-size:16px; color:var(--muted); margin-bottom:22px}
-.hero h1{font-size:clamp(2.3rem, 4.3vw, 4.1rem); font-weight:800; letter-spacing:-0.035em; line-height:1.03; text-wrap:balance; max-width:17ch}
-.hero-lede{margin-top:26px; font-size:clamp(17px, 1.4vw, 19px); color:var(--muted); max-width:46ch}
-.hero-actions{display:flex; flex-wrap:wrap; gap:12px; margin-top:34px}
+/* ---------- Hero: a poster ---------- */
+/* Display caps sized to the hero's width (cqi), the business loop drawn over them, thin column lines behind. */
+.hero{position:relative; isolation:isolate; container-type:inline-size; overflow-x:clip; max-width:var(--max); margin:0 auto;
+  padding:clamp(20px, 3.5vh, 44px) var(--gutter) clamp(48px, 8vh, 96px)}
+.hero::before{content:""; position:absolute; inset:0 var(--gutter); z-index:-1; pointer-events:none; border-right:1px solid var(--rule);
+  background:linear-gradient(to right, var(--rule) 1px, transparent 1px) 0 0 / calc(100% / 6) 100% repeat-x}
+.hero-top{display:flex; justify-content:space-between; align-items:flex-start; gap:32px}
+.hero-role{font-size:16px; font-weight:500; color:var(--muted)}
+.hero-offer{max-width:36ch; text-align:right; font-size:12px; line-height:1.6; font-weight:700; letter-spacing:.06em; text-transform:uppercase}
+.hero-offer span{display:block; color:var(--muted)}
+/* --cap: the display size. Follows the width, capped by the height so short laptop screens keep the buttons close. */
+.hero-stage{--cap:min(17.5cqi, 24vh); position:relative; margin-top:clamp(16px, 2.5vh, 32px)}
+.hero h1{position:relative; z-index:1; font-weight:400}
+.hero-big{display:block}
+.hb-l1{display:flex; flex-wrap:wrap; align-items:baseline; column-gap:calc(var(--cap) * .09)}
+.hb-cap{display:block; font-family:var(--f-display), "Arial Narrow", sans-serif; font-size:var(--cap); line-height:.9; letter-spacing:0; text-transform:uppercase; overflow-wrap:anywhere}
+.hb-l2{padding-left:calc(var(--cap) * .74)}
+.hb-it{font-family:var(--f-italic), Georgia, serif; font-style:italic; font-size:calc(var(--cap) * .31); line-height:1.15}
+.hb-it .w{padding-inline:.1em; margin-inline:-.1em}
+.hero .map{position:absolute; z-index:2; left:calc(var(--cap) * 3.42); top:calc(var(--cap) * .29); width:calc(var(--cap) * 2.29); transform:rotate(-7deg); transform-origin:50% 50%; pointer-events:none}
+.hero .map a{pointer-events:auto}
+.hero-foot{display:flex; justify-content:space-between; align-items:flex-end; gap:40px; margin-top:clamp(32px, 4.5cqi, 64px)}
+.hero-lede{font-size:clamp(17px, 1.4vw, 19px); max-width:54ch}
+.hero-actions{display:flex; flex-wrap:wrap; gap:12px; margin-top:28px}
+.hero-badge{position:relative; display:block; flex:none; width:160px; height:160px; border-radius:50%; color:var(--ink); text-decoration:none}
+.hero-badge svg{position:absolute; inset:0; width:100%; height:100%; overflow:visible}
+.hero-badge text{font-size:12px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; fill:currentColor}
+.hero-badge .ring{transform-origin:80px 80px; animation:hero-spin 26s linear infinite}
+.hero-badge-face{position:absolute; inset:34px; border-radius:50%; overflow:hidden; background:var(--avatar-bg); box-shadow:0 0 0 1.5px var(--rule); transition:transform .35s var(--ease)}
+.hero-badge-face img{display:block; width:100%; height:100%}
+.hero-badge:hover .hero-badge-face, .hero-badge:focus-visible .hero-badge-face{transform:scale(1.07) rotate(-4deg)}
+.hero-badge:focus-visible{outline:2px solid var(--ink); outline-offset:4px}
+@keyframes hero-spin{to{transform:rotate(360deg)}}
+/* Without a poster headline (both lines emptied in the admin): the sentence beside the loop, as before. */
+.hero-plain .hero-stage{display:grid; grid-template-columns:minmax(0, 1.08fr) minmax(0, .92fr); gap:clamp(32px, 5vw, 80px); align-items:center}
+.hero-plain h1{font-size:clamp(2.3rem, 4.3vw, 4.1rem); font-weight:800; letter-spacing:-0.035em; line-height:1.03; text-wrap:balance; max-width:17ch}
+.hero-plain .map{position:relative; top:auto; right:auto; width:auto; transform:none}
 
-.map{position:relative}
-.map-svg{width:100%; height:auto; overflow:visible}
+.map{position:relative; margin:0}
+.map-svg{display:block; width:100%; height:auto; overflow:visible}
 .map .ln{stroke:currentColor; transition:opacity .3s}
 .map .ln[data-line="found"]{color:var(--l-found)} .map .ln[data-line="sell"]{color:var(--l-sell)}
 .map .ln[data-line="serve"]{color:var(--l-serve)} .map .ln[data-line="run"]{color:var(--l-run)}
-.map .lname{font-size:21px; font-weight:700; letter-spacing:-0.01em}
+.map .lname{font-size:14px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; paint-order:stroke; stroke:var(--wall); stroke-width:5px; stroke-linejoin:round}
 .map .lname[data-line="found"]{fill:var(--l-found)} .map .lname[data-line="sell"]{fill:var(--l-sell)}
 .map .lname[data-line="serve"]{fill:var(--l-serve)} .map .lname[data-line="run"]{fill:var(--l-run)}
 .map-linenames a{cursor:pointer}
-.map-linenames a:hover .lname{text-decoration:underline}
-.map .mc-big{font-size:30px; font-weight:800; letter-spacing:-0.03em; fill:var(--ink)}
+.map-linenames a:hover .lname, .map-linenames a:focus-visible .lname{text-decoration:underline; text-underline-offset:3px}
 .map .st{cursor:pointer}
 .map .st .hit{fill:transparent}
 .map .st .dot{fill:var(--wall); stroke:var(--ink); stroke-width:4; transition:fill .2s, stroke-width .2s}
 .map .st-x .dot{stroke-width:5}
-.map .st .sname{font-size:21px; font-weight:600; fill:var(--ink)}
+/* Station names stay hidden over the headline and appear on hover or keyboard focus. */
+.map .st .sname{font-size:20px; font-weight:700; fill:var(--ink); paint-order:stroke; stroke:var(--wall); stroke-width:7px; stroke-linejoin:round; opacity:0; transition:opacity .2s; pointer-events:none}
 .map .st:hover .dot, .map .st:focus-visible .dot{fill:var(--ink); stroke-width:7}
-.map .st:hover .sname, .map .st:focus-visible .sname{text-decoration:underline; text-underline-offset:4px}
+.map .st:hover .sname, .map .st:focus-visible .sname{opacity:1}
 .map .st:focus-visible{outline:none}
 .map.is-focus .ln{opacity:.18}
 .map.is-focus .ln.on{opacity:1}
-.map figcaption{margin-top:12px; font-size:14px; color:var(--muted); max-width:52ch}
 
 /* ---------- Works ---------- */
-.works{position:relative}
+/* screens slide in from beyond the edges: clip sideways (clip keeps sticky children working, unlike hidden) */
+.works{position:relative; overflow-x:clip}
 .works-head{max-width:var(--max); margin:0 auto; padding:clamp(48px, 9vh, 110px) var(--gutter) clamp(32px, 6vh, 64px);
   display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.3fr); gap:24px 64px; align-items:end; border-top:1px solid var(--rule)}
 .works-head h2{font-size:clamp(3rem, 7vw, 6.5rem); font-weight:800; letter-spacing:-0.04em; line-height:.9}
@@ -159,7 +189,9 @@ button{font:inherit; color:inherit}
 .room-actions{display:flex; flex-wrap:wrap; align-items:center; gap:14px 22px; margin-top:30px}
 
 .room-visual{position:relative; min-height:420px}
-.shot{translate:0 var(--py, 0px); position:relative; overflow:hidden; border-radius:12px; background:#000; box-shadow:0 40px 80px -30px rgba(0,0,0,.55), 0 0 0 1px color-mix(in srgb, var(--ink) 14%, transparent)}
+/* --px/--py/--rz: drift while the room scrolls past (lib/motion/site.ts); transform is left to the entrance effect */
+.shot,.brand-card{translate:var(--px, 0px) var(--py, 0px); rotate:var(--rz, 0deg)}
+.shot{position:relative; overflow:hidden; border-radius:12px; background:#000; box-shadow:0 40px 80px -30px rgba(0,0,0,.55), 0 0 0 1px color-mix(in srgb, var(--ink) 14%, transparent)}
 .shot img{width:100%}
 .shot-phone{border-radius:30px; box-shadow:0 30px 60px -20px rgba(0,0,0,.6), 0 0 0 7px #0E0E10, 0 0 0 8px color-mix(in srgb, var(--ink) 22%, transparent)}
 
@@ -185,8 +217,8 @@ button{font:inherit; color:inherit}
 
 .comp-two-phones{display:flex; justify-content:center; align-items:flex-start; gap:clamp(16px, 3vw, 40px); padding:20px 0}
 .comp-two-phones .shot{width:min(44%, 300px)}
-.comp-two-phones .shot:nth-child(odd){rotate:-3deg}
-.comp-two-phones .shot:nth-child(even){rotate:3.5deg; margin-top:80px}
+.comp-two-phones .shot:nth-child(odd){rotate:calc(-3deg + var(--rz, 0deg))}
+.comp-two-phones .shot:nth-child(even){rotate:calc(3.5deg + var(--rz, 0deg)); margin-top:80px}
 
 /* full-bleed patterns behind a room */
 .room[data-pattern]:not([data-pattern="none"])::before{content:""; position:absolute; top:0; bottom:0; left:calc(50% - 50vw); right:calc(50% - 50vw); z-index:-1; pointer-events:none}
@@ -354,9 +386,9 @@ html:not(.js) .room{--wall:var(--r-wall); --ink:var(--r-ink); --muted:var(--r-mu
   .plan{display:none}
 }
 @media (max-width: 960px){
-  .hero{grid-template-columns:1fr}
-  .hero h1{max-width:18ch}
-  .map{max-width:560px}
+  .hero-plain .hero-stage{grid-template-columns:1fr}
+  .hero-plain h1{max-width:18ch}
+  .hero-plain .map{max-width:560px}
   .works-head{grid-template-columns:1fr}
   .room{grid-template-columns:1fr; min-height:auto; gap:40px}
   .room-visual{min-height:0}
@@ -379,7 +411,21 @@ html:not(.js) .room{--wall:var(--r-wall); --ink:var(--r-ink); --muted:var(--r-mu
   .brand-name{display:none}
   .head-wa{display:none}
   .btn-small{padding:8px 14px}
-  .hero{padding-top:28px}
+  .hero{padding-top:24px}
+  .hero::before{background-size:calc(100% / 3) 100%}
+  .hero-offer{display:none}
+  .hb-l1{display:block}
+  .hero-stage{--cap:26cqi}
+  .hb-it{display:block; font-size:10.5cqi; padding-left:8cqi; margin:.02em 0 .2em}
+  /* the bottom line stacks one word per line, every word after the first stepped in */
+  .hb-l2{padding-left:0}
+  .hb-l2 .hb-w{display:block}
+  .hb-l2 .hb-w + .hb-w{padding-left:30cqi}
+  .hero .map{left:auto; width:80cqi; right:-4cqi; top:auto; bottom:-9cqi}
+  .map .lname{display:none}
+  .hero-foot{flex-direction:column; align-items:stretch; margin-top:60px}
+  .hero-actions .btn{flex:1 1 100%; justify-content:center}
+  .hero-badge{display:none}
   .facts{grid-template-columns:1fr 1fr 1fr; gap:12px}
   .facts dt{font-size:24px}
   .facts dd{font-size:13px}
@@ -402,6 +448,7 @@ html:not(.js) .room{--wall:var(--r-wall); --ink:var(--r-ink); --muted:var(--r-mu
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{transition-duration:.01ms !important; animation-duration:.01ms !important}
+  .hero-badge .ring{animation:none}
 }
 
 /* fact rows follow the number of facts */

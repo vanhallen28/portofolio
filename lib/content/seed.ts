@@ -73,6 +73,16 @@ export const seedSections: Sections = {
     ),
     ctaPrimary: l("Konsultasi gratis via WhatsApp", "Free consultation on WhatsApp"),
     ctaSecondary: l("Lihat karya", "See the work"),
+    display: {
+      top: l("Sistem", "Systems"),
+      italic: l("yang menjalankan", "that run your"),
+      bottom: l("Bisnis Anda", "business"),
+    },
+    offer: l(
+      "Yang bisa saya bangun: website & landing page, toko online & kasir, portal klien, absensi & payroll",
+      "What I build: websites & landing pages, online stores & point of sale, client portals, attendance & payroll",
+    ),
+    badge: l("Masuk ke pameran • {n} ruang karya •", "Enter the exhibition • {n} rooms •"),
     mapCenter: l("Bisnis Anda", "Your business"),
     mapCaption: l(
       "Denah pameran. Empat sisi bisnis membentuk satu putaran, dan setiap karya adalah stasiun di jalurnya. Pilih stasiun untuk masuk ke ruangnya.",
@@ -214,7 +224,7 @@ export const seedProjects: Project[] = [
       { value: "6", label: l("langkah anamnesa dengan tanda tangan", "step intake form with signature") },
     ],
     status: null, liveUrl: "https://www.aliyasyifaa.com/", liveLabel: "aliyasyifaa.com", liveNote: null, previewUrl: "/preview/aliya-syifaa.html",
-    layout: "desk-phone",
+    layout: "desk-phone", motion: "arch",
     visuals: [
       { role: "desk", image: img("aliya-admin", 1600, 911, "Panel admin Aliya Syifaa: pesanan baru, kunjungan aktif, pendapatan, dan keluhan terbanyak", "Aliya Syifaa admin panel: new bookings, active visits, revenue and top complaints") },
       { role: "phone", image: img("aliya-hp-beranda", 390, 844, "Aplikasi pasien: kunjungan berikutnya dan daftar layanan", "Patient app: next visit and list of services") },
@@ -235,7 +245,7 @@ export const seedProjects: Project[] = [
       { value: "47rb", label: l("baris kode, dikerjakan sendiri", "lines of code, built solo") },
     ],
     status: null, liveUrl: "", liveLabel: "", liveNote: l("Versi live di hris.invisual.studio khusus tim", "The live version at hris.invisual.studio is team only"),
-    previewUrl: "/preview/hris.html", layout: "back-desk",
+    previewUrl: "/preview/hris.html", layout: "back-desk", motion: "slide",
     result: l("Satu login menggantikan sekitar enam aplikasi langganan yang dulu dipakai terpisah.", "One login replaced about six subscription apps the studio used to run separately."),
     visuals: [
       { role: "back", image: img("hris-heatmap", 1600, 887, "Timesheet heatmap kehadiran harian per karyawan", "Daily attendance timesheet heatmap per employee") },
@@ -257,7 +267,7 @@ export const seedProjects: Project[] = [
       { value: "4", label: l("lapis cek sebelum status lunas", "checks before an order is paid") },
     ],
     status: l("Belum tayang, menunggu keputusan klien", "Not live yet, awaiting the client's go-ahead"),
-    liveUrl: "", liveLabel: "", liveNote: null, previewUrl: "/preview/biansa.html", layout: "desk-phone",
+    liveUrl: "", liveLabel: "", liveNote: null, previewUrl: "/preview/biansa.html", layout: "desk-phone", motion: "curtain",
     visuals: [
       { role: "desk", image: img("biansa-beranda", 1600, 1000, "Beranda Biansa: model memakai outer karamel dalam bingkai lengkung, judul Nyaman itu tidak harus mahal", "Biansa homepage: a model in a caramel outer inside an arched frame, headline Nyaman itu tidak harus mahal") },
       { role: "phone", image: img("biansa-hp-produk", 600, 1300, "Halaman produk Outer Piping Espresso versi HP: foto utama dan deretan thumbnail galeri", "Outer Piping Espresso product page on phone: main photo and the gallery thumbnails") },
@@ -286,7 +296,7 @@ export const seedProjects: Project[] = [
       { value: "3", label: l("cara bayar: QRIS, VA, e-wallet", "ways to pay: QRIS, VA, e-wallet") },
     ],
     status: l("Preview proyek menyusul", "Project preview coming soon"),
-    liveUrl: "http://portal.invisual.studio/", liveLabel: "portal.invisual.studio", liveNote: null, previewUrl: "", layout: "two-phones",
+    liveUrl: "http://portal.invisual.studio/", liveLabel: "portal.invisual.studio", liveNote: null, previewUrl: "", layout: "two-phones", motion: "spread",
     result: l("Dimulai dari audit keamanan: 66 uji hak akses yang gagal kini semuanya lolos, sebelum fitur baru ditambahkan.", "It started with a security audit: 66 failing access tests now all pass, before any new feature was added."),
     visuals: [
       { role: "phone", image: img("portal-top", 640, 1023, "Beranda portal klien: status proyek dan kartu proyek", "Client portal home: project status and project card") },
@@ -307,7 +317,7 @@ export const seedProjects: Project[] = [
       { value: "35", label: l("halaman, desktop dan HP", "pages, desktop and phone") },
       { value: "0", label: l("warna aksen, perak yang bicara", "accent colours, the silver speaks") },
     ],
-    status: l("Dalam review klien", "In client review"), liveUrl: "", liveLabel: "", liveNote: null, previewUrl: "/preview/ciri.html", layout: "desk-phone",
+    status: l("Dalam review klien", "In client review"), liveUrl: "", liveLabel: "", liveNote: null, previewUrl: "/preview/ciri.html", layout: "desk-phone", motion: "focus",
     visuals: [
       { role: "desk", image: img("ciri-home", 1600, 1000, "Beranda Ciri: tangan memakai cincin perak, judul Your Personal Mark", "Ciri homepage: a hand wearing a silver ring, headline Your Personal Mark") },
       { role: "phone", image: img("ciri-hp", 600, 1298, "Halaman produk Hollow Ring versi HP", "Hollow Ring product page on phone") },
@@ -327,7 +337,7 @@ export const seedProjects: Project[] = [
       { value: "2", label: l("bahasa, satu alamat", "languages, one address") },
       { value: "20+", label: l("paket pembaruan dikirim", "update packages shipped") },
     ],
-    status: null, liveUrl: "https://invisual.studio/", liveLabel: "invisual.studio", liveNote: null, previewUrl: "/preview/web-invi.html", layout: "desk-phone",
+    status: null, liveUrl: "https://invisual.studio/", liveLabel: "invisual.studio", liveNote: null, previewUrl: "/preview/web-invi.html", layout: "desk-phone", motion: "tilt",
     visuals: [
       { role: "desk", image: img("web-contact", 1600, 1000, "Halaman kontak Invisual Studio versi Bahasa Indonesia, mode gelap", "Invisual Studio contact page in Indonesian, dark mode") },
       { role: "phone", image: img("web-hp", 600, 1298, "Halaman kontak di HP", "Contact page on phone") },
@@ -347,7 +357,7 @@ export const seedProjects: Project[] = [
       { value: "3", label: l("pilihan durasi paket: 1, 6, 12 bulan", "plan lengths: 1, 6 or 12 months") },
       { value: "1", label: l("tujuan untuk setiap tombol: WhatsApp", "destination for every button: WhatsApp") },
     ],
-    status: null, liveUrl: "https://www.internetbandung.com/", liveLabel: "internetbandung.com", liveNote: null, previewUrl: "/preview/internet-bandung.html", layout: "desk-phone",
+    status: null, liveUrl: "https://www.internetbandung.com/", liveLabel: "internetbandung.com", liveNote: null, previewUrl: "/preview/internet-bandung.html", layout: "desk-phone", motion: "signal",
     visuals: [
       { role: "desk", image: img("intbdg-paket", 1600, 1000, "Pilihan paket internet dengan tab 1, 6, dan 12 bulan", "Internet plans with 1, 6 and 12-month tabs") },
       { role: "phone", image: img("intbdg-hp", 600, 1298, "Paket internet di HP dengan tombol WhatsApp", "Internet plans on phone with a WhatsApp button") },
@@ -368,7 +378,7 @@ export const seedProjects: Project[] = [
       { value: "1", label: l("resep per menu, stok bahan terpotong sendiri", "recipe per item, ingredients deduct themselves") },
     ],
     status: l("Prototipe interaktif, bisa langsung dicoba", "Interactive prototype you can try now"),
-    liveUrl: "", liveLabel: "", liveNote: null, previewUrl: "/preview/point-pos.html", layout: "desk-phone",
+    liveUrl: "", liveLabel: "", liveNote: null, previewUrl: "/preview/point-pos.html", layout: "desk-phone", motion: "print",
     visuals: [
       { role: "desk", image: img("point-kasir", 1600, 1000, "Layar kasir POINT: menu kopi, pesanan berisi varian dan add-on, pajak PB1, dan pilihan bayar", "POINT till screen: coffee menu, order with variants and add-ons, PB1 tax and payment options") },
       { role: "phone", image: img("point-hp", 600, 1298, "Katalog menu POINT di HP", "POINT menu catalogue on phone") },

@@ -3,6 +3,35 @@
 Format: setiap rilis dikirim sebagai `portofolio-vX.Y.Z.zip`. Nomor versi naik setiap kali, jadi zip tidak pernah saling tumpuk.
 Petunjuk pasang per versi: `docs/updates/BACA-INI-vX.Y.Z.txt`.
 
+## v0.2.6 — 29 Oktober 2026
+
+Layar desktop dan HP di setiap ruang karya punya efek gulir sendiri.
+
+- Efeknya mengikuti gulir dua arah: layar masuk saat ruangnya digulir ke layar, dan mundur lagi saat digulir ke atas. Setelah tampil penuh, layar tetap bergerak pelan dengan kedalaman berbeda (HP lebih cepat dari desktop).
+- Delapan efek, satu per ruang, disesuaikan dengan proyeknya:
+  - **Aliya Syifaa · Gerbang:** layar desktop naik dari bawah melalui bentuk lengkung, HP masuk lembut.
+  - **Invisual HRIS · Geser:** panel masuk dari sisi yang berlawanan, lalu terus bergeser berlawanan.
+  - **Biansa · Tirai:** layar desktop terbuka dari tengah seperti tirai, HP berayun dari tepi atasnya.
+  - **Portal Klien · Kipas:** dua layar HP bertumpuk di tengah lalu menyebar ke tempatnya.
+  - **Ciri · Fokus:** dari buram dan dekat menjadi tajam, seperti lensa kamera.
+  - **Website Invisual · Putar 3D:** layar desktop terangkat dari tepi bawah, HP berputar menghadap pengunjung.
+  - **Internet Bandung · Sinyal:** layar desktop membesar, HP jatuh dan memantul.
+  - **POINT POS · Cetak:** layar keluar baris demi baris seperti struk dari printer kasir.
+- **Admin → Proyek → Tampilan visual:** pilihan baru "Efek layar saat digulir". "Otomatis" memilih berdasarkan urutan ruang, jadi ruang yang bersebelahan selalu berbeda.
+- Database yang sudah berjalan langsung mendapat efek ini tanpa SQL. Dengan urutan ruang sekarang, pilihan "Otomatis" menghasilkan efek yang sama seperti daftar di atas.
+- Tanpa efek bila pengunjung memilih gerak dikurangi. Bagian Karya tidak lagi bisa tergeser ke samping di HP saat layar masuk dari tepi.
+
+## v0.2.5 — 29 Oktober 2026
+
+Hero baru bergaya poster. Bagian lain (Karya, ruang berwarna saat digulir, Layanan, dan seterusnya) tidak berubah.
+
+- **Judul poster:** "SISTEM *yang menjalankan* BISNIS ANDA" dalam huruf besar condensed (Anton) dengan frasa miring (Instrument Serif). EN: "SYSTEMS *that run your* BUSINESS". Ukurannya mengikuti lebar layar; di HP kata-katanya bersusun dan baris kedua menjorok.
+- **Putaran jalur menimpa judul:** denah empat jalur (Ditemukan, Menjual, Melayani, Mengelola) kini berbentuk putaran lebar yang melingkari kata "ANDA", miring sedikit. Efeknya tetap: garis tergambar saat halaman dibuka, dua kereta berjalan, stasiun membesar saat dilewati. Saat stasiun disorot, nama proyeknya muncul dan jalurnya menyala. Klik stasiun membawa ke ruangnya, klik nama jalur menyaring karya.
+- **Garis kolom tipis** di belakang hero (6 kolom, 3 di HP), peran di kiri atas, dan daftar "Yang bisa saya bangun" berhuruf kapital kecil di kanan atas.
+- **Lencana bulat** berisi avatar dengan teks berputar "Masuk ke pameran • 8 ruang karya •", menuju Karya. Teks berhenti berputar bila pengunjung memilih gerak dikurangi.
+- **Admin → Bagian → Hero:** kartu baru "Judul poster" (baris 1, frasa miring, baris 2, teks kanan atas, teks lencana). "Judul besar" kini bernama "Kalimat utama": tetap dibaca mesin pencari dan pembaca layar, dan tetap dipakai di gambar pratinjau tautan. Kosongkan baris 1 dan 2 untuk kembali ke hero lama.
+- Database yang sudah berjalan langsung memakai hero baru tanpa SQL: isi bawaannya terisi otomatis sampai Anda mengubahnya di admin.
+
 ## v0.2.4 — 29 Oktober 2026
 
 Avatar karakter di header, foto About di tengah, dan ruang Biansa yang berisi.

@@ -335,10 +335,11 @@ try {
 
   await test("ubah judul hero → tampil di beranda", async () => {
     await a.goto(`${BASE}/admin/sections/hero`);
-    const field = a.locator('textarea[aria-label="Judul besar (Indonesia)"]');
-    await field.fill("Judul uji dari panel admin.");
+    await a.locator('textarea[aria-label="Kalimat utama (Indonesia)"]').fill("Judul uji dari panel admin.");
+    await a.locator('input[aria-label="Baris 1 (huruf besar) (Indonesia)"]').fill("Poster uji");
     await saveAndWait(a);
-    assert(await pageHas(`${BASE}/`, "Judul uji dari panel admin."), "judul baru belum tampil di beranda");
+    assert(await pageHas(`${BASE}/`, "Judul uji dari panel admin."), "kalimat utama baru belum ada di judul beranda");
+    assert(await pageHas(`${BASE}/`, "Poster uji"), "baris poster baru belum tampil di beranda");
   });
 
   const pid = seed.projects[1].id, pslug = seed.projects[1].slug;

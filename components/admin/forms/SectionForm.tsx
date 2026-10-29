@@ -26,12 +26,21 @@ export function SectionForm<K extends SectionKey>({ sectionKey, initial, lineNam
           <>
             <Card title="Teks utama" description="Bagian pertama yang dibaca pengunjung.">
               <LField label="Peran (di atas judul)" value={h.role} onChange={(x) => set({ role: x } as never)} />
-              <LField label="Judul besar" value={h.title} onChange={(x) => set({ title: x } as never)} multiline rows={3} max={140} hint="Satu kalimat yang menjawab: apa yang Anda bangun untuk bisnis mereka." />
+              <LField label="Kalimat utama" value={h.title} onChange={(x) => set({ title: x } as never)} multiline rows={3} max={140} hint="Satu kalimat yang menjawab: apa yang Anda bangun untuk bisnis mereka. Dibaca mesin pencari dan pembaca layar, dan dipakai di gambar pratinjau tautan. Tampil di layar hanya bila judul poster di bawah dikosongkan." />
               <LField label="Paragraf pembuka" value={h.lede} onChange={(x) => set({ lede: x } as never)} multiline rows={4} />
               <div className="adm-grid-2">
                 <LField label="Tombol utama (WhatsApp)" value={h.ctaPrimary} onChange={(x) => set({ ctaPrimary: x } as never)} />
                 <LField label="Tombol kedua (ke Karya)" value={h.ctaSecondary} onChange={(x) => set({ ctaSecondary: x } as never)} />
               </div>
+            </Card>
+            <Card title="Judul poster" description="Huruf besar di hero: baris 1, frasa miring, lalu baris 2. Pendek saja, 1–2 kata per baris. Kosongkan baris 1 dan 2 untuk kembali ke kalimat utama.">
+              <div className="adm-grid-2">
+                <LField label="Baris 1 (huruf besar)" value={h.display.top} onChange={(x) => set({ display: { ...h.display, top: x } } as never)} max={16} />
+                <LField label="Frasa miring" value={h.display.italic} onChange={(x) => set({ display: { ...h.display, italic: x } } as never)} max={24} />
+              </div>
+              <LField label="Baris 2 (huruf besar)" value={h.display.bottom} onChange={(x) => set({ display: { ...h.display, bottom: x } } as never)} max={16} />
+              <LField label="Yang bisa Anda bangun (kanan atas)" value={h.offer} onChange={(x) => set({ offer: x } as never)} multiline rows={2} max={140} hint="Huruf kapital kecil. Teks sebelum titik dua tampil abu-abu sebagai label." />
+              <LField label="Teks lencana bulat" value={h.badge} onChange={(x) => set({ badge: x } as never)} max={44} hint="Berputar di lencana avatar yang menuju Karya. {n} diganti jumlah karya." />
             </Card>
             <Card title="Deretan klien" description="Nama klien di bawah hero, masing-masing dengan huruf mereknya. Klik nama membawa ke ruangnya."
               aside={<Toggle label="Tampilkan" checked={h.clients.visible} onChange={(x) => set({ clients: { ...h.clients, visible: x } } as never)} />}>
@@ -52,9 +61,8 @@ export function SectionForm<K extends SectionKey>({ sectionKey, initial, lineNam
                   </>
                 )} />
             </Card>
-            <Card title="Denah jalur" description="Nama stasiun diatur di tiap proyek (Label denah), nama jalur di menu Jalur & warna.">
-              <LField label="Teks di tengah denah" value={h.mapCenter} onChange={(x) => set({ mapCenter: x } as never)} max={20} />
-              <LField label="Keterangan di bawah denah" value={h.mapCaption} onChange={(x) => set({ mapCaption: x } as never)} multiline rows={3} />
+            <Card title="Putaran jalur" description="Putaran berwarna yang melingkari judul poster. Nama stasiun diatur di tiap proyek (Label denah) dan muncul saat stasiun disorot; nama jalur di menu Jalur & warna.">
+              <LField label="Keterangan putaran (dibaca pembaca layar)" value={h.mapCaption} onChange={(x) => set({ mapCaption: x } as never)} multiline rows={3} />
             </Card>
           </>
         );
