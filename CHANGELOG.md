@@ -3,6 +3,16 @@
 Format: setiap rilis dikirim sebagai `portofolio-vX.Y.Z.zip`. Nomor versi naik setiap kali, jadi zip tidak pernah saling tumpuk.
 Petunjuk pasang per versi: `docs/updates/BACA-INI-vX.Y.Z.txt`.
 
+## v0.2.9 — 31 Oktober 2026
+
+Ruang karya yang hidup.
+
+- **Maskot, karakter, atau logo** di setiap ruang, masing-masing dengan gerakannya sendiri: ksatria VALE mengayun stik golf, jaguar Loma masuk dari samping lalu bernapas pelan, kura-kura RUA melompat dari bawah; logo Aliya Syifaa bercahaya, HR Portal meloncat, Biansa berkilau, stiker Invisual bergoyang, liontin Ciri berayun, logo Invisual sesekali berputar, Internet Bandung memancarkan sinyal, dan POINT dicap lalu melayang. Karakter berdiri di pojok layar; logo berada di bawah layar supaya tampilan tidak tertutup. Di HP ukurannya lebih kecil.
+- **Layar desktop dan HP memutar video situs aslinya**: rekaman pendek tanpa suara (± 10 detik, berulang) dari file preview tiap proyek, misalnya pesanan masuk di POINT, landmark dibuka di peta VALE, menu dan tiket RUA, atau kuesioner proyek di Website Invisual. Video baru dimuat saat ruangnya terlihat dan berhenti saat digulir lewat. Pengunjung yang memilih gerak dikurangi atau mode hemat data tetap melihat gambar diam. Gambar diam itu kini frame pertama videonya.
+- Portal Klien tidak punya file preview, jadi layarnya tetap gambar diam; maskotnya tetap ada.
+- **Admin → Proyek:** kartu baru "Maskot atau logo" (gambar, gerakan, tinggi, warna stiker) dan kolom "Video layar (opsional)" di setiap gambar layar, untuk file .mp4 atau .webm.
+- `supabase/updates/v0.2.9.sql`: menambahkan maskot ke ruang yang belum punya, dan mengganti layar dengan versi videonya hanya bila gambarnya masih gambar bawaan. Layar yang sudah Anda ganti, urutan ruang, dan jalur tidak disentuh; berjalan sekali saja. File pembaruan versi sebelumnya tidak berubah.
+
 ## v0.2.8 — 31 Oktober 2026
 
 Satu ruang baru dari Invisual Studio: RUA.

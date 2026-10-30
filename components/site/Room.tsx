@@ -105,6 +105,8 @@ function RoomVisual({ project: p, lang }: { project: Project; lang: Lang }) {
     return (
       <figure key={i} className={`shot shot-${role}`}>
         <img src={v.image.url} width={v.image.width} height={v.image.height} loading="lazy" decoding="async" alt={t(v.image.alt, lang)} />
+        {/* loaded and played only while the room is on screen (lib/motion/site.ts); never for reduced motion or Save-Data */}
+        {v.video ? <video className="shot-video" data-src={v.video.url} muted loop playsInline preload="none" aria-hidden="true" tabIndex={-1} /> : null}
       </figure>
     );
   });
@@ -125,8 +127,23 @@ function RoomVisual({ project: p, lang }: { project: Project; lang: Lang }) {
           ) : null}
         </div>
         {shots.length ? shots[0] : note ? <div className="arch">{note}</div> : null}
+        <RoomMascot project={p} lang={lang} />
       </div>
     );
   }
-  return <div className={`room-visual comp-${p.layout === "brand-card" ? "desk-phone" : p.layout}`}>{shots}</div>;
+  return <div className={`room-visual comp-${p.layout === "brand-card" ? "desk-phone" : p.layout}`}>{shots}<RoomMascot project={p} lang={lang} /></div>;
+}
+
+/** The client's mascot or logo at the corner of the screens. Its entrance and idle loop live in CSS (site.css, "Mascots"). */
+function RoomMascot({ project: p, lang }: { project: Project; lang: Lang }) {
+  const m = p.mascot;
+  if (!m || !m.image.url) return null;
+  const style = { "--m-h": `${m.size}px`, "--m-src": `url("${m.image.url}")`, ...(m.chip ? { "--m-chip": m.chip } : {}) } as CSSProperties;
+  return (
+    <div className={`mascot m-${m.motion}${m.chip ? " has-chip" : ""}`} style={style}>
+      <div className="mascot-in">
+        <img src={m.image.url} width={m.image.width} height={m.image.height} loading="lazy" decoding="async" alt={t(m.image.alt, lang)} />
+      </div>
+    </div>
+  );
 }

@@ -1,6 +1,20 @@
-import { ContentSchema } from "./schema";
+import { ContentSchema, ImgSchema } from "./schema";
 import { caseToRow, projectToRow } from "./rows";
-import type { Content } from "./types";
+import type { Content, Project } from "./types";
+import { VISUALS_BEFORE_029 } from "./visuals-before-029";
+
+/** A project row as v0.2.8 and earlier wrote it: the v0.2.8 screens and no mascot. Keeps the update files
+    those versions shipped byte-for-byte the same now that the seed has moved on. */
+function rowBefore029(p: Project) {
+  const r = projectToRow(p);
+  const data: Record<string, unknown> = { ...r.data };
+  delete data.mascot;
+  const before = VISUALS_BEFORE_029[p.id];
+  data.visuals = before
+    ? before.map((v) => ({ role: v.role, image: ImgSchema.parse(v.image) }))
+    : r.data.visuals.map((v) => ({ role: v.role, image: v.image }));
+  return { ...r, data: data as Omit<typeof r.data, "mascot"> };
+}
 
 /* supabase/updates/v0.2.0.sql — brings a database seeded by v0.1.x up to the v0.2.0 starter content.
    It only ever FILLS what is missing (a new field, an empty FAQ, a case study without colours);
@@ -82,7 +96,7 @@ export function buildUpdateSql022(content: Content): string {
   const project = c.projects.find((p) => p.slug === "biansa");
   const study = c.caseStudies.find((cs) => cs.projectSlug === "biansa");
   if (!project || !study) throw new Error("seed has no Biansa project or case study");
-  const pd = projectToRow(project).data;
+  const pd = rowBefore029(project).data;
   const cd = caseToRow(study).data;
   // feature title (Indonesian) -> pictures, for every feature that has them in the seed
   const pics: Record<string, unknown> = {};
@@ -179,7 +193,7 @@ export function buildUpdateSql027(content: Content): string {
     "select coalesce(max(sort), 0) into next_sort from public.projects;",
   ];
   projects.forEach((p, i) => {
-    const r = projectToRow(p!);
+    const r = rowBefore029(p!);
     out.push(`insert into public.projects (id, slug, sort, published, data) select ${s(r.id)}, ${s(r.slug)}, next_sort + ${i + 1}, ${r.published}, ${j(r.data)} where not exists (select 1 from public.projects where id = ${s(r.id)} or slug = ${s(r.slug)});`);
   });
   out.push("", "-- Studi kasus keduanya (hanya untuk proyek VALE dan Loma yang baru ditambahkan, dan bila belum ada)");
@@ -233,7 +247,7 @@ export function buildUpdateSql028(content: Content): string {
   const p = c.projects.find((x) => x.slug === "rua");
   const cs = c.caseStudies.find((x) => x.projectSlug === "rua");
   if (!p || !cs) throw new Error("seed has no RUA project / case study");
-  const r = projectToRow(p);
+  const r = rowBefore029(p);
   const rc = caseToRow(cs);
   const clients = c.sections.hero.clients.items.filter((it) => it.projectSlug === "rua");
   return [
@@ -275,4 +289,56 @@ export function buildUpdateSql028(content: Content): string {
     "$upd$;",
     "",
   ].join("\n");
+}
+
+/* supabase/updates/v0.2.9.sql — rooms come alive: every room gets its client's mascot or logo, and each screen that
+   still shows the image v0.2.8 shipped becomes its live version (a new still taken from the first frame of a short
+   silent video, plus that video). A screen the owner replaced, or a mascot the owner already set, is left alone.
+   Runs once (recorded in content_updates). */
+export function buildUpdateSql029(content: Content): string {
+  const c = ContentSchema.parse(content);
+  const j = (v: unknown) => `'${JSON.stringify(v).replace(/'/g, "''")}'::jsonb`;
+  const s = (v: string) => `'${v.replace(/'/g, "''")}'`;
+  const out: string[] = [
+    "-- Pembaruan isi v0.2.9. Dibuat otomatis oleh `npm run seed:sql` — jangan diedit manual.",
+    "-- Ruang karya yang hidup: maskot atau logo klien di setiap ruang, dan layar desktop/HP yang memutar video situsnya.",
+    "-- Layar hanya diganti bila gambarnya masih gambar bawaan; maskot hanya ditambahkan bila ruang itu belum punya.",
+    "-- Berjalan sekali saja: menjalankannya lagi tidak mengubah apa pun (dicatat di tabel content_updates).",
+    "",
+    "create table if not exists public.content_updates (version text primary key, applied_at timestamptz not null default now());",
+    "alter table public.content_updates enable row level security;",
+    "revoke all on public.content_updates from anon, authenticated;",
+    "",
+    "do $upd$",
+    "begin",
+    "if exists (select 1 from public.content_updates where version = '0.2.9') then",
+    "  raise notice 'Pembaruan isi v0.2.9 sudah pernah dijalankan; tidak ada yang diubah.';",
+    "  return;",
+    "end if;",
+  ];
+  for (const p of c.projects) {
+    const before = VISUALS_BEFORE_029[p.id];
+    const swaps = (before ?? []).flatMap((old, i) => {
+      const now = p.visuals[i];
+      if (!now || (now.image.url === old.image.url && !now.video)) return [];
+      return [`when x->'image'->>'url' = ${s(old.image.url)} then ${j(now)}`];
+    });
+    if (!swaps.length && !p.mascot) continue;
+    out.push("", `-- ${p.name}`);
+    if (swaps.length) {
+      out.push(`update public.projects set data = jsonb_set(data, '{visuals}', (select coalesce(jsonb_agg(case ${swaps.join(" ")} else x end order by ord), '[]'::jsonb) from jsonb_array_elements(data->'visuals') with ordinality as v(x, ord))) where id = ${s(p.id)} and jsonb_typeof(data->'visuals') = 'array';`);
+    }
+    if (p.mascot) {
+      out.push(`update public.projects set data = jsonb_set(data, '{mascot}', ${j(p.mascot)}) where id = ${s(p.id)} and (data->'mascot' is null or data->'mascot' = 'null'::jsonb);`);
+    }
+  }
+  out.push(
+    "",
+    "insert into public.content_updates (version) values ('0.2.9');",
+    "raise notice 'Pembaruan isi v0.2.9 selesai.';",
+    "end",
+    "$upd$;",
+    "",
+  );
+  return out.join("\n");
 }

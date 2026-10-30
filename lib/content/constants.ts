@@ -8,6 +8,8 @@ export const PATTERNS = ["none", "checker", "glow"] as const;
 export const ROOM_MOTIONS = ["auto", "arch", "slide", "curtain", "spread", "focus", "tilt", "signal", "print", "unfold", "glow", "pop"] as const;
 export const AUTO_MOTIONS = ["arch", "slide", "curtain", "spread", "focus", "tilt", "signal", "print", "unfold", "glow", "pop"] as const;
 export const TITLE_SIZES = ["md", "lg", "xl", "xxl"] as const;
+/** How a room's mascot or logo moves once its room is on screen (each room picks one that suits the brand). */
+export const MASCOT_MOTIONS = ["pop", "swing", "prowl", "glow", "hop", "shine", "wiggle", "dangle", "turn", "signal", "stamp", "float"] as const;
 export const VISUAL_ROLES = ["desk", "phone", "back"] as const;
 export const MAP_SLOTS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] as const;
 

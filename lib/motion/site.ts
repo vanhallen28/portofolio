@@ -502,9 +502,17 @@ function initHome(undo: Cleanup[], reduce: MediaQueryList) {
         tl.to(o, { v: n, duration: 1.1, ease: "power2.out", onUpdate: () => { text.nodeValue = Math.round(o.v) + suffix; } }, 0.4);
         local.push(() => { text.nodeValue = original; });
       }
-      const st = ScrollTrigger.create({ trigger: room, start: "top 72%", once: true, onEnter: () => tl.play() });
+      /* the mascot waits off stage, enters with the room, and only loops while the room is on screen */
+      const mascot = $(".mascot", room);
+      if (mascot) {
+        mascot.classList.add("m-wait");
+        local.push(() => mascot.classList.remove("m-wait", "is-in", "is-live"));
+        ScrollTrigger.create({ trigger: room, start: "top bottom", end: "bottom top", onToggle: (s) => mascot.classList.toggle("is-live", s.isActive) });
+      }
+      const enterMascot = () => { if (mascot) { mascot.classList.remove("m-wait"); mascot.classList.add("is-in"); } };
+      const st = ScrollTrigger.create({ trigger: room, start: "top 72%", once: true, onEnter: () => { tl.play(); enterMascot(); } });
       /* a room already above the viewport (deep link, reload) is shown finished, never left hidden */
-      requestAnimationFrame(() => { if (st.progress > 0 || room.getBoundingClientRect().top < window.innerHeight * 0.72) tl.play(); });
+      requestAnimationFrame(() => { if (st.progress > 0 || room.getBoundingClientRect().top < window.innerHeight * 0.72) { tl.play(); enterMascot(); } });
       /* the screens: this room's own effect, tied to the scroll in both directions */
       const visual = $(".room-visual", room);
       if (visual && shots.length) {
@@ -520,6 +528,22 @@ function initHome(undo: Cleanup[], reduce: MediaQueryList) {
           if (d.rz) { from["--rz"] = `${d.rz}deg`; to["--rz"] = `${-d.rz}deg`; }
           gsap.fromTo(d.el, from, { ...to, ease: "none", scrollTrigger: { trigger: room, start: "top bottom", end: "bottom top", scrub: true } });
         }
+      }
+    }
+
+    /* 4b · Live screens: each room's videos load and play only while that screen is on screen. Skipped when the
+       visitor saves data; reduced motion never reaches this block, so they keep the still image. */
+    const nav = navigator as Navigator & { connection?: { saveData?: boolean } };
+    if (!nav.connection?.saveData) {
+      for (const v of $$<HTMLVideoElement>(".shot-video")) {
+        const shot = v.closest(".shot");
+        if (!shot || !v.dataset.src) continue;
+        v.muted = true;
+        const onPlaying = () => shot.classList.add("is-playing");
+        v.addEventListener("playing", onPlaying);
+        const play = () => { if (!v.getAttribute("src")) v.src = v.dataset.src!; v.play().catch(() => { /* autoplay refused: the still stays */ }); };
+        ScrollTrigger.create({ trigger: shot, start: "top bottom", end: "bottom top", onToggle: (s) => (s.isActive ? play() : v.pause()) });
+        local.push(() => { v.pause(); v.removeEventListener("playing", onPlaying); shot.classList.remove("is-playing"); });
       }
     }
 

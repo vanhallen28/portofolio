@@ -1,13 +1,26 @@
-import type { Block, CaseStudy, Content, Img, L, Line, Project, Sections, SiteSettings, Theme } from "./types";
+import type { Block, CaseStudy, Content, Img, L, Line, Mascot, Project, Sections, SiteSettings, Theme, Visual } from "./types";
 import { SEED_CASES } from "./seed-cases";
 
 /* Initial content. Everything here is editable from /admin; this file is only the first fill
    (and the fallback when the database is not connected yet). */
 
 const l = (id: string, en: string): L => ({ id, en });
+/** The client's mascot, character or logo for its room (files in public/media/seed/mascot, taken from each project). */
+const mascot = (file: string, width: number, height: number, size: number, motion: Mascot["motion"], chip: string, altId: string, altEn: string): Mascot => ({
+  image: { url: `/media/seed/${file}`, width, height, alt: l(altId, altEn) }, motion, size, chip,
+});
 const img = (key: string, width: number, height: number, altId: string, altEn: string): Img => ({
   url: `/media/seed/${key}.webp`, width, height, alt: l(altId, altEn),
 });
+/** A room screen recorded from the project's preview: its first frame as the still, the loop as the video. */
+const live = (slug: string, role: Visual["role"], altId: string, altEn: string): Visual => {
+  const desk = role !== "phone";
+  return {
+    role,
+    image: img(`live/${slug}-${role}`, desk ? 1600 : 600, desk ? 1000 : 1298, altId, altEn),
+    video: { url: `/media/seed/live/${slug}-${role}.mp4` },
+  };
+};
 
 export const WA_MESSAGE = l(
   "Halo Virgiawan, saya ingin konsultasi soal sistem untuk bisnis saya.",
@@ -210,7 +223,8 @@ export const seedSections: Sections = {
   },
 };
 
-const P = (p: Omit<Project, "published" | "result"> & { published?: boolean; result?: L | null }): Project => ({ published: true, result: null, ...p });
+const P = (p: Omit<Project, "published" | "result" | "mascot" | "visuals"> & { published?: boolean; result?: L | null; mascot?: Mascot | null; visuals: (Omit<Visual, "video"> & { video?: Visual["video"] })[] }): Project =>
+  ({ published: true, result: null, mascot: null, ...p, visuals: p.visuals.map((v) => ({ video: null, ...v })) });
 
 export const seedProjects: Project[] = [
   P({
@@ -229,10 +243,11 @@ export const seedProjects: Project[] = [
     status: null, liveUrl: "https://www.aliyasyifaa.com/", liveLabel: "aliyasyifaa.com", liveNote: null, previewUrl: "/preview/aliya-syifaa.html",
     layout: "desk-phone", motion: "arch",
     visuals: [
-      { role: "desk", image: img("aliya-admin", 1600, 911, "Panel admin Aliya Syifaa: pesanan baru, kunjungan aktif, pendapatan, dan keluhan terbanyak", "Aliya Syifaa admin panel: new bookings, active visits, revenue and top complaints") },
-      { role: "phone", image: img("aliya-hp-beranda", 390, 844, "Aplikasi pasien: kunjungan berikutnya dan daftar layanan", "Patient app: next visit and list of services") },
+      live("aliya-syifaa", "desk", "Panel admin Aliya Syifaa: pesanan baru, pendapatan bulan ini, pesanan terbaru, dan keluhan terbanyak", "Aliya Syifaa admin panel: new bookings, this month's revenue, latest bookings and top complaints"),
+      live("aliya-syifaa", "phone", "Aplikasi pasien: kunjungan berikutnya, daftar layanan, dan doa kesembuhan", "Patient app: next visit, list of services and a prayer for healing"),
     ],
     brand: null, pattern: "none",
+    mascot: mascot("mascot/aliya.svg", 884, 648, 92, "glow", "", "Logo Aliya Syifaa", "Aliya Syifaa logo"),
   }),
   P({
     id: "adb2f26d-61cb-549f-894d-957fd98ee546", slug: "invisual-hris", sort: 2, name: "Invisual HRIS", mapLabel: "Invisual HRIS", mapSlot: 7,
@@ -251,10 +266,11 @@ export const seedProjects: Project[] = [
     previewUrl: "/preview/hris.html", layout: "back-desk", motion: "slide",
     result: l("Satu login menggantikan sekitar enam aplikasi langganan yang dulu dipakai terpisah.", "One login replaced about six subscription apps the studio used to run separately."),
     visuals: [
-      { role: "back", image: img("hris-heatmap", 1600, 887, "Timesheet heatmap kehadiran harian per karyawan", "Daily attendance timesheet heatmap per employee") },
-      { role: "desk", image: img("hris-dasbor", 1600, 903, "Dasbor HR: jumlah hadir, terlambat, WFH, log absensi live", "HR dashboard: present, late, WFH counts and live attendance log") },
+      live("invisual-hris", "back", "Manajemen kehadiran: hadir tepat waktu, terlambat, izin, dan alfa, serta siapa yang sering terlambat dan paling disiplin", "Attendance management: on time, late, leave and absent counts, and who is late most often and most punctual"),
+      live("invisual-hris", "desk", "Dasbor HR: jumlah hadir, terlambat, WFH, dan log absensi live", "HR dashboard: present, late and WFH counts and the live attendance log"),
     ],
     brand: null, pattern: "none",
+    mascot: mascot("mascot/hris.webp", 734, 230, 56, "hop", "", "Logo Invisual HR Portal", "Invisual HR Portal logo"),
   }),
   P({
     id: "5a58e7d3-0970-5cba-8abd-ffb43dc286b5", slug: "biansa", sort: 3, name: "Biansa", mapLabel: "Biansa", mapSlot: 4,
@@ -272,8 +288,8 @@ export const seedProjects: Project[] = [
     status: l("Belum tayang, menunggu keputusan klien", "Not live yet, awaiting the client's go-ahead"),
     liveUrl: "", liveLabel: "", liveNote: null, previewUrl: "/preview/biansa.html", layout: "desk-phone", motion: "curtain",
     visuals: [
-      { role: "desk", image: img("biansa-beranda", 1600, 1000, "Beranda Biansa: model memakai outer karamel dalam bingkai lengkung, judul Nyaman itu tidak harus mahal", "Biansa homepage: a model in a caramel outer inside an arched frame, headline Nyaman itu tidak harus mahal") },
-      { role: "phone", image: img("biansa-hp-produk", 600, 1300, "Halaman produk Outer Piping Espresso versi HP: foto utama dan deretan thumbnail galeri", "Outer Piping Espresso product page on phone: main photo and the gallery thumbnails") },
+      live("biansa", "desk", "Beranda Biansa: model memakai outer karamel dalam bingkai lengkung, judul Nyaman itu tidak harus mahal", "Biansa homepage: a model in a caramel outer inside an arched frame, headline Nyaman itu tidak harus mahal"),
+      live("biansa", "phone", "Beranda Biansa di HP: judul Nyaman itu tidak harus mahal di atas foto model dalam bingkai lengkung", "Biansa homepage on phone: the headline Nyaman itu tidak harus mahal above a model in an arched frame"),
     ],
     brand: {
       logoUrl: "/media/seed/biansa-logo.svg",
@@ -284,6 +300,7 @@ export const seedProjects: Project[] = [
       note: l("14 layar toko dan admin ada di preview UI", "14 store and admin screens in the UI preview"),
     },
     pattern: "none",
+    mascot: mascot("biansa-logo.svg", 619, 190, 40, "shine", "", "Logo Biansa", "Biansa logo"),
   }),
   P({
     id: "f93ddd77-c3ef-5bfd-8c21-1c671327edc5", slug: "portal-klien", sort: 4, name: "Portal Klien", mapLabel: "Portal Klien", mapSlot: 8,
@@ -306,6 +323,7 @@ export const seedProjects: Project[] = [
       { role: "phone", image: img("portal-progres", 640, 1015, "Progres tahapan, batas feedback 48 jam, sisa revisi", "Stage progress, 48-hour feedback window, revisions left") },
     ],
     brand: null, pattern: "checker",
+    mascot: mascot("mascot/portal.webp", 524, 100, 26, "wiggle", "#D1F360", "Logo Invisual", "Invisual logo"),
   }),
   P({
     id: "917b706b-98ac-5382-ac9e-6928f98f53ec", slug: "ciri", sort: 5, name: "Ciri", mapLabel: "Ciri", mapSlot: 5,
@@ -322,10 +340,11 @@ export const seedProjects: Project[] = [
     ],
     status: l("Dalam review klien", "In client review"), liveUrl: "", liveLabel: "", liveNote: null, previewUrl: "/preview/ciri.html", layout: "desk-phone", motion: "focus",
     visuals: [
-      { role: "desk", image: img("ciri-home", 1600, 1000, "Beranda Ciri: tangan memakai cincin perak, judul Your Personal Mark", "Ciri homepage: a hand wearing a silver ring, headline Your Personal Mark") },
-      { role: "phone", image: img("ciri-hp", 600, 1298, "Halaman produk Hollow Ring versi HP", "Hollow Ring product page on phone") },
+      live("ciri", "desk", "Beranda Ciri: tangan memakai cincin perak, judul Your Personal Mark", "Ciri homepage: a hand wearing a silver ring, headline Your Personal Mark"),
+      live("ciri", "phone", "Beranda Ciri di HP: tangan memakai cincin perak, judul Your Personal Mark", "Ciri homepage on phone: a hand wearing a silver ring, headline Your Personal Mark"),
     ],
     brand: null, pattern: "none",
+    mascot: mascot("mascot/ciri.webp", 289, 166, 66, "dangle", "", "Logo Ciri", "Ciri logo"),
   }),
   P({
     id: "5ea9fd41-1964-5919-b1f3-b5405a6c86dc", slug: "website-invisual", sort: 6, name: "Website Invisual", mapLabel: "Website Invisual", mapSlot: 2,
@@ -342,10 +361,11 @@ export const seedProjects: Project[] = [
     ],
     status: null, liveUrl: "https://invisual.studio/", liveLabel: "invisual.studio", liveNote: null, previewUrl: "/preview/web-invi.html", layout: "desk-phone", motion: "tilt",
     visuals: [
-      { role: "desk", image: img("web-contact", 1600, 1000, "Halaman kontak Invisual Studio versi Bahasa Indonesia, mode gelap", "Invisual Studio contact page in Indonesian, dark mode") },
-      { role: "phone", image: img("web-hp", 600, 1298, "Halaman kontak di HP", "Contact page on phone") },
+      live("website-invisual", "desk", "Halaman kontak Invisual Studio, mode gelap: Let’s create something worth looking at", "Invisual Studio contact page, dark mode: Let’s create something worth looking at"),
+      live("website-invisual", "phone", "Halaman kontak Invisual Studio di HP, dengan kartu Start a project", "Invisual Studio contact page on phone, with the Start a project card"),
     ],
     brand: null, pattern: "none",
+    mascot: mascot("mascot/web.webp", 524, 100, 34, "turn", "", "Logo Invisual", "Invisual logo"),
   }),
   P({
     id: "36416adb-ba98-597e-8c59-4fef26390a55", slug: "internet-bandung", sort: 7, name: "Internet Bandung", mapLabel: "Internet Bandung", mapSlot: 3,
@@ -362,10 +382,11 @@ export const seedProjects: Project[] = [
     ],
     status: null, liveUrl: "https://www.internetbandung.com/", liveLabel: "internetbandung.com", liveNote: null, previewUrl: "/preview/internet-bandung.html", layout: "desk-phone", motion: "signal",
     visuals: [
-      { role: "desk", image: img("intbdg-paket", 1600, 1000, "Pilihan paket internet dengan tab 1, 6, dan 12 bulan", "Internet plans with 1, 6 and 12-month tabs") },
-      { role: "phone", image: img("intbdg-hp", 600, 1298, "Paket internet di HP dengan tombol WhatsApp", "Internet plans on phone with a WhatsApp button") },
+      live("internet-bandung", "desk", "Studi kasus Internet Bandung: judul internetbandung.com dan cuplikan halaman depan situsnya", "Internet Bandung case page: the internetbandung.com headline and a snapshot of the site’s homepage"),
+      live("internet-bandung", "phone", "Studi kasus Internet Bandung di HP: cuplikan halaman depan dan judul internetbandung.com", "Internet Bandung case page on phone: a snapshot of the homepage and the internetbandung.com headline"),
     ],
     brand: null, pattern: "glow",
+    mascot: mascot("mascot/intbdg.webp", 810, 86, 22, "signal", "#FFFFFF", "Logo Internet Bandung", "Internet Bandung logo"),
   }),
   P({
     id: "4c7b3202-46ba-55fe-aed8-7695aac2189b", slug: "point-pos", sort: 8, name: "POINT POS", mapLabel: "POINT POS", mapSlot: 6,
@@ -383,10 +404,11 @@ export const seedProjects: Project[] = [
     status: l("Prototipe interaktif, bisa langsung dicoba", "Interactive prototype you can try now"),
     liveUrl: "", liveLabel: "", liveNote: null, previewUrl: "/preview/point-pos.html", layout: "desk-phone", motion: "print",
     visuals: [
-      { role: "desk", image: img("point-kasir", 1600, 1000, "Layar kasir POINT: menu kopi, pesanan berisi varian dan add-on, pajak PB1, dan pilihan bayar", "POINT till screen: coffee menu, order with variants and add-ons, PB1 tax and payment options") },
-      { role: "phone", image: img("point-hp", 600, 1298, "Katalog menu POINT di HP", "POINT menu catalogue on phone") },
+      live("point-pos", "desk", "Layar kasir POINT: menu kopi dan pesanan yang masih kosong, siap diisi", "POINT till screen: the coffee menu and an empty order, ready to fill"),
+      live("point-pos", "phone", "Katalog menu POINT di HP", "POINT menu catalogue on phone"),
     ],
     brand: null, pattern: "none",
+    mascot: mascot("mascot/point.webp", 390, 95, 36, "stamp", "", "Logo POINT", "POINT logo"),
   }),
   P({
     id: "b3e12ca6-5f31-564b-bb02-2067017def95", slug: "vale", sort: 9, name: "VALE", mapLabel: "VALE", mapSlot: 9,
@@ -404,10 +426,11 @@ export const seedProjects: Project[] = [
     status: l("Preview desain, belum tayang", "Design preview, not live yet"),
     liveUrl: "", liveLabel: "", liveNote: null, previewUrl: "/preview/vale.html", layout: "desk-phone", motion: "unfold",
     visuals: [
-      { role: "desk", image: img("vale-peta", 1600, 1000, "Beranda VALE: peta kerajaan bergaya cetak dengan enam landmark, kompas, dan daftar Legend of the Realm", "VALE homepage: a printed-style map of the realm with six landmarks, a compass and the Legend of the Realm list") },
-      { role: "phone", image: img("vale-hp", 600, 1298, "Bab I di HP: Every golfer becomes a knight, dengan ilustrasi ksatria", "Chapter I on phone: Every golfer becomes a knight, with a knight illustration") },
+      live("vale", "desk", "Beranda VALE: peta kerajaan bergaya cetak dengan enam landmark, kompas, dan daftar Legend of the Realm", "VALE homepage: a printed-style map of the realm with six landmarks, a compass and the Legend of the Realm list"),
+      live("vale", "phone", "Bab I di HP: Every golfer becomes a knight, dengan ilustrasi ksatria", "Chapter I on phone: Every golfer becomes a knight, with a knight illustration"),
     ],
     brand: null, pattern: "none",
+    mascot: mascot("mascot/vale.webp", 566, 941, 230, "swing", "", "Ksatria VALE mengayun stik golf", "The VALE knight swinging a golf club"),
   }),
   P({
     id: "042b1844-a06f-5a50-8149-8032ea9936c4", slug: "loma", sort: 10, name: "Loma", mapLabel: "Loma", mapSlot: 10,
@@ -425,10 +448,11 @@ export const seedProjects: Project[] = [
     status: l("Preview desain, belum tayang", "Design preview, not live yet"),
     liveUrl: "", liveLabel: "", liveNote: null, previewUrl: "/preview/loma.html", layout: "desk-phone", motion: "glow",
     visuals: [
-      { role: "desk", image: img("loma-hero", 1600, 1000, "Beranda Loma: lampu dinding hangat di ruang makan gelap, wordmark Loma besar di bawah", "Loma homepage: a warm wall lamp in a dark dining room, the large Loma wordmark below") },
-      { role: "phone", image: img("loma-hp", 600, 1298, "Tujuh menu signature Loma di HP, masing-masing dengan fotonya", "Loma's seven signature plates on phone, each with its photo") },
+      live("loma", "desk", "Beranda Loma: lampu dinding hangat di ruang makan gelap, wordmark Loma besar di bawah", "Loma homepage: a warm wall lamp in a dark dining room, the large Loma wordmark below"),
+      live("loma", "phone", "Menu signature Loma di HP: Seven plates that say the most about us, dimulai dari Charred Corn", "Loma’s signature plates on phone: Seven plates that say the most about us, starting with Charred Corn"),
     ],
     brand: null, pattern: "glow",
+    mascot: mascot("mascot/loma.svg", 314, 290, 118, "prowl", "", "Jaguar Loma", "The Loma jaguar"),
   }),
   P({
     id: "ea7d720a-1d02-5600-b3b3-175d3728dc65", slug: "rua", sort: 11, name: "RUA", mapLabel: "RUA", mapSlot: 11,
@@ -446,10 +470,11 @@ export const seedProjects: Project[] = [
     status: l("Preview desain, belum tayang", "Design preview, not live yet"),
     liveUrl: "", liveLabel: "", liveNote: null, previewUrl: "/preview/rua.html", layout: "desk-phone", motion: "pop",
     visuals: [
-      { role: "desk", image: img("rua-hero", 1600, 1000, "Beranda RUA: wordmark merah besar di latar kuning, maskot kura-kura memegang menu dan menyapa Xin chào", "RUA homepage: a large red wordmark on yellow, the turtle mascot holding a menu and saying Xin chào") },
-      { role: "phone", image: img("rua-hp", 600, 1298, "Come, we eat di HP: judul kuning di latar merah dan tiga kura-kura pelayan", "Come, we eat on phone: a yellow headline on red and three turtle servers") },
+      live("rua", "desk", "Beranda RUA: wordmark merah besar di latar kuning, maskot kura-kura memegang menu dan menyapa Xin chào", "RUA homepage: a large red wordmark on yellow, the turtle mascot holding a menu and saying Xin chào"),
+      live("rua", "phone", "Beranda RUA di HP: wordmark merah, kura-kura memegang menu, dan tombol See the menu", "RUA homepage on phone: the red wordmark, the turtle holding a menu and the See the menu button"),
     ],
     brand: null, pattern: "none",
+    mascot: mascot("mascot/rua.svg", 635, 615, 210, "pop", "", "Kura-kura RUA membawa mangkuk di atas nampan", "The RUA turtle carrying a bowl on a tray"),
   }),
 ];
 

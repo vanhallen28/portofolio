@@ -15,7 +15,7 @@ export function newProject(id: string, existing: Project[]): Project {
     meta: l("Bidang klien, tahun", "Client field, year"), text: l(), lines: ["found"],
     theme: { wall: "#F3F3F1", ink: "#151619", muted: "#5C5F65", accent: "#2F6FE4", btnBg: "#151619", btnInk: "#F3F3F1" },
     facts: [], status: null, liveUrl: "", liveLabel: "", liveNote: null, previewUrl: "",
-    layout: "desk-phone", visuals: [], brand: null, pattern: "none", motion: "auto", result: null,
+    layout: "desk-phone", visuals: [], brand: null, pattern: "none", motion: "auto", result: null, mascot: null,
   };
 }
 

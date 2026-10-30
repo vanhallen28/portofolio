@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { FONT_KEYS, LAYOUTS, LINE_KEYS, MAP_SLOTS, PATTERNS, ROOM_MOTIONS, SECTION_KEYS, TITLE_SIZES, VISUAL_ROLES } from "./constants";
+import { FONT_KEYS, LAYOUTS, LINE_KEYS, MAP_SLOTS, MASCOT_MOTIONS, PATTERNS, ROOM_MOTIONS, SECTION_KEYS, TITLE_SIZES, VISUAL_ROLES } from "./constants";
 
 const hex = z.string().regex(/^#[0-9a-fA-F]{6}$/, "Warna harus berformat #RRGGBB");
 const url = z.string().max(2048);
@@ -16,6 +16,20 @@ export const ImgSchema = z.object({
   height: z.number().int().positive(),
 });
 export const ThemeSchema = z.object({ wall: hex, ink: hex, muted: hex, accent: hex, btnBg: hex, btnInk: hex });
+/** A short silent loop of the site, played over a room screen while it is in view (the image stays as its still). */
+export const VideoSchema = z.object({
+  url: url.min(1, "Alamat video belum diisi").refine((v) => /^(https:\/\/|\/)/.test(v) && /\.(mp4|webm)(\?.*)?$/i.test(v), "Video harus file .mp4 atau .webm, alamatnya diawali https:// atau /"),
+});
+export const VisualSchema = z.object({ role: z.enum(VISUAL_ROLES), image: ImgSchema, video: VideoSchema.nullable().default(null) });
+/** The client's mascot, character or logo, standing at the corner of the room's screens. */
+export const MascotSchema = z.object({
+  image: ImgSchema,
+  motion: z.enum(MASCOT_MOTIONS),
+  /** Height on a desktop screen, in px (phones show it smaller). */
+  size: z.number().int().min(16).max(280),
+  /** A sticker colour behind a logo that would disappear on the wall; empty = cut-out, no sticker. */
+  chip: hex.or(z.literal("")).default(""),
+});
 export const FactSchema = z.object({ value: z.string().min(1).max(12), label: LSchema });
 const LineKey = z.enum(LINE_KEYS);
 
@@ -141,13 +155,15 @@ export const ProjectSchema = z.object({
   liveNote: LSchema.nullable(),
   previewUrl: url,
   layout: z.enum(LAYOUTS),
-  visuals: z.array(z.object({ role: z.enum(VISUAL_ROLES), image: ImgSchema })).max(3),
+  visuals: z.array(VisualSchema).max(3),
   brand: z.object({ logoUrl: url, swatches: z.array(z.object({ name: short, color: hex })).max(8), note: LSchema }).nullable(),
   pattern: z.enum(PATTERNS),
   /** Scroll effect for the room's screens (rows from before v0.2.6 get "auto"). */
   motion: z.enum(ROOM_MOTIONS).default("auto"),
   /** One sentence about the business outcome, highlighted in the room. */
   result: LSchema.nullable().default(null),
+  /** Mascot or logo with its own animation (rows from before v0.2.9 get none). */
+  mascot: MascotSchema.nullable().default(null),
 });
 
 const BlockSchema = z.discriminatedUnion("type", [

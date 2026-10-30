@@ -5,6 +5,7 @@ import { contentToRows } from "@/lib/content/rows";
 import { CaseStudySchema, ContentSchema, ProjectSchema } from "@/lib/content/schema";
 import { seed } from "@/lib/content/seed";
 import { buildUpdateSql027, buildUpdateSql028, TEXT_BEFORE_027, TEXT_BEFORE_028 } from "@/lib/content/update-sql";
+import { projectBefore029 } from "@/lib/content/visuals-before-029";
 
 /* A database running v0.2.7 has ten rooms and three sentences that count them. The v0.2.8 update must add RUA
    with its case study, put its wordmark at the end of the client strip, change the counts while they still read
@@ -65,11 +66,11 @@ describe("supabase/updates/v0.2.8.sql", () => {
     expect(readFileSync("supabase/updates/v0.2.8.sql", "utf8")).toBe(buildUpdateSql028(seed));
   });
 
-  it("adds RUA after the last room, exactly as in the seed", async () => {
+  it("adds RUA after the last room, exactly as the seed had it before v0.2.9", async () => {
     const all = await projects(db);
     expect(all.map((p) => p.slug).at(-1)).toBe(NEW);
     const got = all.find((p) => p.slug === NEW)!;
-    const want = seed.projects.find((p) => p.slug === NEW)!;
+    const want = projectBefore029(seed.projects.find((p) => p.slug === NEW)!);
     expect({ ...got, sort: 0 }).toEqual({ ...want, sort: 0 });
     expect(all).toHaveLength(11);
   });

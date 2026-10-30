@@ -5,6 +5,7 @@ import { contentToRows } from "@/lib/content/rows";
 import { CaseStudySchema, ProjectSchema } from "@/lib/content/schema";
 import { seed } from "@/lib/content/seed";
 import { buildUpdateSql022 } from "@/lib/content/update-sql";
+import { projectBefore029 } from "@/lib/content/visuals-before-029";
 
 /* A database running v0.2.1 has Biansa as a brand card with no screens and a case study without
    pictures. The v0.2.2 update must add them, and leave alone anything the owner already changed. */
@@ -20,7 +21,7 @@ const STUBS = `
 
 type Any = Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 const BIANSA_ID = seed.projects.find((p) => p.slug === "biansa")!.id;
-const wantProject = seed.projects.find((p) => p.slug === "biansa")!;
+const wantProject = projectBefore029(seed.projects.find((p) => p.slug === "biansa")!);
 const wantCase = seed.caseStudies.find((c) => c.projectSlug === "biansa")!;
 
 /** The seed as v0.2.1 shipped it: Biansa without screens. */

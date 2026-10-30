@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import { FONT_KEYS, LAYOUTS, LINE_KEYS, MAP_SLOTS, PATTERNS, ROOM_MOTIONS, TITLE_SIZES, VISUAL_ROLES } from "@/lib/content/constants";
+import { FONT_KEYS, LAYOUTS, LINE_KEYS, MAP_SLOTS, MASCOT_MOTIONS, PATTERNS, ROOM_MOTIONS, TITLE_SIZES, VISUAL_ROLES } from "@/lib/content/constants";
 import type { Line, LineKey, Project, Sections } from "@/lib/content/types";
 import { FONT_FAMILY, FONT_LABEL } from "@/lib/font-family";
 import { saveProjectAction } from "@/app/admin/actions";
@@ -42,6 +42,20 @@ const MOTION_LABEL: Record<(typeof ROOM_MOTIONS)[number], string> = {
   unfold: "Lembaran: desktop terbentang seperti peta, HP berbalik seperti halaman",
   glow: "Nyala: layar menyala dari gelap seperti cahaya lilin",
   pop: "Muncul: layar melompat dari tepi bawah lalu memantul, seperti maskot yang menyapa",
+};
+const MASCOT_LABEL: Record<(typeof MASCOT_MOTIONS)[number], string> = {
+  pop: "Muncul: melompat dari bawah, lalu bergoyang patah-patah",
+  swing: "Ayun: berayun dari kaki, seperti mengayun stik",
+  prowl: "Mengendap: masuk dari samping, lalu bernapas pelan",
+  glow: "Bercahaya: cahaya lembut berdenyut di sekelilingnya",
+  hop: "Loncat: meloncat kecil patah-patah",
+  shine: "Kilau: kilatan cahaya melintas di logo",
+  wiggle: "Stiker: ditempel, lalu bergoyang patah-patah",
+  dangle: "Gantung: berayun pelan dari atas, seperti liontin",
+  turn: "Putar: sesekali berputar satu kali",
+  signal: "Sinyal: gelombang memancar dari stikernya",
+  stamp: "Cap: dicapkan, lalu melayang pelan",
+  float: "Melayang: naik turun pelan",
 };
 const ROLE_LABEL: Record<(typeof VISUAL_ROLES)[number], string> = { desk: "Layar desktop", phone: "Layar HP", back: "Layar desktop di belakang" };
 const PATTERN_LABEL: Record<(typeof PATTERNS)[number], string> = { none: "Polos", checker: "Kotak-kotak halus", glow: "Cahaya di pojok kanan atas" };
@@ -165,7 +179,7 @@ export function ProjectForm({ initial, index, lines, works, slots, takenSlugs, p
             ) : null}
             <ListField label={p.layout === "brand-card" ? "Gambar (opsional, menggantikan lengkung)" : "Gambar layar"} items={p.visuals} max={3} addLabel="Tambah gambar"
               onChange={(v) => set("visuals", v)}
-              create={() => ({ role: p.layout === "two-phones" ? "phone" as const : "desk" as const, image: { url: "", alt: emptyL(), width: 1600, height: 1000 } })}
+              create={() => ({ role: p.layout === "two-phones" ? "phone" as const : "desk" as const, image: { url: "", alt: emptyL(), width: 1600, height: 1000 }, video: null })}
               itemTitle={(v) => ROLE_LABEL[v.role]}
               render={(v, put) => (
                 <div className="adm-grid">
@@ -173,8 +187,28 @@ export function ProjectForm({ initial, index, lines, works, slots, takenSlugs, p
                     <Select label="Jenis layar" value={v.role} options={VISUAL_ROLES.map((r) => ({ value: r, label: ROLE_LABEL[r] }))} onChange={(role) => put({ ...v, role })} />
                   ) : null}
                   <ImageField label="Gambar" value={v.image} onChange={(image) => image && put({ ...v, image })} hint="Screenshot dengan data samaran. Ukuran HP ideal 390×844 atau 600×1298." />
+                  <TextField label="Video layar (opsional)" value={v.video?.url ?? ""} mono
+                    onChange={(url) => put({ ...v, video: url.trim() ? { url: url.trim() } : null })}
+                    hint="Alamat file .mp4 tanpa suara, mis. /media/seed/live/nama-desk.mp4. Diputar berulang saat ruang terlihat; gambar di atas tetap dipakai sebagai tampilan awal dan untuk pengunjung yang memilih gerak dikurangi." />
                 </div>
               )} />
+          </Card>
+
+          <Card title="Maskot atau logo" description="Berdiri di pojok layar ruang ini dan bergerak saat ruangnya terlihat."
+            aside={<Toggle label="Tampilkan" checked={!!p.mascot} onChange={(on) => set("mascot", on ? (p.mascot ?? { image: { url: "", alt: emptyL(), width: 400, height: 400 }, motion: "float", size: 140, chip: "" }) : null)} />}>
+            {p.mascot ? (
+              <div className="adm-grid">
+                <ImageField label="Gambar maskot atau logo" value={p.mascot.image} onChange={(image) => image && set("mascot", { ...p.mascot!, image })}
+                  hint="Paling bagus PNG, WebP, atau SVG berlatar transparan." />
+                <Select label="Gerakan" value={p.mascot.motion} options={MASCOT_MOTIONS.map((k) => ({ value: k, label: MASCOT_LABEL[k] }))} onChange={(motion) => set("mascot", { ...p.mascot!, motion })}
+                  hint="Tidak bergerak bila pengunjung memilih gerak dikurangi." />
+                <div className="adm-grid-2">
+                  <NumberField label="Tinggi di desktop (px)" value={p.mascot.size} min={16} max={280} onChange={(size) => set("mascot", { ...p.mascot!, size })} />
+                  <TextField label="Warna stiker (#RRGGBB, kosongkan bila tanpa stiker)" value={p.mascot.chip} mono
+                    onChange={(chip) => set("mascot", { ...p.mascot!, chip: chip.trim().toUpperCase() })} />
+                </div>
+              </div>
+            ) : null}
           </Card>
 
           <Card title="Denah jalur" description="Setiap proyek adalah satu stasiun di denah hero.">

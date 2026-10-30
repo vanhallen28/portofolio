@@ -1,0 +1,90 @@
+PORTOFOLIO v0.2.9 — BACA INI DULU
+================================================================
+
+Ruang karya yang hidup.
+
+- Setiap ruang punya maskot, karakter, atau logo kliennya sendiri,
+  lengkap dengan gerakannya:
+
+    Aliya Syifaa      logo lampu      bercahaya
+    Invisual HRIS     logo HR Portal  meloncat
+    Biansa            logo            kilau cahaya
+    Portal Klien      stiker Invisual bergoyang seperti stiker
+    Ciri              logo            berayun seperti liontin
+    Website Invisual  logo            sesekali berputar
+    Internet Bandung  logo            gelombang sinyal
+    POINT POS         logo            dicap, lalu melayang
+    VALE              ksatria         mengayun stik golf
+    Loma              jaguar          masuk dari samping, bernapas pelan
+    RUA               kura-kura       melompat dari bawah
+
+  Karakter (ksatria, jaguar, kura-kura) berdiri di pojok layar;
+  logo berada tepat di bawah layar supaya tidak menutupi tampilan.
+
+- Layar desktop dan HP memutar video situs aslinya: rekaman pendek
+  tanpa suara dari file preview tiap proyek (menu dipilih, halaman
+  digulir, landmark dibuka, pesanan masuk). Video hanya dimuat dan
+  diputar saat ruangnya terlihat, dan berhenti saat digulir lewat.
+  Pengunjung yang memilih gerak dikurangi, atau yang menghemat data,
+  tetap melihat gambar diam.
+- Portal Klien tidak punya file preview, jadi layarnya tetap gambar
+  diam; maskotnya tetap ada.
+- Admin → Proyek: kartu baru "Maskot atau logo" (gambar, gerakan,
+  tinggi, warna stiker) dan kolom "Video layar (opsional)" di setiap
+  gambar layar.
+
+Yang berubah: 20 video baru dan 20 gambar diam baru di
+public/media/seed/live (± 8 MB), 10 file maskot di
+public/media/seed/mascot, model isi (maskot dan video), ruang,
+animasi, form admin Proyek, SQL pembaruan, uji. Tidak ada file yang
+dihapus, tidak ada migrasi struktur database.
+
+
+1. PASANG (salin-tempel di Terminal)
+----------------------------------------------------------------
+
+  cd ~/Documents/Virgiawan/PROJECT/portofolio
+  unzip -o ~/Downloads/portofolio-v0.2.9.zip -d .
+  npm install
+  npm run build
+  git add -A
+  git commit -m "v0.2.9: ruang karya yang hidup"
+  git push
+
+Push berhasil bila diakhiri "main -> main" dan tidak ada baris
+"error:" atau "fatal:". Cek dengan: git status
+
+
+2. SUPABASE: MASKOT DAN VIDEO (sekali saja)
+----------------------------------------------------------------
+
+a. Tunggu deploy v0.2.9 di Vercel berstatus Ready.
+
+b. Di Terminal:
+
+     pbcopy < supabase/updates/v0.2.9.sql
+
+c. Supabase → SQL Editor → New query, tempel (Cmd+V), Run.
+   Hasilnya "Success. No rows returned" (itu normal).
+
+   SQL ini menambahkan maskot ke ruang yang belum punya, dan
+   mengganti layar dengan versi videonya HANYA bila gambarnya masih
+   gambar bawaan. Layar yang sudah Anda ganti sendiri di admin tidak
+   disentuh; di sana Anda bisa mengisi kolom "Video layar" sendiri.
+   Urutan ruang dan jalur yang sudah Anda ubah juga tidak disentuh.
+   Menjalankannya lagi tidak mengubah apa pun.
+
+d. Buka /admin → Pengaturan situs → Simpan (tanpa mengubah apa pun),
+   lalu buka beranda dan tekan Cmd+Shift+R.
+
+
+3. MOHON DICEK SETELAH DEPLOY
+----------------------------------------------------------------
+
+[ ] Beranda → Karya: setiap ruang punya maskot atau logo yang
+    bergerak saat ruangnya terlihat.
+[ ] Layar desktop dan HP mulai memutar video beberapa saat setelah
+    ruangnya terlihat (sebelumnya tampil gambar diam yang sama).
+[ ] Di HP: video tetap berjalan, maskot lebih kecil.
+[ ] Admin → Proyek → salah satu proyek: kartu "Maskot atau logo"
+    dan kolom "Video layar" ada.
