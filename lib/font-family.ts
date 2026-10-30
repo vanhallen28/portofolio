@@ -18,16 +18,17 @@ export const FONT_FAMILY: Record<FontKey, string> = {
   lora: "var(--f-lora), Georgia, serif",
   vale: "var(--f-vale), Georgia, serif",
   loma: "var(--f-loma), system-ui, sans-serif",
+  rua: "var(--f-rua), Impact, sans-serif",
 };
 
 export const FONT_LABEL: Record<FontKey, string> = {
   schibsted: "Schibsted Grotesk", marcellus: "Marcellus", jakarta: "Plus Jakarta Sans", archivo: "Archivo Black",
   unbounded: "Unbounded", cormorant: "Cormorant Garamond", host: "Host Grotesk", quicksand: "Quicksand", lora: "Lora",
-  vale: "VALE Display (huruf kapital saja)", loma: "LOMA Display (huruf kapital saja)",
+  vale: "VALE Display (huruf kapital saja)", loma: "LOMA Display (huruf kapital saja)", rua: "RUA Display",
 };
 
 
 /** The weight each title font is shipped in (used for client wordmarks). */
 export const FONT_WEIGHT: Record<FontKey, number> = {
-  schibsted: 800, marcellus: 400, jakarta: 800, archivo: 400, unbounded: 800, cormorant: 500, host: 700, quicksand: 700, lora: 600, vale: 400, loma: 400,
+  schibsted: 800, marcellus: 400, jakarta: 800, archivo: 400, unbounded: 800, cormorant: 500, host: 700, quicksand: 700, lora: 600, vale: 400, loma: 400, rua: 400,
 };

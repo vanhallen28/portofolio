@@ -297,6 +297,14 @@ const SCREEN_EFFECTS: Record<ScreenEffect, (s: ScreenSet, tl: gsap.core.Timeline
       { filter: "brightness(1) saturate(1)", y: 0, opacity: 1, duration: 0.9, ease: "power2.out", stagger: 0.1 }, 0.3);
     return [...drift(desks, { py: 16 }), ...drift(phones, { py: 65 })];
   },
+  /* Muncul: the desktop pops up from its bottom edge and overshoots, the phone hops in after it, the way a mascot says hi */
+  pop: ({ desks, phones }, tl) => {
+    if (desks.length) tl.fromTo(desks, { yPercent: 45, scaleY: 0.55, opacity: 0, transformOrigin: "50% 100%" },
+      { yPercent: 0, scaleY: 1, opacity: 1, duration: 1, ease: "back.out(2.2)", stagger: 0.12 }, 0);
+    if (phones.length) tl.fromTo(phones, { yPercent: 70, rotation: -9, opacity: 0, transformOrigin: "50% 100%" },
+      { yPercent: 0, rotation: 0, opacity: 1, duration: 0.8, ease: "back.out(2.8)", stagger: 0.1 }, 0.3);
+    return [...drift(desks, { py: 16 }), ...drift(phones, { py: 70, rz: -3 })];
+  },
 };
 
 /* ---------- Home page ---------- */

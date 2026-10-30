@@ -193,9 +193,9 @@ export function buildUpdateSql027(content: Content): string {
     `update public.sections set data = jsonb_set(data, '{clients,items}', coalesce(data->'clients'->'items', '[]'::jsonb) || ${j(clients)}) where key = 'hero' and data ? 'clients' and jsonb_array_length(coalesce(data->'clients'->'items', '[]'::jsonb)) <= 10 and not exists (select 1 from jsonb_array_elements(coalesce(data->'clients'->'items', '[]'::jsonb)) x where x->>'projectSlug' in ('vale', 'loma'));`,
     "",
     "-- Kalimat yang menghitung jumlah karya (delapan → sepuluh), hanya bila belum Anda ubah",
-    `update public.sections set data = jsonb_set(data, '{lede}', ${j(c.sections.hero.lede)}) where key = 'hero' and data->'lede' = ${j(TEXT_BEFORE_027.lede)};`,
-    `update public.sections set data = jsonb_set(data, '{intro}', ${j(c.sections.works.intro)}) where key = 'works' and data->'intro' = ${j(TEXT_BEFORE_027.intro)};`,
-    `update public.site_settings set data = jsonb_set(data, '{seoDescription}', ${j(c.settings.seoDescription)}) where id = 1 and data->'seoDescription' = ${j(TEXT_BEFORE_027.seo)};`,
+    `update public.sections set data = jsonb_set(data, '{lede}', ${j(TEXT_BEFORE_028.lede)}) where key = 'hero' and data->'lede' = ${j(TEXT_BEFORE_027.lede)};`,
+    `update public.sections set data = jsonb_set(data, '{intro}', ${j(TEXT_BEFORE_028.intro)}) where key = 'works' and data->'intro' = ${j(TEXT_BEFORE_027.intro)};`,
+    `update public.site_settings set data = jsonb_set(data, '{seoDescription}', ${j(TEXT_BEFORE_028.seo)}) where id = 1 and data->'seoDescription' = ${j(TEXT_BEFORE_027.seo)};`,
     "",
     "insert into public.content_updates (version) values ('0.2.7');",
     "raise notice 'Pembaruan isi v0.2.7 selesai.';",
@@ -204,4 +204,75 @@ export function buildUpdateSql027(content: Content): string {
     "",
   );
   return out.join("\n");
+}
+
+/** The three sentences as v0.2.7 shipped them (ten rooms). v0.2.7 writes these; v0.2.8 replaces them only while they still read so. */
+export const TEXT_BEFORE_028 = {
+  seo: {
+    id: "Portofolio Virgiawan Listanto, desainer dan pengembang produk digital di Bandung. Sepuluh karya untuk bisnis nyata, dari sistem internal sampai situs merek.",
+    en: "Portfolio of Virgiawan Listanto, a digital product designer and developer in Bandung. Ten projects for real businesses, from internal systems to brand sites.",
+  },
+  lede: {
+    id: "Studio Manager di Invisual Studio. Sepuluh karya di halaman ini, dari sistem internal sampai situs merek, saya rancang dan bangun dari tampilan sampai kodenya. Lima di antaranya sudah tayang dan dipakai.",
+    en: "Studio Manager at Invisual Studio. I designed and built the ten projects on this page, from internal systems to brand sites, from the interface to the code. Five of them are live and in use.",
+  },
+  intro: {
+    id: "Sepuluh ruang, sepuluh bisnis. Setiap ruang memakai warna dan huruf milik kliennya, karena sistem yang baik tampil sebagai brand Anda, bukan template saya.",
+    en: "Ten rooms, ten businesses. Each room wears its client's own colours and type, because a good system looks like your brand, not my template.",
+  },
+};
+
+/* supabase/updates/v0.2.8.sql — one new room from Invisual Studio, RUA: its project (after the last room), its
+   case study, its wordmark in the client strip, and the three sentences that counted ten projects. Same rules as
+   v0.2.7: inserts only what is missing, replaces a sentence only while it still reads exactly as it shipped, and
+   runs once (recorded in content_updates). */
+export function buildUpdateSql028(content: Content): string {
+  const c = ContentSchema.parse(content);
+  const j = (v: unknown) => `'${JSON.stringify(v).replace(/'/g, "''")}'::jsonb`;
+  const s = (v: string) => `'${v.replace(/'/g, "''")}'`;
+  const p = c.projects.find((x) => x.slug === "rua");
+  const cs = c.caseStudies.find((x) => x.projectSlug === "rua");
+  if (!p || !cs) throw new Error("seed has no RUA project / case study");
+  const r = projectToRow(p);
+  const rc = caseToRow(cs);
+  const clients = c.sections.hero.clients.items.filter((it) => it.projectSlug === "rua");
+  return [
+    "-- Pembaruan isi v0.2.8. Dibuat otomatis oleh `npm run seed:sql` — jangan diedit manual.",
+    "-- Satu ruang baru dari Invisual Studio: RUA, dengan studi kasusnya.",
+    "-- Hanya menambah yang belum ada; kalimat hanya diganti bila masih sama persis dengan bawaan v0.2.7.",
+    "-- Berjalan sekali saja: menjalankannya lagi tidak mengubah apa pun (dicatat di tabel content_updates).",
+    "",
+    "create table if not exists public.content_updates (version text primary key, applied_at timestamptz not null default now());",
+    "alter table public.content_updates enable row level security;",
+    "revoke all on public.content_updates from anon, authenticated;",
+    "",
+    "do $upd$",
+    "declare next_sort int;",
+    "begin",
+    "if exists (select 1 from public.content_updates where version = '0.2.8') then",
+    "  raise notice 'Pembaruan isi v0.2.8 sudah pernah dijalankan; tidak ada yang diubah.';",
+    "  return;",
+    "end if;",
+    "",
+    "-- Ruang RUA, di belakang ruang terakhir (dilewati bila id atau alamatnya sudah dipakai)",
+    "select coalesce(max(sort), 0) into next_sort from public.projects;",
+    `insert into public.projects (id, slug, sort, published, data) select ${s(r.id)}, ${s(r.slug)}, next_sort + 1, ${r.published}, ${j(r.data)} where not exists (select 1 from public.projects where id = ${s(r.id)} or slug = ${s(r.slug)});`,
+    "",
+    "-- Studi kasusnya (hanya untuk proyek RUA yang baru ditambahkan, dan bila belum ada)",
+    `insert into public.case_studies (project_slug, published, data) select ${s(rc.project_slug)}, ${rc.published}, ${j(rc.data)} where exists (select 1 from public.projects where slug = ${s(rc.project_slug)} and id = ${s(p.id)}) and not exists (select 1 from public.case_studies where project_slug = ${s(rc.project_slug)});`,
+    "",
+    "-- Deretan klien di bawah hero: RUA ditambahkan di ujung (dilewati bila sudah ada atau deretannya sudah penuh)",
+    `update public.sections set data = jsonb_set(data, '{clients,items}', coalesce(data->'clients'->'items', '[]'::jsonb) || ${j(clients)}) where key = 'hero' and data ? 'clients' and jsonb_array_length(coalesce(data->'clients'->'items', '[]'::jsonb)) <= 11 and not exists (select 1 from jsonb_array_elements(coalesce(data->'clients'->'items', '[]'::jsonb)) x where x->>'projectSlug' = 'rua');`,
+    "",
+    "-- Kalimat yang menghitung jumlah karya (sepuluh → sebelas), hanya bila belum Anda ubah",
+    `update public.sections set data = jsonb_set(data, '{lede}', ${j(c.sections.hero.lede)}) where key = 'hero' and data->'lede' = ${j(TEXT_BEFORE_028.lede)};`,
+    `update public.sections set data = jsonb_set(data, '{intro}', ${j(c.sections.works.intro)}) where key = 'works' and data->'intro' = ${j(TEXT_BEFORE_028.intro)};`,
+    `update public.site_settings set data = jsonb_set(data, '{seoDescription}', ${j(c.settings.seoDescription)}) where id = 1 and data->'seoDescription' = ${j(TEXT_BEFORE_028.seo)};`,
+    "",
+    "insert into public.content_updates (version) values ('0.2.8');",
+    "raise notice 'Pembaruan isi v0.2.8 selesai.';",
+    "end",
+    "$upd$;",
+    "",
+  ].join("\n");
 }

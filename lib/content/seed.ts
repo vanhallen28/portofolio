@@ -32,8 +32,8 @@ export const seedSettings: SiteSettings = {
   footer: l("Desain dan kode situs ini juga saya kerjakan sendiri.", "I designed and coded this site myself, too."),
   seoTitle: l("Virgiawan Listanto · Sistem untuk bisnis", "Virgiawan Listanto · Systems for business"),
   seoDescription: l(
-    "Portofolio Virgiawan Listanto, desainer dan pengembang produk digital di Bandung. Sepuluh karya untuk bisnis nyata, dari sistem internal sampai situs merek.",
-    "Portfolio of Virgiawan Listanto, a digital product designer and developer in Bandung. Ten projects for real businesses, from internal systems to brand sites.",
+    "Portofolio Virgiawan Listanto, desainer dan pengembang produk digital di Bandung. Sebelas karya untuk bisnis nyata, dari sistem internal sampai situs merek.",
+    "Portfolio of Virgiawan Listanto, a digital product designer and developer in Bandung. Eleven projects for real businesses, from internal systems to brand sites.",
   ),
   availability: { show: false, text: l("Menerima proyek baru", "Taking on new projects") },
   stickyCta: { show: true, text: l("Chat WhatsApp", "Chat on WhatsApp") },
@@ -68,8 +68,8 @@ export const seedSections: Sections = {
       "I build the systems that run your business: from online stores to payroll.",
     ),
     lede: l(
-      "Studio Manager di Invisual Studio. Sepuluh karya di halaman ini, dari sistem internal sampai situs merek, saya rancang dan bangun dari tampilan sampai kodenya. Lima di antaranya sudah tayang dan dipakai.",
-      "Studio Manager at Invisual Studio. I designed and built the ten projects on this page, from internal systems to brand sites, from the interface to the code. Five of them are live and in use.",
+      "Studio Manager di Invisual Studio. Sebelas karya di halaman ini, dari sistem internal sampai situs merek, saya rancang dan bangun dari tampilan sampai kodenya. Lima di antaranya sudah tayang dan dipakai.",
+      "Studio Manager at Invisual Studio. I designed and built the eleven projects on this page, from internal systems to brand sites, from the interface to the code. Five of them are live and in use.",
     ),
     ctaPrimary: l("Konsultasi gratis via WhatsApp", "Free consultation on WhatsApp"),
     ctaSecondary: l("Lihat karya", "See the work"),
@@ -99,14 +99,15 @@ export const seedSections: Sections = {
         { name: "Internet Bandung", font: "jakarta", uppercase: false, projectSlug: "internet-bandung" },
         { name: "VALE", font: "vale", uppercase: true, projectSlug: "vale" },
         { name: "Loma", font: "loma", uppercase: true, projectSlug: "loma" },
+        { name: "RUA", font: "rua", uppercase: true, projectSlug: "rua" },
       ],
     },
   },
   works: {
     title: l("Karya", "Work"),
     intro: l(
-      "Sepuluh ruang, sepuluh bisnis. Setiap ruang memakai warna dan huruf milik kliennya, karena sistem yang baik tampil sebagai brand Anda, bukan template saya.",
-      "Ten rooms, ten businesses. Each room wears its client's own colours and type, because a good system looks like your brand, not my template.",
+      "Sebelas ruang, sebelas bisnis. Setiap ruang memakai warna dan huruf milik kliennya, karena sistem yang baik tampil sebagai brand Anda, bukan template saya.",
+      "Eleven rooms, eleven businesses. Each room wears its client's own colours and type, because a good system looks like your brand, not my template.",
     ),
     allLabel: l("Semua", "All"),
     roomLabel: l("Ruang", "Room"),
@@ -429,6 +430,27 @@ export const seedProjects: Project[] = [
     ],
     brand: null, pattern: "glow",
   }),
+  P({
+    id: "ea7d720a-1d02-5600-b3b3-175d3728dc65", slug: "rua", sort: 11, name: "RUA", mapLabel: "RUA", mapSlot: 11,
+    titleFont: "rua", titleStyle: { size: "xxl", uppercase: true, weight: 400, tracking: 0 },
+    meta: l("Kafe Vietnam, Saigon, Invisual Studio, 2026", "Vietnamese café, Saigon, Invisual Studio, 2026"),
+    text: l("Situs untuk kafe Vietnam di Saigon dengan maskot kura-kura yang menjadi pelayan. Menu bisa dipesan untuk satu meja lalu dikirim ke kasir sebagai tiket bernomor, papan Open/Closed mengikuti jam Saigon, dan setiap bagian bergerak seperti animasi stop-motion merek RUA.",
+      "A site for a Vietnamese café in Saigon whose turtle mascot works as the server. The menu orders for the whole table and goes to the counter as a numbered ticket, the Open/Closed sign follows Saigon time, and every section moves like RUA's own stop-motion animations."),
+    lines: ["found", "serve"],
+    theme: { wall: "#BA0C0C", ink: "#FFF7C7", muted: "#F9D816", accent: "#F9D816", btnBg: "#F9D816", btnInk: "#5B0808" },
+    facts: [
+      { value: "17", label: l("makanan dan minuman di menu", "dishes and drinks on the menu") },
+      { value: "13", label: l("wajah kura-kura untuk setiap suasana", "turtle faces for every mood") },
+      { value: "96", label: l("gambar vektor dalam satu file", "vector drawings in a single file") },
+    ],
+    status: l("Preview desain, belum tayang", "Design preview, not live yet"),
+    liveUrl: "", liveLabel: "", liveNote: null, previewUrl: "/preview/rua.html", layout: "desk-phone", motion: "pop",
+    visuals: [
+      { role: "desk", image: img("rua-hero", 1600, 1000, "Beranda RUA: wordmark merah besar di latar kuning, maskot kura-kura memegang menu dan menyapa Xin chào", "RUA homepage: a large red wordmark on yellow, the turtle mascot holding a menu and saying Xin chào") },
+      { role: "phone", image: img("rua-hp", 600, 1298, "Come, we eat di HP: judul kuning di latar merah dan tiga kura-kura pelayan", "Come, we eat on phone: a yellow headline on red and three turtle servers") },
+    ],
+    brand: null, pattern: "none",
+  }),
 ];
 
 export const aliyaCase: CaseStudy = {
@@ -488,6 +510,7 @@ const CASE_THEMES: Record<string, Theme> = {
   "point-pos": { wall: "#FBF8F2", ink: "#2B2620", muted: "#6B6355", accent: "#2F6BFF", btnBg: "#2B2620", btnInk: "#FBF8F2" },
   vale: { wall: "#FBEBD6", ink: "#3E2A24", muted: "#6B4A3F", accent: "#817916", btnBg: "#5B3C34", btnInk: "#FED7AB" },
   loma: { wall: "#EEEAE3", ink: "#161513", muted: "#5C5546", accent: "#865F46", btnBg: "#161513", btnInk: "#EEEAE3" },
+  rua: { wall: "#FFF7C7", ink: "#5B0808", muted: "#7B0808", accent: "#BA0C0C", btnBg: "#BA0C0C", btnInk: "#FFF7C7" },
 };
 
 /* Before → after, only where the figures come from the project itself. */

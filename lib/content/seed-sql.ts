@@ -22,8 +22,8 @@ export function buildSeedSql(content: Content): string {
     // A fresh database gets the starter content that already includes these updates, so they are recorded as done.
     // Only when there are no projects yet: running seed.sql again on a live database must not mark an update
     // as done that never reached its (already existing, therefore untouched) rows.
-    "-- Isi awal ini sudah memuat pembaruan isi v0.2.0, v0.2.2, dan v0.2.7 (dicatat hanya pada database yang masih kosong).",
-    "insert into public.content_updates (version) select v from (values ('0.2.0'), ('0.2.2'), ('0.2.7')) as x(v) where not exists (select 1 from public.projects) on conflict do nothing;",
+    "-- Isi awal ini sudah memuat pembaruan isi v0.2.0, v0.2.2, v0.2.7, dan v0.2.8 (dicatat hanya pada database yang masih kosong).",
+    "insert into public.content_updates (version) select v from (values ('0.2.0'), ('0.2.2'), ('0.2.7'), ('0.2.8')) as x(v) where not exists (select 1 from public.projects) on conflict do nothing;",
     "",
     ...rows.projects.map(
       (r) =>

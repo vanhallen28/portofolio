@@ -3,6 +3,20 @@
 Format: setiap rilis dikirim sebagai `portofolio-vX.Y.Z.zip`. Nomor versi naik setiap kali, jadi zip tidak pernah saling tumpuk.
 Petunjuk pasang per versi: `docs/updates/BACA-INI-vX.Y.Z.txt`.
 
+## v0.2.8 — 31 Oktober 2026
+
+Satu ruang baru dari Invisual Studio: RUA.
+
+- **Ruang 11 · RUA**, situs kafe Vietnam di Saigon dengan maskot kura-kura pelayan. Layar desktop dan HP, warna dari palet mereknya (Hot Sauce, Egg Yolk, Tofu Skin, Soy Glaze), judul dengan huruf merek RUA Display, dan status "Preview desain, belum tayang".
+- **Preview proyek** membuka file asli dari klien, sama persis byte demi byte (`public/preview/rua.html`), di dalam sandbox yang sama dengan preview lain. Semua fiturnya berjalan: menu dengan piring, Your table dan tiket, botol saus, kotak bawa pulang, papan Open/Closed dengan jam Saigon, dan dinding stiker.
+- **Studi kasus** RUA (ID/EN): situasi, tujuh fitur dengan gambar, alur memesan untuk satu meja, empat keputusan desain, dan angka.
+- **Efek gulir baru "Muncul":** layar desktop melompat dari tepi bawah lalu memantul, HP menyusul, seperti maskot RUA yang menyapa. Sebelas ruang, sebelas efek berbeda.
+- **Denah di hero:** sisi kiri (jalur Melayani) kini punya tiga stasiun yang berjarak sama: VALE di atas, RUA di tengah, Loma di bawah. Admin → Proyek → Posisi stasiun kini 1–11.
+- **Deretan klien** di bawah hero bertambah RUA.
+- Kalimat yang menghitung karya diperbarui: "Sebelas ruang, sebelas bisnis", paragraf hero, dan deskripsi SEO.
+- `supabase/updates/v0.2.8.sql`: menambahkan semua itu ke database yang sudah berjalan, tanpa menimpa yang sudah Anda ubah di admin; berjalan sekali saja. File `v0.2.7.sql` tidak berubah.
+- `app/fonts/LICENSES.md` menjelaskan asal huruf VALE Display, LOMA Display, dan RUA Display dengan lebih tepat: diambil apa adanya dari file proyek, lisensinya mengikuti lisensi huruf di proyek klien.
+
 ## v0.2.7 — 30 Oktober 2026
 
 Dua ruang baru dari Invisual Studio: VALE dan Loma.

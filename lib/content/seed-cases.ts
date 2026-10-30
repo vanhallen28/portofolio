@@ -1854,4 +1854,353 @@ export const SEED_CASES: CaseStudy[] = [
       },
     ],
   },
+  {
+    projectSlug: "rua",
+    published: true,
+    subtitle: {
+      id: "Situs kafe Vietnam di Saigon: maskot kura-kura, menu yang dipesan untuk satu meja, dan jam buka yang selalu tepat.",
+      en: "A Vietnamese café site for Saigon: a turtle mascot, a menu you order for the table, and opening hours that are always right.",
+    },
+    labels: {
+      client: "RUA",
+      field: {
+        id: "Kafe Vietnam",
+        en: "Vietnamese café",
+      },
+      role: {
+        id: "Desain situs, interaksi, dan front-end, bersama Invisual Studio",
+        en: "Site design, interaction and front-end, with Invisual Studio",
+      },
+      year: "2026",
+    },
+    cover: {
+      url: "/media/seed/rua-hero.webp",
+      alt: {
+        id: "Beranda RUA: wordmark merah besar di latar kuning, maskot kura-kura memegang menu dan menyapa Xin chào",
+        en: "RUA homepage: a large red wordmark on yellow, the turtle mascot holding a menu and saying Xin chào",
+      },
+      width: 1600,
+      height: 1000,
+    },
+    blocks: [
+      {
+        type: "prose",
+        title: {
+          id: "Situasinya",
+          en: "The situation",
+        },
+        paragraphs: [
+          {
+            id: "RUA adalah merek kafe Vietnam yang dibangun dari kehangatan, rasa akrab, dan sedikit karakter. Identitasnya mengambil inspirasi dari budaya visual Vietnam: papan nama lama, gambar tangan, dan suasana ramai tempat makan sehari-hari, lalu menyatukannya dengan cara yang lebih berani dan kontemporer.",
+            en: "RUA is a Vietnamese café brand built around warmth, familiarity, and a little bit of character. The identity takes inspiration from traditional Vietnamese visual culture, old signage, hand-drawn graphics, and the lively atmosphere of everyday food places, then brings them together in a bolder and more contemporary way.",
+          },
+          {
+            id: "Pusatnya adalah maskot kura-kura yang terinspirasi kura-kura Danau Hoàn Kiếm, dibayangkan ulang sebagai pelayan kafe yang ramah: mengantar makanan, menyambut tamu, membawa nampan, dan muncul di kemasan, menu, papan nama, sampai aplikasi digital. Situsnya perlu terasa seperti kafe itu sendiri: berisik, hangat, dan mengundang untuk memesan bersama.",
+            en: "At the center of RUA is a turtle mascot inspired by the Hoan Kiem turtle, reimagined as a friendly café server who serves food, welcomes guests, carries trays and appears across packaging, menus, signage and digital applications. The site had to feel like the café itself: loud, warm and made for ordering together.",
+          },
+          {
+            id: "Proyek ini dikerjakan di Invisual Studio sebagai satu file preview berisi satu halaman panjang dengan sepuluh bagian, lengkap di desktop dan HP. Situsnya belum tayang, dan pesanannya tidak dikirim ke mana pun.",
+            en: "The project was made at Invisual Studio as a single preview file: one long page in ten sections, complete on desktop and phone. The site isn't live yet, and its orders are sent nowhere.",
+          },
+        ],
+      },
+      {
+        type: "features",
+        title: {
+          id: "Satu halaman, satu meja panjang",
+          en: "One page, one long table",
+        },
+        items: [
+          {
+            title: {
+              id: "Kura-kura di depan pintu",
+              en: "A turtle at the door",
+            },
+            text: {
+              id: "Situs dibuka dengan rolling door yang naik setelah hitungan sampai 100. Wordmark RUA meregang ke atas, kura-kura melompat dari tepi bawah sambil memegang menu, dan bila disentuh ia mengucapkan kalimat lain, dari Xin chào sampai Ăn ngon nhé. Bagian Come, we eat menghadirkan tiga kura-kura pelayan dan kisah namanya: rùa berarti kura-kura.",
+              en: "The site opens with a roll-up shutter that lifts once the count reaches 100. The RUA wordmark stretches up, the turtle pops up from the bottom edge holding the menu, and a tap makes him say another line, from Xin chào to Ăn ngon nhé. Come, we eat brings in three turtle servers and the story of the name: rùa means turtle.",
+            },
+            images: [
+              {
+                url: "/media/seed/rua-hp.webp",
+                alt: {
+                  id: "Come, we eat di HP: judul kuning di latar merah dan tiga kura-kura pelayan",
+                  en: "Come, we eat on phone: a yellow headline on red and three turtle servers",
+                },
+                width: 600,
+                height: 1298,
+              },
+            ],
+          },
+          {
+            title: {
+              id: "Jangan lupa saus",
+              en: "Don't skip the sauce",
+            },
+            text: {
+              id: "Botol saus cabai bisa diremas. Setiap remasan memercikkan saus ke judul dan menaikkan tingkat pedasnya, dari Mild sampai RUA hot, lalu OK, that’s plenty.",
+              en: "The chili bottle can be squeezed. Every squeeze splashes sauce across the headline and raises the heat, from Mild to RUA hot, then OK, that’s plenty.",
+            },
+            images: [
+              {
+                url: "/media/seed/rua-saus.webp",
+                alt: {
+                  id: "Judul Don't skip the sauce dengan percikan saus, botol cabai di kanan atas bertuliskan Very hot",
+                  en: "The Don't skip the sauce headline splashed with sauce, the chili bottle top right reading Very hot",
+                },
+                width: 1600,
+                height: 1000,
+              },
+            ],
+          },
+          {
+            title: {
+              id: "Menu yang tersaji",
+              en: "A menu that plates itself",
+            },
+            text: {
+              id: "Menu berisi 17 makanan dan minuman dalam tiga tab: Big eats, Good sips, dan Extra bites. Di desktop, gambar hidangannya mendarat di piring saat namanya disorot; menu yang pedas diberi tanda cabai. Di bawahnya, carousel Hot eats on the go bisa digeser, dan tombol Add-nya langsung menaruh hidangan di meja.",
+              en: "The menu holds 17 dishes and drinks in three tabs: Big eats, Good sips and Extra bites. On desktop, the dish lands on the plate as you point at its name, and the spicy ones carry a chili. Below it, the Hot eats on the go carousel can be dragged, and its Add button puts a dish on the table straight away.",
+            },
+            images: [
+              {
+                url: "/media/seed/rua-menu.webp",
+                alt: {
+                  id: "Tab Big eats dengan Phở bò disorot dan gambar mangkuknya di piring",
+                  en: "The Big eats tab with Phở bò highlighted and its bowl on the plate",
+                },
+                width: 1600,
+                height: 1000,
+              },
+              {
+                url: "/media/seed/rua-hp-menu.webp",
+                alt: {
+                  id: "Menu di HP: tab di atas dan setiap hidangan dengan tombol tambah",
+                  en: "The menu on phone: tabs at the top and every dish with an add button",
+                },
+                width: 600,
+                height: 1298,
+              },
+            ],
+          },
+          {
+            title: {
+              id: "Pesan untuk satu meja",
+              en: "Order for the table",
+            },
+            text: {
+              id: "Tombol + membuat hidangan terbang ke Your table. Di sana jumlahnya bisa diatur, totalnya terlihat, dan kura-kura bereaksi dengan wajah yang berbeda. Send to the counter mencetak tiket bernomor untuk ditunjukkan di kasir; tiket itu menyebut dengan jelas bahwa ini preview dan tidak ada yang dikirim.",
+              en: "The + button sends a dish flying to Your table. There the amounts can be changed, the total shows, and the turtle reacts with a different face. Send to the counter prints a numbered ticket to show at the counter, and the ticket says plainly that this is a preview and nothing is sent.",
+            },
+            images: [
+              {
+                url: "/media/seed/rua-meja.webp",
+                alt: {
+                  id: "Your table terbuka: nampan berisi hidangan, daftar pesanan dengan jumlahnya, dan total 300K",
+                  en: "Your table open: a tray of dishes, the order list with amounts and a 300K total",
+                },
+                width: 1600,
+                height: 1000,
+              },
+              {
+                url: "/media/seed/rua-hp-tiket.webp",
+                alt: {
+                  id: "Tiket Nº 027 di HP dengan daftar pesanan dan total",
+                  en: "Ticket Nº 027 on phone with the order list and total",
+                },
+                width: 600,
+                height: 1298,
+              },
+            ],
+          },
+          {
+            title: {
+              id: "Panas di dalam kotak",
+              en: "Hot stuff inside",
+            },
+            text: {
+              id: "Bagian bawa pulang memperlihatkan kemasan RUA dalam empat langkah: lembaran datar, label, kotak terlipat, dan mangkuk sup. Di desktop langkahnya berganti saat halaman digulir; di HP berganti sendiri dan bisa dipilih.",
+              en: "The takeaway section shows RUA's packaging in four steps: the flat pack, the label, the folded box and the soup tub. On desktop the steps change as the page scrolls; on phones they change on their own and can be picked.",
+            },
+            images: [
+              {
+                url: "/media/seed/rua-kotak.webp",
+                alt: {
+                  id: "Hot stuff inside: kotak merah RUA terlipat dengan kura-kura koki, langkah Box it terpilih",
+                  en: "Hot stuff inside: the folded red RUA box with a turtle chef, the Box it step selected",
+                },
+                width: 1600,
+                height: 1000,
+              },
+            ],
+          },
+          {
+            title: {
+              id: "Pull up here!",
+              en: "Pull up here!",
+            },
+            text: {
+              id: "Papan Open/Closed tergantung dan berayun saat disentuh atau saat halaman digulir cepat. Papan itu membaca jam Saigon, jadi pengunjung dari mana pun tahu apakah RUA sedang buka. Di bawahnya ada foto toko, empat cara makan di RUA, dan kolase papan-papan di dalam kafe.",
+              en: "The Open/Closed sign hangs and swings when touched or when the page scrolls fast. It reads the time in Saigon, so visitors anywhere know whether RUA is open right now. Below it come the storefront photo, the four ways to eat at RUA and a collage of the signs inside.",
+            },
+            images: [
+              {
+                url: "/media/seed/rua-tempat.webp",
+                alt: {
+                  id: "Pull up here! dengan papan We are Open dan jam Saigon di bawahnya, foto toko RUA di bawah",
+                  en: "Pull up here! with the We are Open sign and the Saigon time beneath it, the RUA storefront below",
+                },
+                width: 1600,
+                height: 1000,
+              },
+            ],
+          },
+          {
+            title: {
+              id: "Little Stool Club",
+              en: "Little Stool Club",
+            },
+            text: {
+              id: "Dinding stiker bisa diisi sendiri: ketuk tempat kosong untuk menempel stiker baru, geser stiker ke mana saja, atau kelupas semuanya. Di bawahnya ada merchandise RUA dan enam unggahan Instagram.",
+              en: "The sticker wall is yours to fill: tap an empty spot to slap on a new sticker, drag any sticker around, or peel them all off. Below it sit RUA's merchandise and six Instagram posts.",
+            },
+            images: [
+              {
+                url: "/media/seed/rua-stiker.webp",
+                alt: {
+                  id: "Dinding stiker Little Stool Club: wajah kura-kura, wordmark RUA, banh mi, dan stiker Extra sauce please",
+                  en: "The Little Stool Club sticker wall: turtle faces, the RUA wordmark, a bánh mì and an Extra sauce please sticker",
+                },
+                width: 1600,
+                height: 1000,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        type: "flow",
+        title: {
+          id: "Alur memesan untuk satu meja",
+          en: "Ordering for the table",
+        },
+        steps: [
+          {
+            id: "Ketuk + pada hidangan di menu atau carousel",
+            en: "Tap + on a dish in the menu or the carousel",
+          },
+          {
+            id: "Hidangannya terbang ke Your table",
+            en: "The dish flies to Your table",
+          },
+          {
+            id: "Atur jumlah setiap hidangan",
+            en: "Change how many of each",
+          },
+          {
+            id: "Periksa totalnya",
+            en: "Check the total",
+          },
+          {
+            id: "Kirim dengan Send to the counter",
+            en: "Send it with Send to the counter",
+          },
+          {
+            id: "Tunjukkan tiket bernomor di Order here",
+            en: "Show the numbered ticket at Order here",
+          },
+        ],
+      },
+      {
+        type: "decisions",
+        title: {
+          id: "Keputusan desain",
+          en: "Design decisions",
+        },
+        items: [
+          {
+            title: {
+              id: "Gerak dari GIF mereknya",
+              en: "Motion from the brand's GIFs",
+            },
+            text: {
+              id: "Maskot muncul dari tepi bawah dengan kabur gerak lalu memantul. Gerak diam, goyangan, dan stiker yang ditempel ditahan dua frame seperti stop-motion, dan garisnya bergetar delapan kali per detik seperti gambar tangan.",
+              en: "Mascots pop up from the bottom edge with a motion-blur whoosh and an overshoot. Idles, wiggles and sticker slaps hold every frame twice like stop-motion, and the lines boil eight times a second like hand drawing.",
+            },
+          },
+          {
+            title: {
+              id: "Jam buka dalam waktu Saigon",
+              en: "Opening hours in Saigon time",
+            },
+            text: {
+              id: "Status di header dan papan Open/Closed dihitung dari jam Saigon (10.00 sampai 22.00), bukan jam di perangkat pengunjung, dan diperbarui setiap 30 detik.",
+              en: "The status in the header and the Open/Closed sign are worked out from Saigon time (10AM to 10PM), not the visitor's own clock, and refresh every 30 seconds.",
+            },
+          },
+          {
+            title: {
+              id: "Meja yang menunggu",
+              en: "A table that waits for you",
+            },
+            text: {
+              id: "Pesanan disimpan di perangkat pengunjung, jadi saat kembali mejanya masih ada. Bila browser menolak penyimpanan, situs tetap berjalan.",
+              en: "The order is kept on the visitor's device, so the table is still there when they come back. If the browser refuses storage, the site keeps working.",
+            },
+          },
+          {
+            title: {
+              id: "Main-main, tetap mudah dipakai",
+              en: "Playful, still easy to use",
+            },
+            text: {
+              id: "Kursor sumpit hanya muncul untuk mouse. Hidangan bisa ditambah dengan keyboard, Escape menutup Your table, dan bila pengunjung meminta gerak dikurangi, animasinya berhenti.",
+              en: "The chopstick cursor only appears for a mouse. Dishes can be added from the keyboard, Escape closes Your table, and when visitors ask for reduced motion, the animation stops.",
+            },
+          },
+        ],
+      },
+      {
+        type: "numbers",
+        title: {
+          id: "Dalam angka",
+          en: "By the numbers",
+        },
+        facts: [
+          {
+            value: "10",
+            label: {
+              id: "bagian dalam satu halaman",
+              en: "sections on one page",
+            },
+          },
+          {
+            value: "17",
+            label: {
+              id: "makanan dan minuman di menu",
+              en: "dishes and drinks on the menu",
+            },
+          },
+          {
+            value: "13",
+            label: {
+              id: "wajah kura-kura",
+              en: "turtle faces",
+            },
+          },
+          {
+            value: "96",
+            label: {
+              id: "gambar vektor dalam satu file",
+              en: "vector drawings in a single file",
+            },
+          },
+        ],
+        stack: {
+          id: "Dibuat dengan HTML, CSS, dan JavaScript, GSAP (ScrollTrigger, Draggable, Inertia, SplitText), dan Lenis untuk gulir halus. Satu file, berjalan tanpa server.",
+          en: "Built with HTML, CSS and JavaScript, GSAP (ScrollTrigger, Draggable, Inertia, SplitText) and Lenis for smooth scrolling. One file that runs without a server.",
+        },
+      },
+    ],
+  },
 ];

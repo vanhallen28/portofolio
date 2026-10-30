@@ -4,7 +4,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { contentToRows } from "@/lib/content/rows";
 import { CaseStudySchema, ContentSchema, ProjectSchema } from "@/lib/content/schema";
 import { seed } from "@/lib/content/seed";
-import { buildUpdateSql027, TEXT_BEFORE_027 } from "@/lib/content/update-sql";
+import { buildUpdateSql027, TEXT_BEFORE_027, TEXT_BEFORE_028 } from "@/lib/content/update-sql";
 
 /* A database running v0.2.6 has eight rooms and three sentences that count them. The v0.2.7 update must add
    VALE and Loma with their case studies, put their wordmarks in the client strip, change the counts while they
@@ -21,13 +21,15 @@ const STUBS = `
 
 type Any = Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 const NEW = ["vale", "loma"];
+const LATER = ["rua"]; // added by v0.2.8, not part of this update
 
 /** The seed as v0.2.6 shipped it: eight rooms, eight in every count. */
 function v026(): Any {
   const old = structuredClone(seed) as unknown as Any;
-  old.projects = old.projects.filter((p: Any) => !NEW.includes(p.slug));
-  old.caseStudies = old.caseStudies.filter((c: Any) => !NEW.includes(c.projectSlug));
-  old.sections.hero.clients.items = old.sections.hero.clients.items.filter((it: Any) => !NEW.includes(it.projectSlug));
+  const gone = [...NEW, ...LATER];
+  old.projects = old.projects.filter((p: Any) => !gone.includes(p.slug));
+  old.caseStudies = old.caseStudies.filter((c: Any) => !gone.includes(c.projectSlug));
+  old.sections.hero.clients.items = old.sections.hero.clients.items.filter((it: Any) => !gone.includes(it.projectSlug));
   old.sections.hero.lede = TEXT_BEFORE_027.lede;
   old.sections.works.intro = TEXT_BEFORE_027.intro;
   old.settings.seoDescription = TEXT_BEFORE_027.seo;
@@ -86,14 +88,14 @@ describe("supabase/updates/v0.2.7.sql", () => {
 
   it("puts the two wordmarks at the end of the client strip, once", async () => {
     const items = (await section(db, "hero")).clients.items;
-    expect(items.map((it: Any) => it.projectSlug)).toEqual(seed.sections.hero.clients.items.map((it) => it.projectSlug));
+    expect(items.map((it: Any) => it.projectSlug)).toEqual(seed.sections.hero.clients.items.map((it) => it.projectSlug).filter((s) => !LATER.includes(s)));
   });
 
   it("changes the counts from eight to ten", async () => {
-    expect((await section(db, "hero")).lede).toEqual(seed.sections.hero.lede);
-    expect((await section(db, "works")).intro).toEqual(seed.sections.works.intro);
+    expect((await section(db, "hero")).lede).toEqual(TEXT_BEFORE_028.lede);
+    expect((await section(db, "works")).intro).toEqual(TEXT_BEFORE_028.intro);
     const settings = (await db.query<Any>("select data from public.site_settings where id = 1")).rows[0].data;
-    expect(settings.seoDescription).toEqual(seed.settings.seoDescription);
+    expect(settings.seoDescription).toEqual(TEXT_BEFORE_028.seo);
   });
 });
 

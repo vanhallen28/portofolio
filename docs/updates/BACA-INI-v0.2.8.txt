@@ -1,0 +1,96 @@
+PORTOFOLIO v0.2.8 — BACA INI DULU
+================================================================
+
+Satu ruang baru dari Invisual Studio:
+
+  11  RUA   Kafe Vietnam di Saigon, maskot kura-kura   efek gulir "Muncul"
+
+- Tombol "Preview proyek" membuka file HTML asli yang Anda kirim,
+  sama persis tanpa perubahan (public/preview/rua.html).
+- RUA punya ruang dengan layar desktop dan HP, studi kasus ID/EN,
+  stasiun di denah hero, dan nama di deretan klien.
+- Sisi kiri denah kini berisi tiga stasiun yang berjarak sama:
+  VALE di atas, RUA di tengah, Loma di bawah.
+- Kalimat "Sepuluh ruang, sepuluh bisnis", paragraf hero, dan
+  deskripsi SEO kini menyebut sebelas karya.
+
+Zip ini berisi seluruh proyek, termasuk v0.2.7. Kalau v0.2.7 belum
+dipasang, cukup pasang yang ini, lalu jalankan v0.2.7.sql dulu
+sebelum v0.2.8.sql (lihat langkah 2).
+
+Yang berubah: 1 file preview baru (± 2,8 MB), 10 gambar baru di
+public/media/seed, 1 file huruf merek di app/fonts, isi bawaan,
+animasi ruang, posisi stasiun di denah, form admin Proyek, SQL
+pembaruan, uji. Tidak ada file yang dihapus, tidak ada migrasi
+struktur database. File supabase/updates/v0.2.7.sql tidak berubah.
+
+
+1. PASANG (salin-tempel di Terminal)
+----------------------------------------------------------------
+
+  cd ~/Documents/Virgiawan/PROJECT/portofolio
+  unzip -o ~/Downloads/portofolio-v0.2.8.zip -d .
+  npm install
+  npm run build
+  git add -A
+  git commit -m "v0.2.8: ruang RUA"
+  git push
+
+Push berhasil bila diakhiri "main -> main" dan tidak ada baris
+"error:" atau "fatal:". Cek dengan: git status
+
+
+2. SUPABASE: TAMBAHKAN RUA (sekali saja)
+----------------------------------------------------------------
+
+Isi situs live diambil dari database, jadi ruang RUA baru muncul
+setelah SQL ini dijalankan.
+
+a. Tunggu deploy v0.2.8 di Vercel berstatus Ready (gambar dan file
+   preview baru ada setelah deploy).
+
+b. Di Terminal, salin isi SQL-nya:
+
+     pbcopy < supabase/updates/v0.2.8.sql
+
+c. Buka Supabase → SQL Editor → New query, tempel (Cmd+V), Run.
+   Hasilnya: "Success. No rows returned". Itu normal; Supabase
+   tidak menampilkan pesan selesai dari SQL ini.
+
+   SQL ini hanya menambah yang belum ada: proyek RUA di belakang
+   ruang terakhir, studi kasusnya, dan namanya di deretan klien.
+   Tiga kalimat yang menghitung karya hanya diganti bila masih sama
+   persis dengan bawaan v0.2.7; kalimat yang sudah Anda ubah di
+   admin tidak disentuh. Menjalankannya lagi tidak mengubah apa pun.
+
+   v0.2.7.sql belum pernah dijalankan? Jalankan v0.2.7.sql dulu
+   dengan cara yang sama, baru v0.2.8.sql.
+
+d. Cek hasilnya, masih di SQL Editor:
+
+     select slug, sort, published from public.projects order by sort;
+
+   Benar bila baris terakhir: rua, published = true.
+
+e. Situs memuat isi baru dalam ± 10 menit. Supaya langsung tampil:
+   buka /admin → Pengaturan situs → Simpan (tanpa mengubah apa pun),
+   lalu buka beranda dan tekan Cmd+Shift+R.
+
+
+3. MOHON DICEK SETELAH DEPLOY
+----------------------------------------------------------------
+
+[ ] Beranda → Karya: ada Ruang 11 RUA (dinding merah) dengan layar
+    desktop dan HP. Gulir pelan: layarnya melompat dari bawah lalu
+    memantul.
+[ ] Tombol Preview proyek RUA: rolling door terbuka, kura-kura
+    menyapa, menu menampilkan hidangan di piring, Your table bisa
+    diisi dan dikirim menjadi tiket.
+[ ] /karya/rua: studi kasus dengan gambar di setiap fitur. Coba juga
+    versi EN.
+[ ] Hero: sisi kiri denah punya tiga stasiun (VALE, RUA, Loma);
+    arahkan kursor, namanya muncul.
+[ ] Deretan klien di bawah hero: RUA di ujung.
+
+Urutan ruang bisa diubah di Admin → Proyek kalau Anda ingin RUA
+tampil lebih awal.
