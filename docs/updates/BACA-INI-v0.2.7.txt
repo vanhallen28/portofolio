@@ -1,0 +1,94 @@
+PORTOFOLIO v0.2.7 — BACA INI DULU
+================================================================
+
+Dua ruang baru dari Invisual Studio:
+
+  09  VALE   Golf clubhouse bertema ksatria   efek gulir "Lembaran"
+  10  Loma   Restoran Amerika Latin, Lima     efek gulir "Nyala"
+
+- Tombol "Preview proyek" membuka file HTML asli yang Anda kirim,
+  sama persis tanpa perubahan (public/preview/vale.html dan
+  public/preview/loma.html).
+- Masing-masing punya ruang dengan layar desktop dan HP, studi
+  kasus ID/EN, stasiun di denah hero, dan nama di deretan klien.
+- Kalimat "Delapan ruang, delapan bisnis", paragraf hero, dan
+  deskripsi SEO kini menyebut sepuluh karya.
+
+Zip ini berisi seluruh proyek, termasuk v0.2.4 sampai v0.2.6. Kalau
+versi itu belum dipasang, cukup pasang yang ini.
+
+Yang berubah: 2 file preview baru (± 11 MB), 20 gambar baru di
+public/media/seed, 2 file huruf merek di app/fonts, isi bawaan,
+animasi ruang, form admin Proyek, SQL pembaruan, uji. Tidak ada file
+yang dihapus, tidak ada migrasi struktur database.
+
+
+1. PASANG (salin-tempel di Terminal)
+----------------------------------------------------------------
+
+  cd ~/Documents/Virgiawan/PROJECT/portofolio
+  unzip -o ~/Downloads/portofolio-v0.2.7.zip -d .
+  npm install
+  npm run build
+  git add -A
+  git commit -m "v0.2.7: ruang VALE dan Loma"
+  git push
+
+Push berhasil bila diakhiri "main -> main" dan tidak ada baris
+"error:" atau "fatal:". Cek dengan: git status
+
+
+2. SUPABASE: TAMBAHKAN VALE DAN LOMA (sekali saja)
+----------------------------------------------------------------
+
+Isi situs live diambil dari database, jadi kedua ruang baru baru
+muncul setelah SQL ini dijalankan.
+
+a. Tunggu deploy v0.2.7 di Vercel berstatus Ready (gambar dan file
+   preview baru ada setelah deploy).
+
+b. Di Terminal, salin isi SQL-nya:
+
+     pbcopy < supabase/updates/v0.2.7.sql
+
+c. Buka Supabase → SQL Editor → New query, tempel (Cmd+V), Run.
+   Hasilnya: "Pembaruan isi v0.2.7 selesai."
+
+   SQL ini hanya menambah yang belum ada: proyek VALE dan Loma di
+   belakang ruang terakhir, studi kasusnya, dan dua nama di deretan
+   klien. Tiga kalimat yang menghitung karya hanya diganti bila
+   masih sama persis dengan bawaan lama; kalimat yang sudah Anda ubah
+   di admin tidak disentuh. Menjalankannya lagi tidak mengubah apa pun.
+
+d. Cek hasilnya, masih di SQL Editor:
+
+     select slug, sort, published from public.projects order by sort;
+
+   Benar bila dua baris terakhir: vale dan loma, published = true.
+
+e. Buka admin dan simpan apa saja (mis. Pengaturan situs → Simpan),
+   atau tunggu ± 10 menit, supaya situs memuat isi baru.
+
+Ruang Biansa masih kosong di situs live? Jalankan juga
+supabase/updates/v0.2.2.sql dengan cara yang sama (lihat
+docs/updates/BACA-INI-v0.2.4.txt).
+
+
+3. MOHON DICEK SETELAH DEPLOY
+----------------------------------------------------------------
+
+[ ] Beranda → Karya: ada Ruang 09 VALE (dinding cokelat) dan Ruang 10
+    Loma (dinding hitam), masing-masing dengan layar desktop dan HP.
+    Gulir pelan: VALE terbentang seperti peta, Loma menyala dari gelap.
+[ ] Tombol Preview proyek VALE: peta bisa digeser dan diperbesar,
+    landmark membuka kartu, Begin the Quest membuka booking.
+[ ] Tombol Preview proyek Loma: foto melengkung saat digulir, La Carta,
+    Historia, dan Reservar berjalan.
+[ ] /karya/vale dan /karya/loma: studi kasus dengan gambar di setiap
+    fitur. Coba juga versi EN.
+[ ] Hero: dua stasiun baru di sisi kiri putaran; arahkan kursor,
+    namanya muncul.
+[ ] Deretan klien di bawah hero: VALE dan LOMA di ujung.
+
+Urutan ruang bisa diubah di Admin → Proyek kalau Anda ingin VALE dan
+Loma tampil lebih awal.

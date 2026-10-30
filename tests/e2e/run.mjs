@@ -129,7 +129,7 @@ try {
     assert((await p.getAttribute('.lang a[hreflang="id"]', "href")) === `/karya/${firstSlug}`, "link ID salah");
   });
 
-  await test("8 ruang dan filter jalur", async () => {
+  await test("semua ruang dan filter jalur", async () => {
     await p.goto(`${BASE}/`);
     await p.waitForTimeout(400);
     assert((await p.locator(".room").count()) === seed.projects.length, "jumlah ruang salah");

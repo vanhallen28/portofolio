@@ -3,6 +3,19 @@
 Format: setiap rilis dikirim sebagai `portofolio-vX.Y.Z.zip`. Nomor versi naik setiap kali, jadi zip tidak pernah saling tumpuk.
 Petunjuk pasang per versi: `docs/updates/BACA-INI-vX.Y.Z.txt`.
 
+## v0.2.7 — 30 Oktober 2026
+
+Dua ruang baru dari Invisual Studio: VALE dan Loma.
+
+- **Ruang 09 · VALE**, situs golf clubhouse bertema ksatria, dan **Ruang 10 · Loma**, situs restoran Amerika Latin di Lima. Keduanya punya layar desktop dan HP, warna dari palet mereknya, judul dengan huruf merek masing-masing (VALE Display dan LOMA Display), dan status "Preview desain, belum tayang".
+- **Preview proyek** membuka file asli dari klien, sama persis byte demi byte (`public/preview/vale.html` dan `loma.html`), di dalam sandbox yang sama dengan preview lain. Semua fiturnya berjalan: peta yang bisa digeser, Quest Log, booking tee time, foto WebGL, carta, dan reservasi.
+- **Studi kasus** untuk keduanya (ID/EN): situasi, enam fitur dengan gambar, alur booking, empat keputusan desain, dan angka.
+- **Efek gulir baru:** VALE memakai "Lembaran" (desktop terbentang seperti peta, HP berbalik seperti halaman), Loma memakai "Nyala" (layar menyala dari gelap seperti cahaya lilin). Sepuluh ruang, sepuluh efek berbeda.
+- **Denah di hero** punya dua stasiun baru di sisi kiri (jalur Melayani). Admin → Proyek → Posisi stasiun kini 1–10.
+- **Deretan klien** di bawah hero bertambah VALE dan Loma.
+- Kalimat yang menghitung karya diperbarui: "Sepuluh ruang, sepuluh bisnis", paragraf hero, dan deskripsi SEO.
+- `supabase/updates/v0.2.7.sql`: menambahkan semua itu ke database yang sudah berjalan, tanpa menimpa yang sudah Anda ubah di admin; berjalan sekali saja.
+
 ## v0.2.6 — 29 Oktober 2026
 
 Layar desktop dan HP di setiap ruang karya punya efek gulir sendiri.

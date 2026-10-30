@@ -32,8 +32,8 @@ export const seedSettings: SiteSettings = {
   footer: l("Desain dan kode situs ini juga saya kerjakan sendiri.", "I designed and coded this site myself, too."),
   seoTitle: l("Virgiawan Listanto · Sistem untuk bisnis", "Virgiawan Listanto · Systems for business"),
   seoDescription: l(
-    "Portofolio Virgiawan Listanto, desainer dan pengembang produk digital di Bandung. Delapan sistem yang menjalankan bisnis nyata.",
-    "Portfolio of Virgiawan Listanto, a digital product designer and developer in Bandung. Eight systems that run real businesses.",
+    "Portofolio Virgiawan Listanto, desainer dan pengembang produk digital di Bandung. Sepuluh karya untuk bisnis nyata, dari sistem internal sampai situs merek.",
+    "Portfolio of Virgiawan Listanto, a digital product designer and developer in Bandung. Ten projects for real businesses, from internal systems to brand sites.",
   ),
   availability: { show: false, text: l("Menerima proyek baru", "Taking on new projects") },
   stickyCta: { show: true, text: l("Chat WhatsApp", "Chat on WhatsApp") },
@@ -68,8 +68,8 @@ export const seedSections: Sections = {
       "I build the systems that run your business: from online stores to payroll.",
     ),
     lede: l(
-      "Studio Manager di Invisual Studio. Delapan sistem di halaman ini saya rancang dan bangun sendiri, dari tampilan sampai database. Lima di antaranya sudah tayang dan dipakai.",
-      "Studio Manager at Invisual Studio. I designed and built each of the eight systems on this page myself, from the interface to the database. Five of them are live and in use.",
+      "Studio Manager di Invisual Studio. Sepuluh karya di halaman ini, dari sistem internal sampai situs merek, saya rancang dan bangun dari tampilan sampai kodenya. Lima di antaranya sudah tayang dan dipakai.",
+      "Studio Manager at Invisual Studio. I designed and built the ten projects on this page, from internal systems to brand sites, from the interface to the code. Five of them are live and in use.",
     ),
     ctaPrimary: l("Konsultasi gratis via WhatsApp", "Free consultation on WhatsApp"),
     ctaSecondary: l("Lihat karya", "See the work"),
@@ -97,14 +97,16 @@ export const seedSections: Sections = {
         { name: "Biansa", font: "marcellus", uppercase: true, projectSlug: "biansa" },
         { name: "Ciri", font: "cormorant", uppercase: true, projectSlug: "ciri" },
         { name: "Internet Bandung", font: "jakarta", uppercase: false, projectSlug: "internet-bandung" },
+        { name: "VALE", font: "vale", uppercase: true, projectSlug: "vale" },
+        { name: "Loma", font: "loma", uppercase: true, projectSlug: "loma" },
       ],
     },
   },
   works: {
     title: l("Karya", "Work"),
     intro: l(
-      "Delapan ruang, delapan bisnis. Setiap ruang memakai warna dan huruf milik kliennya, karena sistem yang baik tampil sebagai brand Anda, bukan template saya.",
-      "Eight rooms, eight businesses. Each room wears its client's own colours and type, because a good system looks like your brand, not my template.",
+      "Sepuluh ruang, sepuluh bisnis. Setiap ruang memakai warna dan huruf milik kliennya, karena sistem yang baik tampil sebagai brand Anda, bukan template saya.",
+      "Ten rooms, ten businesses. Each room wears its client's own colours and type, because a good system looks like your brand, not my template.",
     ),
     allLabel: l("Semua", "All"),
     roomLabel: l("Ruang", "Room"),
@@ -385,6 +387,48 @@ export const seedProjects: Project[] = [
     ],
     brand: null, pattern: "none",
   }),
+  P({
+    id: "b3e12ca6-5f31-564b-bb02-2067017def95", slug: "vale", sort: 9, name: "VALE", mapLabel: "VALE", mapSlot: 9,
+    titleFont: "vale", titleStyle: { size: "xxl", uppercase: true, weight: 400, tracking: 0.02 },
+    meta: l("Golf clubhouse bertema ksatria, Invisual Studio, 2026", "Knight-themed golf clubhouse, Invisual Studio, 2026"),
+    text: l("Situs untuk golf clubhouse yang menjadikan setiap pegolf seorang ksatria. Berandanya peta kerajaan yang bisa digeser dan diperbesar, dengan enam landmark untuk ditemukan. Enam bab bercerita dari lapangan sampai keanggotaan, dan tee time dipesan dalam enam langkah dengan tiket yang terisi sambil memilih.",
+      "A site for a golf clubhouse where every golfer becomes a knight. The homepage is a map of the realm you can drag and zoom, with six landmarks to discover. Six chapters run from the course to the membership, and a tee time books in six steps with a ticket that fills in as you choose."),
+    lines: ["found", "serve"],
+    theme: { wall: "#5B3C34", ink: "#FED7AB", muted: "#EAD3A8", accent: "#F3CC9E", btnBg: "#FED7AB", btnInk: "#3E2A24" },
+    facts: [
+      { value: "7", label: l("halaman: peta kerajaan dan enam bab", "pages: the realm map and six chapters") },
+      { value: "6", label: l("landmark untuk ditemukan di peta", "landmarks to discover on the map") },
+      { value: "50", label: l("gambar vektor dalam satu file", "vector drawings in a single file") },
+    ],
+    status: l("Preview desain, belum tayang", "Design preview, not live yet"),
+    liveUrl: "", liveLabel: "", liveNote: null, previewUrl: "/preview/vale.html", layout: "desk-phone", motion: "unfold",
+    visuals: [
+      { role: "desk", image: img("vale-peta", 1600, 1000, "Beranda VALE: peta kerajaan bergaya cetak dengan enam landmark, kompas, dan daftar Legend of the Realm", "VALE homepage: a printed-style map of the realm with six landmarks, a compass and the Legend of the Realm list") },
+      { role: "phone", image: img("vale-hp", 600, 1298, "Bab I di HP: Every golfer becomes a knight, dengan ilustrasi ksatria", "Chapter I on phone: Every golfer becomes a knight, with a knight illustration") },
+    ],
+    brand: null, pattern: "none",
+  }),
+  P({
+    id: "042b1844-a06f-5a50-8149-8032ea9936c4", slug: "loma", sort: 10, name: "Loma", mapLabel: "Loma", mapSlot: 10,
+    titleFont: "loma", titleStyle: { size: "xxl", uppercase: true, weight: 400, tracking: 0.06 },
+    meta: l("Restoran Amerika Latin, Lima, Invisual Studio, 2026", "Latin American restaurant, Lima, Invisual Studio, 2026"),
+    text: l("Situs untuk ruang makan Amerika Latin di Lima yang tenang tapi berani. Fotonya melengkung halus saat digulir, carta berisi 33 menu bisa dijelajah per kategori, kisahnya diceritakan lewat material ruangan, dan meja dipesan dalam enam langkah yang menutup hari Senin dengan sendirinya.",
+      "A site for a Latin American dining room in Lima, quiet but bold. The photographs bend gently as you scroll, the 33-item carta browses by course, the story is told through the room's materials, and a table books in six steps that close Mondays on their own."),
+    lines: ["found", "serve"],
+    theme: { wall: "#161513", ink: "#BAB2A5", muted: "#8C857B", accent: "#BAB2A5", btnBg: "#BAB2A5", btnInk: "#161513" },
+    facts: [
+      { value: "4", label: l("halaman: beranda, carta, historia, reservasi", "pages: home, carta, historia, reservations") },
+      { value: "33", label: l("menu di carta, makanan dan minuman", "items on the carta, food and drink") },
+      { value: "6", label: l("langkah memesan meja", "steps to book a table") },
+    ],
+    status: l("Preview desain, belum tayang", "Design preview, not live yet"),
+    liveUrl: "", liveLabel: "", liveNote: null, previewUrl: "/preview/loma.html", layout: "desk-phone", motion: "glow",
+    visuals: [
+      { role: "desk", image: img("loma-hero", 1600, 1000, "Beranda Loma: lampu dinding hangat di ruang makan gelap, wordmark Loma besar di bawah", "Loma homepage: a warm wall lamp in a dark dining room, the large Loma wordmark below") },
+      { role: "phone", image: img("loma-hp", 600, 1298, "Tujuh menu signature Loma di HP, masing-masing dengan fotonya", "Loma's seven signature plates on phone, each with its photo") },
+    ],
+    brand: null, pattern: "glow",
+  }),
 ];
 
 export const aliyaCase: CaseStudy = {
@@ -442,6 +486,8 @@ const CASE_THEMES: Record<string, Theme> = {
   "website-invisual": { wall: "#101011", ink: "#F2F2F2", muted: "#A6A6AC", accent: "#F65294", btnBg: "#F65294", btnInk: "#101011" },
   "internet-bandung": { wall: "#FFF5F9", ink: "#26202E", muted: "#5C5566", accent: "#D8006F", btnBg: "#D8006F", btnInk: "#FFFFFF" },
   "point-pos": { wall: "#FBF8F2", ink: "#2B2620", muted: "#6B6355", accent: "#2F6BFF", btnBg: "#2B2620", btnInk: "#FBF8F2" },
+  vale: { wall: "#FBEBD6", ink: "#3E2A24", muted: "#6B4A3F", accent: "#817916", btnBg: "#5B3C34", btnInk: "#FED7AB" },
+  loma: { wall: "#EEEAE3", ink: "#161513", muted: "#5C5546", accent: "#865F46", btnBg: "#161513", btnInk: "#EEEAE3" },
 };
 
 /* Before → after, only where the figures come from the project itself. */

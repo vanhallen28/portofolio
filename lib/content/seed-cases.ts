@@ -1197,4 +1197,661 @@ export const SEED_CASES: CaseStudy[] = [
       },
     ],
   },
+  {
+    projectSlug: "vale",
+    published: true,
+    subtitle: {
+      id: "Situs golf clubhouse yang menjadikan setiap pegolf seorang ksatria: peta kerajaan, enam bab, dan pemesanan tee time.",
+      en: "A golf clubhouse site where every golfer becomes a knight: a map of the realm, six chapters and tee-time booking.",
+    },
+    labels: {
+      client: "VALE Golf Clubhouse",
+      field: {
+        id: "Golf clubhouse",
+        en: "Golf clubhouse",
+      },
+      role: {
+        id: "Desain situs, interaksi, dan front-end, bersama Invisual Studio",
+        en: "Site design, interaction and front-end, with Invisual Studio",
+      },
+      year: "2026",
+    },
+    cover: {
+      url: "/media/seed/vale-peta.webp",
+      alt: {
+        id: "Beranda VALE: peta kerajaan bergaya cetak dengan enam landmark, kompas, dan daftar Legend of the Realm",
+        en: "VALE homepage: a printed-style map of the realm with six landmarks, a compass and the Legend of the Realm list",
+      },
+      width: 1600,
+      height: 1000,
+    },
+    blocks: [
+      {
+        type: "prose",
+        title: {
+          id: "Situasinya",
+          en: "The situation",
+        },
+        paragraphs: [
+          {
+            id: "VALE adalah destinasi golf modern yang terinspirasi semangat ksatria abad pertengahan: setiap pegolf menjadi ksatria, setiap fairway menjadi kerajaan, dan setiap ronde menjadi petualangan. Situsnya harus membawa cerita itu sampai terasa, tanpa membuat pengunjung tersesat saat ingin memesan tee time.",
+            en: "VALE is a modern golf destination inspired by the spirit of medieval knights: every golfer becomes a knight, every fairway a realm and every round a quest. The site had to carry that story until you could feel it, without losing visitors who just want to book a tee time.",
+          },
+          {
+            id: "Proyek ini dikerjakan di Invisual Studio. Hasilnya satu file preview berisi peta kerajaan dan enam bab, lengkap di desktop dan HP, yang berjalan tanpa server. Situsnya belum tayang, dan formulir di dalamnya tidak mengirim apa pun.",
+            en: "The project was made at Invisual Studio. The result is a single preview file holding the realm map and six chapters, complete on desktop and phone, that runs without a server. The site isn't live yet, and its forms send nothing.",
+          },
+        ],
+      },
+      {
+        type: "features",
+        title: {
+          id: "Negeri yang bisa dikelilingi",
+          en: "A realm you can explore",
+        },
+        items: [
+          {
+            title: {
+              id: "Peta negeri",
+              en: "The map of the realm",
+            },
+            text: {
+              id: "Beranda adalah peta lapangan yang bisa digeser dan diperbesar. Enam landmark, dari Training Ground sampai King's Reach, membuka kartu cerita masing-masing dan menuju babnya. Setiap landmark yang dibuka memberi satu segel di Quest Log.",
+              en: "The homepage is a map of the course you can drag and zoom. Six landmarks, from the Training Ground to the King's Reach, each open a story card that leads into its chapter. Every landmark you open stamps a seal in the Quest Log.",
+            },
+            images: [
+              {
+                url: "/media/seed/vale-kartu.webp",
+                alt: {
+                  id: "Peta dengan kartu landmark The Great Hall terbuka di sisi kanan",
+                  en: "The map with The Great Hall landmark card open on the right",
+                },
+                width: 1600,
+                height: 1000,
+              },
+              {
+                url: "/media/seed/vale-hp-peta.webp",
+                alt: {
+                  id: "Kartu landmark The Great Hall di HP",
+                  en: "The Great Hall landmark card on phone",
+                },
+                width: 600,
+                height: 1298,
+              },
+            ],
+          },
+          {
+            title: {
+              id: "Enam bab, satu buku",
+              en: "Six chapters, one book",
+            },
+            text: {
+              id: "The Legend, The Course, The Great Hall, The Knights Cup, The Order, dan Begin the Quest dibaca seperti buku: berpindah bab terasa seperti membalik halaman, dan The Chronicle menjadi daftar isinya. Di The Legend, Green Knight berganti pose sambil digulir dan enam companion bisa dibalik seperti medali.",
+              en: "The Legend, The Course, The Great Hall, The Knights Cup, The Order and Begin the Quest read like a book: moving between chapters feels like turning a page, and The Chronicle is the table of contents. In The Legend, the Green Knight changes pose as you scroll and six companions turn over like medallions.",
+            },
+            images: [
+              {
+                url: "/media/seed/vale-legenda.webp",
+                alt: {
+                  id: "Enam companion dalam bingkai oval, dua di antaranya sudah dibalik dan menampilkan ceritanya",
+                  en: "Six companions in oval frames, two of them turned over to show their story",
+                },
+                width: 1600,
+                height: 1000,
+              },
+            ],
+          },
+          {
+            title: {
+              id: "Lapangan dalam detail",
+              en: "The course in detail",
+            },
+            text: {
+              id: "Bab The Course memperkenalkan kontur lapangan, lima bendera dengan angka dan kata, dan hole VII The Dragon's Bunker lengkap dengan par dan jarak dari setiap tee. Kode ksatria ditutup dengan tiga aturan sederhana di lapangan.",
+              en: "The Course chapter introduces the contours, five flags each with a numeral and a word, and hole VII, The Dragon's Bunker, with its par and the distance from every tee. The knight's code closes it with three simple rules on the green.",
+            },
+            images: [
+              {
+                url: "/media/seed/vale-hole.webp",
+                alt: {
+                  id: "Hole VII The Dragon's Bunker: par 4, jarak tiga tee, dan foto batu penanda",
+                  en: "Hole VII, The Dragon's Bunker: par 4, three tee distances and photos of the marker stone",
+                },
+                width: 1600,
+                height: 1000,
+              },
+            ],
+          },
+          {
+            title: {
+              id: "Great Hall dan Armoury",
+              en: "The Great Hall and the Armoury",
+            },
+            text: {
+              id: "Clubhouse tampil lewat foto ruangannya, papan pengumuman yang posternya bisa digeser, dan rak Armoury berisi delapan barang yang bisa ditarik untuk dijelajahi.",
+              en: "The clubhouse comes through its room photographs, a notice board whose posters you can drag about, and an Armoury rack of eight goods you pull to browse.",
+            },
+            images: [
+              {
+                url: "/media/seed/vale-armoury.webp",
+                alt: {
+                  id: "New Goods from the Armoury: polo, topi, kaus kaki, dan sweater dalam rak yang bisa digeser",
+                  en: "New Goods from the Armoury: a polo, cap, socks and sweater on a rack you can drag",
+                },
+                width: 1600,
+                height: 1000,
+              },
+            ],
+          },
+          {
+            title: {
+              id: "Kartu anggota The Order",
+              en: "The Order's member card",
+            },
+            text: {
+              id: "Pengunjung menulis namanya dan langsung melihatnya di kartu anggota, lengkap dengan nomor anggota. Kartunya miring mengikuti kursor dan bisa dibalik. Di bawahnya ada empat hak anggota dan formulir untuk meminta undangan.",
+              en: "Visitors write their name and see it on the member card straight away, with a member number. The card tilts with the cursor and turns over. Below are the four privileges of the Order and a form to request an invitation.",
+            },
+            images: [
+              {
+                url: "/media/seed/vale-order.webp",
+                alt: {
+                  id: "Kartu anggota VALE bertuliskan Sir Galahad, di samping teks A true member of the Vale",
+                  en: "A VALE member card reading Sir Galahad, beside the line A true member of the Vale",
+                },
+                width: 1600,
+                height: 1000,
+              },
+            ],
+          },
+          {
+            title: {
+              id: "Pesan tee time",
+              en: "Booking a tee time",
+            },
+            text: {
+              id: "Begin the Quest memandu pemesanan dalam enam langkah, dari tanggal sampai data diri. Tiket di sampingnya terisi sambil pengunjung memilih, dan jam pagi ditandai Early Knight. Di HP, ringkasannya menempel sebagai bilah di bawah layar.",
+              en: "Begin the Quest walks through the booking in six steps, from the date to the player's details. The ticket beside it fills in as the visitor chooses, and dawn slots are marked Early Knight. On phones the summary sits in a bar at the bottom of the screen.",
+            },
+            images: [
+              {
+                url: "/media/seed/vale-quest.webp",
+                alt: {
+                  id: "Formulir tee time: tanggal, jam 7:00 bertanda Early Knight, dan tiket VALE yang sudah terisi",
+                  en: "The tee-time form: a date, the 7:00 slot marked Early Knight, and the filled VALE ticket",
+                },
+                width: 1600,
+                height: 1000,
+              },
+              {
+                url: "/media/seed/vale-hp-quest.webp",
+                alt: {
+                  id: "Segel lilin dan pesan Your quest begins setelah booking di HP",
+                  en: "A wax seal and the message Your quest begins after booking on phone",
+                },
+                width: 600,
+                height: 1298,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        type: "flow",
+        title: {
+          id: "Alur memesan tee time",
+          en: "Booking a tee time",
+        },
+        steps: [
+          {
+            id: "Pilih tanggal dari empat belas hari ke depan",
+            en: "Pick a date from the next fourteen days",
+          },
+          {
+            id: "Pilih jam; jam pagi bertanda Early Knight",
+            en: "Choose a time; dawn slots are marked Early Knight",
+          },
+          {
+            id: "Atur jumlah ksatria, satu sampai empat",
+            en: "Set the party, one to four knights",
+          },
+          {
+            id: "Pilih sembilan atau delapan belas hole",
+            en: "Choose nine or eighteen holes",
+          },
+          {
+            id: "Tambah caddie atau cart bila perlu",
+            en: "Add a caddie or a cart if needed",
+          },
+          {
+            id: "Isi nama dan email, lalu segel booking",
+            en: "Enter a name and email, then seal the booking",
+          },
+        ],
+      },
+      {
+        type: "decisions",
+        title: {
+          id: "Keputusan desain",
+          en: "Design decisions",
+        },
+        items: [
+          {
+            title: {
+              id: "Terasa tercetak, bukan datar",
+              en: "Printed, not flat",
+            },
+            text: {
+              id: "Judul dan ilustrasinya punya tekstur tinta seperti hasil cetak buku tua. Teksturnya dibuat dengan filter SVG ringan, bukan gambar besar, jadi tetap tajam di layar mana pun.",
+              en: "Headings and illustrations carry an ink texture like an old printed book. The texture comes from a light SVG filter rather than large images, so it stays sharp on any screen.",
+            },
+          },
+          {
+            title: {
+              id: "Peta yang bisa dimainkan",
+              en: "A map you can play",
+            },
+            text: {
+              id: "Quest Log mengumpulkan segel setiap landmark yang dibuka. Progresnya disimpan di perangkat pengunjung, dan situs tetap berjalan normal bila penyimpanan itu diblokir browser.",
+              en: "The Quest Log collects a seal for every landmark opened. Progress is kept on the visitor's device, and the site keeps working normally when the browser blocks that storage.",
+            },
+          },
+          {
+            title: {
+              id: "Cerita tidak menghalangi booking",
+              en: "The story never blocks the booking",
+            },
+            text: {
+              id: "Tombol Begin the Quest selalu ada di header dan di peta, dan ringkasan booking terus terlihat. Pengunjung yang hanya ingin memesan bisa langsung memesan.",
+              en: "The Begin the Quest button is always in the header and on the map, and the booking summary stays in view. Visitors who only want to book can book straight away.",
+            },
+          },
+          {
+            title: {
+              id: "Tenang bila diminta",
+              en: "Calm when asked",
+            },
+            text: {
+              id: "Bila pengunjung memilih gerak dikurangi, animasinya ikut berhenti. Dialog, kartu, dan formulirnya memakai tombol dan label asli, jadi bisa dipakai dengan keyboard dan pembaca layar.",
+              en: "When visitors ask for reduced motion, the animation stops. Dialogs, cards and forms use real buttons and labels, so they work with a keyboard and a screen reader.",
+            },
+          },
+        ],
+      },
+      {
+        type: "numbers",
+        title: {
+          id: "Dalam angka",
+          en: "By the numbers",
+        },
+        facts: [
+          {
+            value: "7",
+            label: {
+              id: "halaman: peta dan enam bab",
+              en: "pages: the map and six chapters",
+            },
+          },
+          {
+            value: "6",
+            label: {
+              id: "landmark dan enam companion",
+              en: "landmarks and six companions",
+            },
+          },
+          {
+            value: "50",
+            label: {
+              id: "gambar vektor dalam satu file",
+              en: "vector drawings in one file",
+            },
+          },
+          {
+            value: "20",
+            label: {
+              id: "pilihan jam tee time per hari",
+              en: "tee times to choose from each day",
+            },
+          },
+        ],
+        stack: {
+          id: "Dibuat dengan HTML, CSS, dan JavaScript, GSAP (ScrollTrigger, Draggable, SplitText), Lenis, dan ilustrasi SVG. Satu file, berjalan tanpa server.",
+          en: "Built with HTML, CSS and JavaScript, GSAP (ScrollTrigger, Draggable, SplitText), Lenis and SVG illustration. One file that runs without a server.",
+        },
+      },
+    ],
+  },
+  {
+    projectSlug: "loma",
+    published: true,
+    subtitle: {
+      id: "Situs restoran Amerika Latin di Lima: tenang tapi berani, dengan carta, kisah merek, dan reservasi meja.",
+      en: "A Latin American restaurant site for Lima: quiet but bold, with the carta, the brand story and table reservations.",
+    },
+    labels: {
+      client: "Loma",
+      field: {
+        id: "Restoran",
+        en: "Restaurant",
+      },
+      role: {
+        id: "Desain situs, interaksi, dan front-end, bersama Invisual Studio",
+        en: "Site design, interaction and front-end, with Invisual Studio",
+      },
+      year: "2026",
+    },
+    cover: {
+      url: "/media/seed/loma-hero.webp",
+      alt: {
+        id: "Beranda Loma: lampu dinding hangat di ruang makan gelap, wordmark Loma besar di bawah",
+        en: "Loma homepage: a warm wall lamp in a dark dining room, the large Loma wordmark below",
+      },
+      width: 1600,
+      height: 1000,
+    },
+    blocks: [
+      {
+        type: "prose",
+        title: {
+          id: "Situasinya",
+          en: "The situation",
+        },
+        paragraphs: [
+          {
+            id: "Loma adalah ruang makan Amerika Latin kontemporer di Lima, Peru: berakar pada tanah, dibentuk oleh api, dibuat untuk dibagi. Situsnya perlu terasa seperti ruangannya, gelap, hangat, dan pelan, sambil tetap membuat dua hal mudah: melihat carta dan memesan meja.",
+            en: "Loma is a contemporary Latin American dining room in Lima, Peru: rooted in the land, shaped by fire, made to share. The site had to feel like the room, dark, warm and unhurried, while keeping two things easy: reading the carta and booking a table.",
+          },
+          {
+            id: "Proyek ini dikerjakan di Invisual Studio sebagai satu file preview berisi empat halaman, lengkap di desktop dan HP. Situsnya belum tayang, dan formulir reservasinya tidak mengirim apa pun.",
+            en: "The project was made at Invisual Studio as a single preview file with four pages, complete on desktop and phone. The site isn't live yet, and its reservation form sends nothing.",
+          },
+        ],
+      },
+      {
+        type: "features",
+        title: {
+          id: "Empat halaman, satu suasana",
+          en: "Four pages, one mood",
+        },
+        items: [
+          {
+            title: {
+              id: "Tierra, Fuego, Tiempo",
+              en: "Tierra, Fuego, Tiempo",
+            },
+            text: {
+              id: "Beranda bercerita lewat tiga unsur, tanah, api, dan waktu, yang bergeser ke samping saat digulir. Fotonya melengkung halus mengikuti gerak gulir, dan tetap tampil sebagai foto biasa bila browser tidak mendukung WebGL.",
+              en: "The homepage tells its story through three elements, land, fire and time, which slide sideways as you scroll. The photographs bend gently with the scroll, and still show as ordinary photos when the browser has no WebGL.",
+            },
+            images: [
+              {
+                url: "/media/seed/loma-bab.webp",
+                alt: {
+                  id: "Bab Fuego di beranda: koki menuang saus di atas piring, kata FUEGO besar di bawah",
+                  en: "The Fuego chapter on the homepage: a chef pouring sauce over a plate, the word FUEGO large below",
+                },
+                width: 1600,
+                height: 1000,
+              },
+            ],
+          },
+          {
+            title: {
+              id: "Tujuh signature",
+              en: "Seven signatures",
+            },
+            text: {
+              id: "Tujuh menu signature tersusun sebagai daftar. Di desktop, foto piringnya berganti saat nama menu disorot; di HP, setiap menu tampil dengan fotonya sendiri.",
+              en: "The seven signature plates sit in a list. On desktop, the photo changes as you point at each name; on phones, every plate shows with its own photo.",
+            },
+            images: [
+              {
+                url: "/media/seed/loma-signature.webp",
+                alt: {
+                  id: "Daftar signature dengan Grilled Octopus disorot dan fotonya di sebelah kanan",
+                  en: "The signature list with Grilled Octopus highlighted and its photo on the right",
+                },
+                width: 1600,
+                height: 1000,
+              },
+              {
+                url: "/media/seed/loma-hp.webp",
+                alt: {
+                  id: "Daftar signature di HP, setiap menu dengan fotonya",
+                  en: "The signature list on phone, each plate with its photo",
+                },
+                width: 600,
+                height: 1298,
+              },
+            ],
+          },
+          {
+            title: {
+              id: "Lima tempat duduk",
+              en: "Five places to sit",
+            },
+            text: {
+              id: "La Sala, El Salón, El Jardín, La Terraza, dan El Bar bisa dipilih satu per satu, masing-masing dengan foto dan suasananya. Tombol reservasinya ikut berganti nama, dan tempat duduk itu sudah terpilih saat formulir reservasi terbuka.",
+              en: "La Sala, El Salón, El Jardín, La Terraza and El Bar can be chosen one at a time, each with its photo and mood. The reserve button takes the space's name, and that seating is already selected when the reservation form opens.",
+            },
+            images: [
+              {
+                url: "/media/seed/loma-ruang.webp",
+                alt: {
+                  id: "Five places to sit dengan El Jardín terpilih: taman berlampu dengan bantal duduk di bawah pepohonan",
+                  en: "Five places to sit with El Jardín selected: a lantern-lit garden with floor cushions under the trees",
+                },
+                width: 1600,
+                height: 1000,
+              },
+            ],
+          },
+          {
+            title: {
+              id: "La Carta",
+              en: "La Carta",
+            },
+            text: {
+              id: "Carta berisi 33 menu dalam delapan kategori, dari Signature sampai Without Spirits. Navigasi kategori menempel di sisi halaman, dan foto signature menemani daftar menu.",
+              en: "The carta holds 33 items in eight courses, from Signature to Without Spirits. The course navigation stays at the side of the page, and a signature photo keeps the list company.",
+            },
+            images: [
+              {
+                url: "/media/seed/loma-carta.webp",
+                alt: {
+                  id: "La Carta: kategori Signature dan To Begin, navigasi kategori di kiri, foto Grilled Octopus di kanan",
+                  en: "La Carta: the Signature and To Begin courses, the course navigation on the left, a Grilled Octopus photo on the right",
+                },
+                width: 1600,
+                height: 1000,
+              },
+              {
+                url: "/media/seed/loma-hp-carta.webp",
+                alt: {
+                  id: "La Carta di HP dengan navigasi kategori di atas",
+                  en: "La Carta on phone with the course navigation at the top",
+                },
+                width: 600,
+                height: 1298,
+              },
+            ],
+          },
+          {
+            title: {
+              id: "Historia",
+              en: "Historia",
+            },
+            text: {
+              id: "Halaman kisah memperkenalkan tanda jaguar, palet warna yang diambil dari material ruangan (walnut, kayu bergalur, linen zaitun, travertine), dapurnya, dan enam ikon yang digambar tangan seperti cap.",
+              en: "The story page introduces the jaguar mark, a palette taken from the room's materials (walnut, fluted wood, olive linen, travertine), the kitchen, and six hand-drawn icons cut like stamps.",
+            },
+            images: [
+              {
+                url: "/media/seed/loma-historia.webp",
+                alt: {
+                  id: "What the room is made of: empat foto material dengan nama warnanya",
+                  en: "What the room is made of: four material photos with their colour names",
+                },
+                width: 1600,
+                height: 1000,
+              },
+            ],
+          },
+          {
+            title: {
+              id: "Reservar",
+              en: "Reservar",
+            },
+            text: {
+              id: "Reservasi berjalan dalam enam langkah. Hari Senin otomatis tertutup, jam hanya muncul dalam jam buka, tamu dibatasi enam orang dengan jalan pintas ke private dining, lalu ringkasannya tampil dengan kalimat Nos vemos pronto.",
+              en: "Reservations run in six steps. Mondays close on their own, times only appear within opening hours, guests are capped at six with a shortcut to private dining, and the summary closes with Nos vemos pronto.",
+            },
+            images: [
+              {
+                url: "/media/seed/loma-reservasi.webp",
+                alt: {
+                  id: "Formulir reservasi: tanggal, jam, tiga tamu, El Jardín, dan acara Celebration terpilih",
+                  en: "The reservation form: a date, a time, three guests, El Jardín and the Celebration occasion selected",
+                },
+                width: 1600,
+                height: 1000,
+              },
+              {
+                url: "/media/seed/loma-hp-reservasi.webp",
+                alt: {
+                  id: "Konfirmasi Nos vemos pronto dengan ringkasan reservasi di HP",
+                  en: "The Nos vemos pronto confirmation with the reservation summary on phone",
+                },
+                width: 600,
+                height: 1298,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        type: "flow",
+        title: {
+          id: "Alur reservasi",
+          en: "Booking a table",
+        },
+        steps: [
+          {
+            id: "Pilih tanggal; hari Senin tutup",
+            en: "Pick a date; Mondays are closed",
+          },
+          {
+            id: "Pilih jam antara 5.30 dan 10.00 malam",
+            en: "Choose a time between 5.30 and 10.00 PM",
+          },
+          {
+            id: "Atur jumlah tamu, satu sampai enam",
+            en: "Set the guests, one to six",
+          },
+          {
+            id: "Pilih tempat duduk bila ingin",
+            en: "Choose a seating area if you like",
+          },
+          {
+            id: "Pilih acaranya bila ingin",
+            en: "Choose the occasion if you like",
+          },
+          {
+            id: "Isi nama dan email, lalu kirim permintaan",
+            en: "Enter a name and email, then send the request",
+          },
+        ],
+      },
+      {
+        type: "decisions",
+        title: {
+          id: "Keputusan desain",
+          en: "Design decisions",
+        },
+        items: [
+          {
+            title: {
+              id: "Foto yang terasa hidup, dengan cadangan",
+              en: "Photos that feel alive, with a fallback",
+            },
+            text: {
+              id: "Foto dirender lewat WebGL supaya bisa melengkung halus saat digulir. Di balik itu tetap ada gambar biasa, jadi semua foto tampil di browser tanpa WebGL.",
+              en: "The photographs render through WebGL so they can bend gently on scroll. Ordinary images sit underneath, so every photo still shows in a browser without WebGL.",
+            },
+          },
+          {
+            title: {
+              id: "Warna dari ruangannya",
+              en: "Colours from the room",
+            },
+            text: {
+              id: "Palet Boho Black, Tribal Brown, Nato Green, dan Silk Grey diambil dari walnut, kayu bergalur, linen, dan travertine di ruang makan, jadi situs dan ruangannya bicara dengan bahasa yang sama.",
+              en: "The Boho Black, Tribal Brown, Nato Green and Silk Grey palette comes from the walnut, fluted wood, linen and travertine in the dining room, so the site and the room speak the same language.",
+            },
+          },
+          {
+            title: {
+              id: "Detail yang digambar tangan",
+              en: "Details drawn by hand",
+            },
+            text: {
+              id: "Enam ikon tempat (entrada, meja host, ruang tunggu, private dining, bar, teras) digambar seperti cap lama dan dipakai dari papan nama sampai kantong kertas.",
+              en: "Six place icons (entrance, host desk, waiting area, private dining, bar, terrace) are drawn like old stamps and used from signage to paper bags.",
+            },
+          },
+          {
+            title: {
+              id: "Reservasi yang jujur",
+              en: "An honest booking form",
+            },
+            text: {
+              id: "Formulir hanya menawarkan yang benar-benar bisa dipesan: hari Senin tutup, jam sesuai jam buka, dan rombongan tujuh orang atau lebih diarahkan ke private dining.",
+              en: "The form only offers what can really be booked: Mondays closed, times within opening hours, and parties of seven or more sent to private dining.",
+            },
+          },
+        ],
+      },
+      {
+        type: "numbers",
+        title: {
+          id: "Dalam angka",
+          en: "By the numbers",
+        },
+        facts: [
+          {
+            value: "4",
+            label: {
+              id: "halaman dalam satu file",
+              en: "pages in one file",
+            },
+          },
+          {
+            value: "33",
+            label: {
+              id: "menu dalam delapan kategori",
+              en: "items across eight courses",
+            },
+          },
+          {
+            value: "5",
+            label: {
+              id: "tempat duduk untuk dipilih",
+              en: "places to sit",
+            },
+          },
+          {
+            value: "6",
+            label: {
+              id: "langkah memesan meja",
+              en: "steps to book a table",
+            },
+          },
+        ],
+        stack: {
+          id: "Dibuat dengan HTML, CSS, dan JavaScript, GSAP (ScrollTrigger, Flip, SplitText), dan Three.js untuk foto WebGL. Satu file, berjalan tanpa server.",
+          en: "Built with HTML, CSS and JavaScript, GSAP (ScrollTrigger, Flip, SplitText) and Three.js for the WebGL photographs. One file that runs without a server.",
+        },
+      },
+    ],
+  },
 ];

@@ -39,5 +39,9 @@ const host = localFont({
 const quicksand = localFont({ src: "../app/fonts/quicksand-latin-700-normal.woff2", weight: "700", variable: "--f-quicksand", display: "swap", preload: false });
 const lora = localFont({ src: "../app/fonts/lora-latin-600-normal.woff2", weight: "600", variable: "--f-lora", display: "swap", preload: false });
 
+/* Brand display faces drawn by Invisual Studio for VALE and Loma (capitals only). */
+const vale = localFont({ src: "../app/fonts/vale-display.woff2", weight: "400", variable: "--f-vale", display: "swap", preload: false });
+const loma = localFont({ src: "../app/fonts/loma-display.woff2", weight: "400", variable: "--f-loma", display: "swap", preload: false });
+
 /** Class names to put on <html> so every font variable is defined. */
-export const fontVariables = [fontShell, fontDisplay, fontItalic, marcellus, jakarta, archivo, unbounded, cormorant, host, quicksand, lora].map((f) => f.variable).join(" ");
+export const fontVariables = [fontShell, fontDisplay, fontItalic, marcellus, jakarta, archivo, unbounded, cormorant, host, quicksand, lora, vale, loma].map((f) => f.variable).join(" ");

@@ -4,7 +4,7 @@ const l = (id = "", en = "") => ({ id, en });
 
 export function newProject(id: string, existing: Project[]): Project {
   const used = new Set(existing.map((p) => p.mapSlot));
-  const slot = [1, 2, 3, 4, 5, 6, 7, 8].find((s) => !used.has(s)) ?? 1;
+  const slot = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].find((s) => !used.has(s)) ?? 1;
   let n = existing.length + 1;
   while (existing.some((p) => p.slug === `proyek-baru-${n}`)) n++;
   return {

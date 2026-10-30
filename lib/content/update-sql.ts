@@ -127,3 +127,81 @@ where c.project_slug = (select slug from public.projects where id = ${s(project.
     "",
   ].join("\n");
 }
+
+/* The three sentences that counted eight projects, exactly as v0.2.6 and earlier shipped them. */
+export const TEXT_BEFORE_027 = {
+  seo: {
+    id: "Portofolio Virgiawan Listanto, desainer dan pengembang produk digital di Bandung. Delapan sistem yang menjalankan bisnis nyata.",
+    en: "Portfolio of Virgiawan Listanto, a digital product designer and developer in Bandung. Eight systems that run real businesses.",
+  },
+  lede: {
+    id: "Studio Manager di Invisual Studio. Delapan sistem di halaman ini saya rancang dan bangun sendiri, dari tampilan sampai database. Lima di antaranya sudah tayang dan dipakai.",
+    en: "Studio Manager at Invisual Studio. I designed and built each of the eight systems on this page myself, from the interface to the database. Five of them are live and in use.",
+  },
+  intro: {
+    id: "Delapan ruang, delapan bisnis. Setiap ruang memakai warna dan huruf milik kliennya, karena sistem yang baik tampil sebagai brand Anda, bukan template saya.",
+    en: "Eight rooms, eight businesses. Each room wears its client's own colours and type, because a good system looks like your brand, not my template.",
+  },
+};
+
+/* supabase/updates/v0.2.7.sql — two new rooms from Invisual Studio, VALE and Loma: their projects (after the
+   last room), their case studies, their wordmarks in the client strip, and the three sentences that counted
+   eight projects. Inserts only what is missing; a sentence is replaced only while it still reads exactly as it
+   shipped, so anything the owner rewrote in the admin stays. Runs once (recorded in content_updates). */
+export function buildUpdateSql027(content: Content): string {
+  const c = ContentSchema.parse(content);
+  const j = (v: unknown) => `'${JSON.stringify(v).replace(/'/g, "''")}'::jsonb`;
+  const s = (v: string) => `'${v.replace(/'/g, "''")}'`;
+  const slugs = ["vale", "loma"];
+  const projects = slugs.map((slug) => c.projects.find((p) => p.slug === slug));
+  const studies = slugs.map((slug) => c.caseStudies.find((cs) => cs.projectSlug === slug));
+  if (projects.some((p) => !p) || studies.some((cs) => !cs)) throw new Error("seed has no VALE or Loma project / case study");
+  const clients = c.sections.hero.clients.items.filter((it) => slugs.includes(it.projectSlug));
+  const out: string[] = [
+    "-- Pembaruan isi v0.2.7. Dibuat otomatis oleh `npm run seed:sql` — jangan diedit manual.",
+    "-- Dua ruang baru dari Invisual Studio: VALE dan Loma, dengan studi kasusnya.",
+    "-- Hanya menambah yang belum ada; kalimat hanya diganti bila masih sama persis dengan bawaan lama.",
+    "-- Berjalan sekali saja: menjalankannya lagi tidak mengubah apa pun (dicatat di tabel content_updates).",
+    "",
+    "create table if not exists public.content_updates (version text primary key, applied_at timestamptz not null default now());",
+    "alter table public.content_updates enable row level security;",
+    "revoke all on public.content_updates from anon, authenticated;",
+    "",
+    "do $upd$",
+    "declare next_sort int;",
+    "begin",
+    "if exists (select 1 from public.content_updates where version = '0.2.7') then",
+    "  raise notice 'Pembaruan isi v0.2.7 sudah pernah dijalankan; tidak ada yang diubah.';",
+    "  return;",
+    "end if;",
+    "",
+    "-- Ruang VALE dan Loma, di belakang ruang terakhir (dilewati bila id atau alamatnya sudah dipakai)",
+    "select coalesce(max(sort), 0) into next_sort from public.projects;",
+  ];
+  projects.forEach((p, i) => {
+    const r = projectToRow(p!);
+    out.push(`insert into public.projects (id, slug, sort, published, data) select ${s(r.id)}, ${s(r.slug)}, next_sort + ${i + 1}, ${r.published}, ${j(r.data)} where not exists (select 1 from public.projects where id = ${s(r.id)} or slug = ${s(r.slug)});`);
+  });
+  out.push("", "-- Studi kasus keduanya (hanya untuk proyek VALE dan Loma yang baru ditambahkan, dan bila belum ada)");
+  studies.forEach((cs, i) => {
+    const r = caseToRow(cs!);
+    out.push(`insert into public.case_studies (project_slug, published, data) select ${s(r.project_slug)}, ${r.published}, ${j(r.data)} where exists (select 1 from public.projects where slug = ${s(r.project_slug)} and id = ${s(projects[i]!.id)}) and not exists (select 1 from public.case_studies where project_slug = ${s(r.project_slug)});`);
+  });
+  out.push(
+    "",
+    "-- Deretan klien di bawah hero: VALE dan Loma ditambahkan di ujung (dilewati bila sudah ada atau deretannya sudah penuh)",
+    `update public.sections set data = jsonb_set(data, '{clients,items}', coalesce(data->'clients'->'items', '[]'::jsonb) || ${j(clients)}) where key = 'hero' and data ? 'clients' and jsonb_array_length(coalesce(data->'clients'->'items', '[]'::jsonb)) <= 10 and not exists (select 1 from jsonb_array_elements(coalesce(data->'clients'->'items', '[]'::jsonb)) x where x->>'projectSlug' in ('vale', 'loma'));`,
+    "",
+    "-- Kalimat yang menghitung jumlah karya (delapan → sepuluh), hanya bila belum Anda ubah",
+    `update public.sections set data = jsonb_set(data, '{lede}', ${j(c.sections.hero.lede)}) where key = 'hero' and data->'lede' = ${j(TEXT_BEFORE_027.lede)};`,
+    `update public.sections set data = jsonb_set(data, '{intro}', ${j(c.sections.works.intro)}) where key = 'works' and data->'intro' = ${j(TEXT_BEFORE_027.intro)};`,
+    `update public.site_settings set data = jsonb_set(data, '{seoDescription}', ${j(c.settings.seoDescription)}) where id = 1 and data->'seoDescription' = ${j(TEXT_BEFORE_027.seo)};`,
+    "",
+    "insert into public.content_updates (version) values ('0.2.7');",
+    "raise notice 'Pembaruan isi v0.2.7 selesai.';",
+    "end",
+    "$upd$;",
+    "",
+  );
+  return out.join("\n");
+}

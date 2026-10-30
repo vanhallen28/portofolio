@@ -39,6 +39,8 @@ const MOTION_LABEL: Record<(typeof ROOM_MOTIONS)[number], string> = {
   tilt: "Putar 3D: layar terangkat dan berputar",
   signal: "Sinyal: layar membesar, HP jatuh memantul",
   print: "Cetak: layar keluar baris demi baris seperti struk",
+  unfold: "Lembaran: desktop terbentang seperti peta, HP berbalik seperti halaman",
+  glow: "Nyala: layar menyala dari gelap seperti cahaya lilin",
 };
 const ROLE_LABEL: Record<(typeof VISUAL_ROLES)[number], string> = { desk: "Layar desktop", phone: "Layar HP", back: "Layar desktop di belakang" };
 const PATTERN_LABEL: Record<(typeof PATTERNS)[number], string> = { none: "Polos", checker: "Kotak-kotak halus", glow: "Cahaya di pojok kanan atas" };
@@ -178,7 +180,7 @@ export function ProjectForm({ initial, index, lines, works, slots, takenSlugs, p
             <div className="adm-grid-2">
               <TextField label="Label di denah" value={p.mapLabel} max={24} onChange={(v) => set("mapLabel", v)} />
               <Select label="Posisi stasiun" value={p.mapSlot}
-                options={[1, 2, 3, 4, 5, 6, 7, 8].map((s) => ({ value: s, label: `${s} · ${["Kiri atas", "Atas tengah", "Kanan atas", "Kanan, atas", "Kanan, bawah", "Kanan bawah", "Bawah tengah", "Kiri bawah"][s - 1]}${slots[s] ? ` (dipakai ${slots[s]})` : ""}` }))}
+                options={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((s) => ({ value: s, label: `${s} · ${["Kiri atas", "Atas tengah", "Kanan atas", "Kanan, atas", "Kanan, bawah", "Kanan bawah", "Bawah tengah", "Kiri bawah", "Kiri, atas", "Kiri, bawah"][s - 1]}${slots[s] ? ` (dipakai ${slots[s]})` : ""}` }))}
                 onChange={(v) => set("mapSlot", v)}
                 hint={slots[p.mapSlot] ? `Posisi ini juga dipakai ${slots[p.mapSlot]}; hanya satu yang tampil di denah.` : "Pojok berada di pertemuan dua jalur."} />
             </div>

@@ -281,6 +281,22 @@ const SCREEN_EFFECTS: Record<ScreenEffect, (s: ScreenSet, tl: gsap.core.Timeline
     if (phones.length) tl.fromTo(phones, { clipPath: clip(0, 0, 100, 0), y: -16 }, { clipPath: OPEN, y: 0, duration: 0.8, ease: "steps(10)" }, 0.45);
     return [...drift(desks, { py: 20 }), ...drift(phones, { py: 60 })];
   },
+  /* Lembaran: the desktop unrolls from its top edge like a map, the phone turns over like a page */
+  unfold: ({ desks, phones }, tl) => {
+    if (desks.length) tl.fromTo(desks, { rotationX: -75, y: -20, clipPath: clip(0, 0, 100, 0), transformPerspective: 1600, transformOrigin: "50% 0%" },
+      { rotationX: 0, y: 0, clipPath: OPEN, transformPerspective: 1600, duration: 1, ease: "power2.out", stagger: 0.12 }, 0);
+    if (phones.length) tl.fromTo(phones, { rotationY: -100, opacity: 0, transformPerspective: 1100, transformOrigin: "0% 50%" },
+      { rotationY: 0, opacity: 1, transformPerspective: 1100, duration: 0.9, ease: "power3.out", stagger: 0.1 }, 0.35);
+    return [...drift(desks, { py: 18 }), ...drift(phones, { py: 55, rz: 2 })];
+  },
+  /* Nyala: the screens light up out of the dark, like a room at candle time */
+  glow: ({ desks, phones }, tl) => {
+    if (desks.length) tl.fromTo(desks, { filter: "brightness(0.15) saturate(0.4)", y: 60, scale: 0.97 },
+      { filter: "brightness(1) saturate(1)", y: 0, scale: 1, duration: 1, ease: "power2.out", stagger: 0.12 }, 0);
+    if (phones.length) tl.fromTo(phones, { filter: "brightness(0.1) saturate(0.3)", y: 90, opacity: 0 },
+      { filter: "brightness(1) saturate(1)", y: 0, opacity: 1, duration: 0.9, ease: "power2.out", stagger: 0.1 }, 0.3);
+    return [...drift(desks, { py: 16 }), ...drift(phones, { py: 65 })];
+  },
 };
 
 /* ---------- Home page ---------- */
