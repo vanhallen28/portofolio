@@ -3,6 +3,13 @@
 Format: setiap rilis dikirim sebagai `portofolio-vX.Y.Z.zip`. Nomor versi naik setiap kali, jadi zip tidak pernah saling tumpuk.
 Petunjuk pasang per versi: `docs/updates/BACA-INI-vX.Y.Z.txt`.
 
+## v0.2.10 — 2 November 2026
+
+RUA versi terbaru dari klien.
+
+- **Preview RUA** diganti dengan file terbaru dari klien, sama persis byte demi byte (`public/preview/rua.html`). Di HP, gelembung "Xin chào! Pull up a stool." kini berada di atas kepala kura-kura, jadi mukanya tidak lagi tertutup teks. Perubahan lain dari klien: tata letak menu di desktop, foto tub sup di bagian bawa pulang, dan gulir yang mengukur ulang setelah daftar menu berubah.
+- **Video layar RUA** di ruangnya direkam ulang dari file baru, baik desktop maupun HP. Nama filenya sama, jadi database tidak perlu diubah.
+
 ## v0.2.9 — 31 Oktober 2026
 
 Ruang karya yang hidup.

@@ -1,0 +1,49 @@
+PORTOFOLIO v0.2.10 — BACA INI DULU
+================================================================
+
+RUA versi terbaru dari klien.
+
+- Preview RUA diganti dengan file terbaru dari klien (sama persis).
+  Di HP, gelembung "Xin chào! Pull up a stool." kini berada di atas
+  kepala kura-kura, jadi mukanya tidak lagi tertutup teks.
+- Video layar desktop dan HP di ruang RUA direkam ulang dari file
+  baru. Nama filenya sama, jadi TIDAK ADA SQL untuk versi ini.
+
+Yang berubah: public/preview/rua.html, empat file di
+public/media/seed/live (rua-desk dan rua-phone, video dan gambar
+diamnya), CHANGELOG, versi paket. Tidak ada file yang dihapus.
+
+
+1. PASANG (salin-tempel di Terminal)
+----------------------------------------------------------------
+
+  cd ~/Documents/Virgiawan/PROJECT/portofolio
+  unzip -o ~/Downloads/portofolio-v0.2.10.zip -d .
+  npm install
+  npm run build
+  git add -A
+  git commit -m "v0.2.10: RUA versi terbaru"
+  git push
+
+Push berhasil bila diakhiri "main -> main" dan tidak ada baris
+"error:" atau "fatal:". Cek dengan: git status
+
+
+2. SETELAH DEPLOY
+----------------------------------------------------------------
+
+a. Tunggu deploy v0.2.10 di Vercel berstatus Ready.
+b. Buka beranda dan tekan Cmd+Shift+R (supaya video lama di
+   browser Anda tidak dipakai lagi).
+
+Bila SQL v0.2.9 belum Anda jalankan, jalankan dulu (lihat
+BACA-INI-v0.2.9.txt); tanpa itu ruang RUA masih memakai gambar
+diam lama tanpa video.
+
+
+3. MOHON DICEK
+----------------------------------------------------------------
+
+[ ] Beranda di HP → ruang RUA: muka kura-kura di layar HP terlihat,
+    gelembungnya di atas kepala.
+[ ] Preview proyek RUA di HP: sama, gelembung di atas kepala.
