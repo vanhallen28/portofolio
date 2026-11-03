@@ -3,6 +3,33 @@
 Format: setiap rilis dikirim sebagai `portofolio-vX.Y.Z.zip`. Nomor versi naik setiap kali, jadi zip tidak pernah saling tumpuk.
 Petunjuk pasang per versi: `docs/updates/BACA-INI-vX.Y.Z.txt`.
 
+## v0.2.11 — 4 November 2026
+
+Statistik kunjungan, kode iklan, dan performa web di admin.
+
+- **Admin → Statistik kunjungan** (menu baru di sidebar):
+  - **Kalender** untuk memilih periode, dengan pilihan cepat: hari ini, kemarin, 7/30/90 hari, bulan ini, bulan lalu, tahun ini.
+  - **Empat angka utama**: kunjungan halaman, pengunjung, klik WhatsApp, dan preview dibuka, masing-masing dibanding periode sebelumnya.
+  - **Grafik per hari.**
+  - **Rincian**: sumber kunjungan (Google, Instagram, Behance, LinkedIn, Facebook, langsung, dan situs lain; mendukung `?utm_source=`), negara, halaman, perangkat dan bahasa, klik WhatsApp per sumber, dan preview per proyek.
+  - **Tarik data**: unduh CSV kunjungan dan performa untuk periode yang dipilih.
+  - Sakelar **"Jangan hitung kunjungan dari browser ini"** supaya kunjungan Anda sendiri tidak ikut terhitung.
+- **Tanpa cookie dan tanpa menyimpan alamat IP.**
+  - Setiap pengunjung diwakili kode acak yang berganti setiap hari.
+  - Robot, crawler, dan pratinjau link tidak dihitung.
+  - Negara dibaca dari lokasi jaringan yang diberikan Vercel.
+- **Admin → Kode iklan** (menu baru):
+  - **Meta Pixel**: cukup isi ID-nya. PageView tercatat di setiap halaman, dan *Contact* tercatat saat tombol WhatsApp ditekan.
+  - **Google AdSense**: cukup isi ID penayang. Kode dan tag verifikasi dipasang di `<head>`, dan `/ads.txt` dibuat otomatis.
+  - Boleh menempel seluruh kode dari Meta atau Google; ID-nya diambil otomatis.
+  - Kode yang terpasang ditampilkan apa adanya.
+- **Ringkasan** kini menampilkan:
+  - kunjungan 7 hari terakhir;
+  - **performa web** 28 hari terakhir dari pengunjung sungguhan: LCP, INP, CLS, FCP, dan TTFB untuk HP dan desktop, dengan batas penilaian Google dan status lulus Core Web Vitals.
+- `supabase/migrations/0002_stats.sql`: dua tabel baru (`visits`, `vitals`) dan dua fungsi ringkasan.
+  - Pengunjung hanya bisa menambah baris; hanya admin yang bisa membaca.
+  - `npm run doctor` ikut memeriksanya.
+
 ## v0.2.10 — 2 November 2026
 
 RUA versi terbaru dari klien.

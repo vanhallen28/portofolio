@@ -15,7 +15,9 @@ export default async function PanelLayout({ children }: { children: React.ReactN
   const mode = backend();
   const items: NavItem[] = [
     { href: "/admin", label: "Ringkasan" },
+    { href: "/admin/stats", label: "Statistik kunjungan" },
     { href: "/admin/settings", label: "Pengaturan situs" },
+    { href: "/admin/ads", label: "Kode iklan" },
     { href: "/admin/sections/hero", label: "Hero & denah", group: "Beranda" },
     { href: "/admin/sections/works", label: "Karya (teks)", group: "Beranda" },
     { href: "/admin/sections/services", label: "Layanan", group: "Beranda" },

@@ -134,6 +134,9 @@ Masuk di `https://alamat-situs/admin`.
 - **Proyek**: urutkan ruang (↑ ↓), tayangkan/sembunyikan, tambah, hapus. Halaman edit proyek punya **pratinjau ruang langsung**, **cek keterbacaan warna** (WCAG), dan kolom **Hasil untuk bisnisnya** yang ditonjolkan di ruang.
 - **Studi kasus**: susun halaman dari blok (prosa, fitur bergambar, alur bernomor, keputusan penting, **hasil sebelum → sesudah**, angka & stack), atur warna halaman (atau **salin warna ruang proyek**), lalu nyalakan **Tayang**.
 
+- **Statistik kunjungan**: kunjungan, pengunjung, klik WhatsApp, dan preview per periode (kalender), dengan sumber, negara, halaman, perangkat, performa web, dan unduhan CSV. Butuh `supabase/migrations/0002_stats.sql` (sekali). Tanpa cookie dan tanpa menyimpan IP.
+- **Kode iklan**: Meta Pixel ID dan ID penayang Google AdSense. Kode resminya dipasang di setiap halaman situs, `/ads.txt` dibuat otomatis.
+
 Klik **Simpan & tayangkan** (atau tekan ⌘S / Ctrl+S): perubahan langsung tampil di situs. Gambar yang diunggah otomatis dikecilkan dan diubah ke WebP di browser sebelum dikirim.
 
 > Draf studi kasus untuk 7 proyek selain Aliya Syifaa disusun dari kode dan dokumen proyeknya. Baca dan sesuaikan dulu sebelum situs dibagikan. Daftar yang perlu dicek ada di `docs/updates/BACA-INI-v0.1.0.txt`.

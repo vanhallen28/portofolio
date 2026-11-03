@@ -317,6 +317,25 @@ try {
     await n.context().close();
   });
 
+  // Visits are only counted from real browsers (the other tests run as HeadlessChrome, a robot).
+  const CHROME_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36";
+  await test("statistik: kunjungan dan klik WhatsApp terkirim tanpa cookie", async () => {
+    const v = await page({ userAgent: CHROME_UA });
+    await v.goto(`${BASE}/karya/${firstSlug}`);
+    await v.waitForTimeout(600);
+    await v.goto(`${BASE}/`);
+    await v.waitForTimeout(600);
+    // a WhatsApp click is counted; the chat itself is not opened in the test
+    await v.evaluate(() => {
+      document.addEventListener("click", (e) => { if (e.target.closest && e.target.closest('a[href*="wa.me"]')) e.preventDefault(); });
+      document.querySelector('a[href*="wa.me"]').click();
+    });
+    await v.waitForTimeout(800);
+    const cookies = await v.context().cookies();
+    assert(cookies.length === 0, `situs memasang cookie: ${cookies.map((c) => c.name).join(", ")}`);
+    await v.context().close();
+  });
+
   console.log("\nPanel admin");
   const a = await page();
 
@@ -403,6 +422,45 @@ try {
     await a.getByRole("button", { name: "Simpan & tayangkan" }).click();
     await a.waitForSelector(".adm-toast.is-bad");
     assert((await a.textContent(".adm-toast.is-bad")).includes("whatsapp"), "pesan galat tidak menyebut kolomnya");
+  });
+
+  await test("statistik kunjungan: angka, kalender, tarik data, dan ringkasan", async () => {
+    await a.goto(`${BASE}/admin/stats`);
+    const kpi = async (label) => (await a.locator(".st-kpi", { hasText: label }).locator("b").textContent()).trim();
+    assert((await kpi("Kunjungan halaman")) === "2", `kunjungan halaman: ${await kpi("Kunjungan halaman")}, harusnya 2`);
+    assert((await kpi("Klik WhatsApp")) === "1", `klik WhatsApp: ${await kpi("Klik WhatsApp")}, harusnya 1`);
+    assert(await a.locator(".st-rank", { hasText: "Langsung" }).count(), "sumber Langsung tidak tampil");
+    await a.click(".st-picker-btn");
+    await a.waitForSelector(".st-pop");
+    assert((await a.locator(".st-days button:not([disabled])").count()) > 20, "kalender tidak menampilkan tanggal");
+    await a.getByRole("button", { name: "7 hari terakhir" }).click();
+    await a.waitForURL(/\/admin\/stats\?from=\d{4}-\d{2}-\d{2}&to=/);
+    assert((await kpi("Kunjungan halaman")) === "2", "angka berubah setelah memilih 7 hari terakhir");
+    const csv = await (await a.request.get(`${BASE}${await a.getAttribute('a[href*="kind=visits"]', "href")}`)).text();
+    const rows = csv.trim().split(/\r?\n/);
+    assert(rows[0].includes("waktu_wib") && rows.length === 4, `CSV kunjungan: ${rows.length} baris`);
+    assert(!/\b\d{1,3}(\.\d{1,3}){3}\b/.test(csv), "CSV memuat alamat IP");
+    const anon = await fetch(`${BASE}/admin/stats/export?kind=visits`, { redirect: "manual" });
+    assert(anon.status !== 200, "CSV bisa diunduh tanpa login");
+    await a.goto(`${BASE}/admin`);
+    assert(await a.getByRole("heading", { name: "Kunjungan 7 hari terakhir" }).count(), "ringkasan kunjungan tidak ada di Ringkasan");
+    assert(await a.getByRole("heading", { name: "Performa web" }).count(), "performa web tidak ada di Ringkasan");
+  });
+
+  await test("kode iklan: Meta Pixel, AdSense, dan ads.txt terpasang lalu bisa dicopot", async () => {
+    await a.goto(`${BASE}/admin/ads`);
+    await a.getByLabel("Pixel ID").fill("<script>fbq('init', '1234567890123456');</script>");
+    assert((await a.getByLabel("Pixel ID").inputValue()) === "1234567890123456", "ID Pixel tidak diambil dari kode yang ditempel");
+    await a.getByLabel("ID penayang").fill("pub-1234567890123456");
+    await saveAndWait(a);
+    assert(await pageHas(`${BASE}/`, "fbq('init','1234567890123456')"), "kode Meta Pixel tidak ada di beranda");
+    assert(await pageHas(`${BASE}/en`, 'name="google-adsense-account" content="ca-pub-1234567890123456"'), "tag AdSense tidak ada di halaman English");
+    assert((await (await fetch(`${BASE}/ads.txt`)).text()).includes("google.com, pub-1234567890123456, DIRECT, f08c47fec0942fa0"), "ads.txt salah");
+    await a.getByLabel("Pixel ID").fill("");
+    await a.getByLabel("ID penayang").fill("");
+    await saveAndWait(a);
+    assert(await pageHas(`${BASE}/`, "fbevents.js", false), "kode Pixel masih terpasang setelah dicopot");
+    assert((await fetch(`${BASE}/ads.txt`)).status === 404, "ads.txt masih ada setelah AdSense dicopot");
   });
 
   await test("pindah halaman dengan perubahan belum disimpan meminta konfirmasi", async () => {

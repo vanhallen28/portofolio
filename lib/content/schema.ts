@@ -57,6 +57,11 @@ export const SettingsSchema = z.object({
     url: url.refine((v) => v === "" || /^(https:\/\/|\/)/.test(v), "Link CV harus diawali https:// atau /"),
     label: LSchema,
   }).default({ url: "", label: { id: "Unduh CV (PDF)", en: "Download CV (PDF)" } }),
+  /** Ad and measurement codes (admin → Kode iklan). Empty = not installed. */
+  ads: z.object({
+    metaPixelId: z.string().trim().regex(/^(\d{10,20})?$/, "Meta Pixel ID berisi 10–20 angka, mis. 1234567890123456").default(""),
+    adsenseClient: z.string().trim().regex(/^(ca-pub-\d{10,20})?$/, "ID penayang AdSense diawali ca-pub-, mis. ca-pub-1234567890123456").default(""),
+  }).default({ metaPixelId: "", adsenseClient: "" }),
   ui: z.object({
     skip: LSchema,
     nav: z.object({ works: LSchema, services: LSchema, process: LSchema, about: LSchema, contact: LSchema }),

@@ -1,0 +1,95 @@
+PORTOFOLIO v0.2.11 — BACA INI DULU
+================================================================
+
+Statistik kunjungan, kode iklan, dan performa web di admin.
+
+- Admin → Statistik kunjungan (menu baru):
+  kalender untuk memilih periode (atau pilihan cepat 7/30/90 hari,
+  bulan ini, bulan lalu, tahun ini), kunjungan halaman, pengunjung,
+  klik WhatsApp, preview dibuka, grafik per hari, sumber (Google,
+  Instagram, Behance, LinkedIn, langsung, dll.), negara, halaman,
+  perangkat, bahasa, dan tombol unduh CSV ("tarik data").
+- Admin → Kode iklan (menu baru): Meta Pixel dan Google AdSense.
+  Cukup isi ID-nya, kode resminya dipasang otomatis di setiap halaman.
+- Ringkasan: kunjungan 7 hari terakhir dan performa web (kecepatan
+  situs di HP dan desktop menurut ukuran Google).
+- Tanpa cookie, alamat IP tidak disimpan.
+
+Yang berubah: halaman dan komponen admin baru, penghitung kunjungan
+di situs, alamat /api/v dan /ads.txt, file SQL baru
+supabase/migrations/0002_stats.sql, uji. Tidak ada file yang dihapus.
+
+
+1. PASANG (salin-tempel di Terminal)
+----------------------------------------------------------------
+
+  cd ~/Documents/Virgiawan/PROJECT/portofolio
+  unzip -o ~/Downloads/portofolio-v0.2.11.zip -d .
+  npm install
+  npm run build
+  git add -A
+  git commit -m "v0.2.11: statistik, kode iklan, performa web"
+  git push
+
+Push berhasil bila diakhiri "main -> main" dan tidak ada baris
+"error:" atau "fatal:". Cek dengan: git status
+
+
+2. SUPABASE: TABEL STATISTIK (sekali saja)
+----------------------------------------------------------------
+
+a. Di Terminal:
+
+     pbcopy < supabase/migrations/0002_stats.sql
+
+b. Supabase → SQL Editor → New query, tempel (Cmd+V), Run.
+   Hasilnya "Success. No rows returned" (itu normal).
+   Aman dijalankan lagi kalau ragu.
+
+c. Tunggu deploy Vercel berstatus Ready, buka /admin → Statistik
+   kunjungan. Kunjungan mulai tercatat sejak saat itu (data sebelum
+   hari ini tidak ada).
+
+d. Supaya kunjungan Anda sendiri tidak ikut terhitung: di setiap
+   browser yang Anda pakai (laptop dan HP), buka /admin → Statistik
+   kunjungan → nyalakan "Jangan hitung kunjungan dari browser ini".
+
+
+3. KODE IKLAN (bila dipakai)
+----------------------------------------------------------------
+
+Meta Pixel
+  Meta Events Manager → Sumber data → pilih Pixel → salin ID-nya.
+  Admin → Kode iklan → Pixel ID → Simpan & tayangkan.
+  Cek dengan ekstensi Chrome "Meta Pixel Helper" di beranda.
+
+Google AdSense
+  AdSense → Akun → Informasi akun → ID penayang (pub-…).
+  Admin → Kode iklan → ID penayang → Simpan & tayangkan.
+  Lalu di AdSense → Situs → tambahkan situs point.lat (domain
+  utamanya), dan pilih verifikasi "Cuplikan kode AdSense" atau
+  "Tag meta"; keduanya sudah terpasang.
+
+  ads.txt: Google membaca ads.txt di domain utama (point.lat/ads.txt).
+  Portofolio menyediakan virgiawan.point.lat/ads.txt. Bila point.lat
+  belum dipakai untuk situs lain, cara termudah:
+    Vercel → proyek portofolio → Settings → Domains → Add Domain:
+    point.lat → pilih "Redirect to" virgiawan.point.lat.
+    Ikuti record DNS yang diminta Vercel (record A untuk point.lat).
+  Setelah itu point.lat/ads.txt ikut mengarah ke file yang benar.
+
+  Persetujuan AdSense ditentukan Google (biasanya beberapa hari
+  sampai beberapa minggu).
+
+
+4. MOHON DICEK SETELAH DEPLOY
+----------------------------------------------------------------
+
+[ ] Buka situs di HP (bukan browser yang sakelarnya dinyalakan),
+    lalu Admin → Statistik kunjungan: kunjungannya muncul.
+[ ] Kalender: pilih dua tanggal → Terapkan → angkanya berganti.
+[ ] Tombol "Unduh kunjungan (CSV)" mengunduh file.
+[ ] Ringkasan: kartu "Kunjungan 7 hari terakhir" dan "Performa web".
+    Performa web terisi setelah ada beberapa kunjungan.
+[ ] Bila kode iklan diisi: buka beranda → klik kanan → View Page
+    Source → cari "fbq('init'" atau "google-adsense-account".

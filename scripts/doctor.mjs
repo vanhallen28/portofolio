@@ -54,6 +54,15 @@ const w = await db.from("site_settings").update({ updated_at: new Date().toISOSt
 if (w.error || !w.data?.length) ok("Pengunjung tidak bisa mengubah konten (aturan akses aktif)");
 else bad("Pengunjung BISA mengubah konten!", "Jalankan ulang 0001_init.sql agar aturan akses (RLS) terpasang");
 
+// Statistics (0002_stats.sql): visitors may add rows but never read them back.
+for (const t of ["visits", "vitals"]) {
+  const r = await db.from(t).select("id", { head: true, count: "exact" });
+  if (r.error && /42P01|PGRST205/.test(r.error.code ?? "")) bad(`Tabel ${t} belum ada (statistik kunjungan)`, "Jalankan supabase/migrations/0002_stats.sql di Supabase → SQL Editor");
+  else if (r.error) ok(`Tabel ${t} ada, dan pengunjung tidak bisa membacanya`);
+  else if ((r.count ?? 0) > 0) bad(`Pengunjung BISA membaca tabel ${t}!`, "Jalankan ulang 0002_stats.sql agar aturan aksesnya terpasang");
+  else ok(`Tabel ${t} ada (pengunjung tidak melihat isinya)`);
+}
+
 const admins = await db.rpc("admin_count");
 if (admins.error) bad(`Fungsi admin_count: ${admins.error.message}`, "Jalankan ulang 0001_init.sql");
 else if (!admins.data) bad("Belum ada akun admin", "Lihat README langkah 4: buat user di Authentication, lalu jalankan insert into public.admins …");

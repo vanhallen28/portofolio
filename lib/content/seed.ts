@@ -51,6 +51,7 @@ export const seedSettings: SiteSettings = {
   availability: { show: false, text: l("Menerima proyek baru", "Taking on new projects") },
   stickyCta: { show: true, text: l("Chat WhatsApp", "Chat on WhatsApp") },
   cv: { url: "", label: l("Unduh CV (PDF)", "Download CV (PDF)") },
+  ads: { metaPixelId: "", adsenseClient: "" },
   ui: {
     skip: l("Langsung ke isi", "Skip to content"),
     nav: {
