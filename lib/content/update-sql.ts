@@ -2,6 +2,7 @@ import { ContentSchema, ImgSchema } from "./schema";
 import { caseToRow, projectToRow } from "./rows";
 import type { Content, Project } from "./types";
 import { VISUALS_BEFORE_029 } from "./visuals-before-029";
+import { CIRI_CLIENT_FONT_BEFORE_0212, CIRI_ID, contentBefore0212 } from "./ciri-before-0212";
 
 /** A project row as v0.2.8 and earlier wrote it: the v0.2.8 screens and no mascot. Keeps the update files
     those versions shipped byte-for-byte the same now that the seed has moved on. */
@@ -20,7 +21,7 @@ function rowBefore029(p: Project) {
    It only ever FILLS what is missing (a new field, an empty FAQ, a case study without colours);
    anything already edited in the admin is left exactly as it is. Safe to run more than once. */
 export function buildUpdateSql020(content: Content): string {
-  const c = ContentSchema.parse(content);
+  const c = ContentSchema.parse(contentBefore0212(content));
   const j = (v: unknown) => `'${JSON.stringify(v).replace(/'/g, "''")}'::jsonb`;
   const s = (v: string) => `'${v.replace(/'/g, "''")}'`;
   const out: string[] = [
@@ -90,7 +91,7 @@ where project_slug = ${s(cs.projectSlug)} and not exists (select 1 from jsonb_ar
    the owner already gave visuals or another layout, a cover already chosen, or a feature that already
    has pictures is left exactly as it is. Runs once (recorded in content_updates). */
 export function buildUpdateSql022(content: Content): string {
-  const c = ContentSchema.parse(content);
+  const c = ContentSchema.parse(contentBefore0212(content));
   const j = (v: unknown) => `'${JSON.stringify(v).replace(/'/g, "''")}'::jsonb`;
   const s = (v: string) => `'${v.replace(/'/g, "''")}'`;
   const project = c.projects.find((p) => p.slug === "biansa");
@@ -163,7 +164,7 @@ export const TEXT_BEFORE_027 = {
    eight projects. Inserts only what is missing; a sentence is replaced only while it still reads exactly as it
    shipped, so anything the owner rewrote in the admin stays. Runs once (recorded in content_updates). */
 export function buildUpdateSql027(content: Content): string {
-  const c = ContentSchema.parse(content);
+  const c = ContentSchema.parse(contentBefore0212(content));
   const j = (v: unknown) => `'${JSON.stringify(v).replace(/'/g, "''")}'::jsonb`;
   const s = (v: string) => `'${v.replace(/'/g, "''")}'`;
   const slugs = ["vale", "loma"];
@@ -241,7 +242,7 @@ export const TEXT_BEFORE_028 = {
    v0.2.7: inserts only what is missing, replaces a sentence only while it still reads exactly as it shipped, and
    runs once (recorded in content_updates). */
 export function buildUpdateSql028(content: Content): string {
-  const c = ContentSchema.parse(content);
+  const c = ContentSchema.parse(contentBefore0212(content));
   const j = (v: unknown) => `'${JSON.stringify(v).replace(/'/g, "''")}'::jsonb`;
   const s = (v: string) => `'${v.replace(/'/g, "''")}'`;
   const p = c.projects.find((x) => x.slug === "rua");
@@ -296,7 +297,7 @@ export function buildUpdateSql028(content: Content): string {
    silent video, plus that video). A screen the owner replaced, or a mascot the owner already set, is left alone.
    Runs once (recorded in content_updates). */
 export function buildUpdateSql029(content: Content): string {
-  const c = ContentSchema.parse(content);
+  const c = ContentSchema.parse(contentBefore0212(content));
   const j = (v: unknown) => `'${JSON.stringify(v).replace(/'/g, "''")}'::jsonb`;
   const s = (v: string) => `'${v.replace(/'/g, "''")}'`;
   const out: string[] = [
@@ -341,4 +342,75 @@ export function buildUpdateSql029(content: Content): string {
     "",
   );
   return out.join("\n");
+}
+
+/* supabase/updates/v0.2.12.sql — Ciri's new site: the room's title font (Alte Haas Grotesk), text, facts, screen
+   descriptions and its logo in full, the Ciri name in the client strip, and the case study (subtitle, role, cover
+   and each block). Each piece is replaced only while it still reads exactly as v0.2.11 shipped it, so anything the
+   owner changed in the admin stays; the room order, lines, colours and status are not touched. Runs once
+   (recorded in content_updates). */
+export function buildUpdateSql0212(content: Content): string {
+  const c = ContentSchema.parse(content);
+  const o = ContentSchema.parse(contentBefore0212(content));
+  const j = (v: unknown) => `'${JSON.stringify(v).replace(/'/g, "''")}'::jsonb`;
+  const s = (v: string) => `'${v.replace(/'/g, "''")}'`;
+  const find = (x: Content) => ({ p: x.projects.find((p) => p.id === CIRI_ID), cs: x.caseStudies.find((cs) => cs.projectSlug === "ciri") });
+  const now = find(c), old = find(o);
+  if (!now.p || !now.cs || !old.p || !old.cs) throw new Error("seed has no Ciri project / case study");
+  const pn = projectToRow(now.p).data, po = projectToRow(old.p).data;
+  const cn = caseToRow(now.cs).data, co = caseToRow(old.cs).data;
+  if (cn.blocks.length !== co.blocks.length) throw new Error("Ciri case study: blocks are replaced one for one");
+  const id = s(CIRI_ID);
+  const study = `project_slug = (select slug from public.projects where id = ${id})`;
+  const alts = po.visuals.flatMap((v, i) => {
+    const n = pn.visuals[i];
+    if (!n || n.image.url !== v.image.url || JSON.stringify(n.image.alt) === JSON.stringify(v.image.alt)) return [];
+    return [`when x->'image'->>'url' = ${s(v.image.url)} and x->'image'->'alt' = ${j(v.image.alt)} then jsonb_set(x, '{image,alt}', ${j(n.image.alt)})`];
+  });
+  const blocks = co.blocks.map((b, i) => `when b.value = ${j(b)} then ${j(cn.blocks[i])}`);
+  return [
+    "-- Pembaruan isi v0.2.12. Dibuat otomatis oleh `npm run seed:sql` — jangan diedit manual.",
+    "-- Ciri versi situs baru: huruf judul Alte Haas Grotesk, teks dan angka ruang, keterangan layar, nama di deretan klien, dan studi kasusnya.",
+    "-- Setiap bagian hanya diganti bila masih sama persis dengan bawaan v0.2.11; urutan ruang, jalur, warna, dan status tidak disentuh.",
+    "-- Berjalan sekali saja: menjalankannya lagi tidak mengubah apa pun (dicatat di tabel content_updates).",
+    "",
+    "create table if not exists public.content_updates (version text primary key, applied_at timestamptz not null default now());",
+    "alter table public.content_updates enable row level security;",
+    "revoke all on public.content_updates from anon, authenticated;",
+    "",
+    "do $upd$",
+    "begin",
+    "if exists (select 1 from public.content_updates where version = '0.2.12') then",
+    "  raise notice 'Pembaruan isi v0.2.12 sudah pernah dijalankan; tidak ada yang diubah.';",
+    "  return;",
+    "end if;",
+    "",
+    "-- Ruang Ciri: huruf dan gaya judul (keduanya hanya bila keduanya masih bawaan), teks, dan angka",
+    `update public.projects set data = data || jsonb_build_object('titleFont', ${s(pn.titleFont)}, 'titleStyle', ${j(pn.titleStyle)}) where id = ${id} and data->>'titleFont' = ${s(po.titleFont)} and data->'titleStyle' = ${j(po.titleStyle)};`,
+    `update public.projects set data = jsonb_set(data, '{text}', ${j(pn.text)}) where id = ${id} and data->'text' = ${j(po.text)};`,
+    `update public.projects set data = jsonb_set(data, '{facts}', ${j(pn.facts)}) where id = ${id} and data->'facts' = ${j(po.facts)};`,
+    ...(alts.length ? [
+      "",
+      "-- Keterangan layar desktop dan HP (hanya layar yang masih memakai gambar dan keterangan bawaan)",
+      `update public.projects set data = jsonb_set(data, '{visuals}', (select coalesce(jsonb_agg(case ${alts.join(" ")} else x end order by ord), '[]'::jsonb) from jsonb_array_elements(data->'visuals') with ordinality as v(x, ord))) where id = ${id} and jsonb_typeof(data->'visuals') = 'array';`,
+    ] : []),
+    "",
+    "-- Logo Ciri utuh (yang lama terpotong di huruf terakhir), hanya bila logonya masih logo bawaan",
+    `update public.projects set data = jsonb_set(data, '{mascot}', ${j(pn.mascot)}) where id = ${id} and data->'mascot' = ${j(po.mascot)};`,
+    "",
+    "-- Deretan klien di bawah hero: nama Ciri memakai huruf barunya (hanya bila masih huruf bawaan)",
+    `update public.sections set data = jsonb_set(data, '{clients,items}', (select coalesce(jsonb_agg(case when x->>'font' = ${s(CIRI_CLIENT_FONT_BEFORE_0212)} and x->>'projectSlug' in ('ciri', (select slug from public.projects where id = ${id})) then jsonb_set(x, '{font}', ${j(c.sections.hero.clients.items.find((x) => x.projectSlug === "ciri")?.font ?? "ciri")}) else x end order by ord), '[]'::jsonb) from jsonb_array_elements(data->'clients'->'items') with ordinality as t(x, ord))) where key = 'hero' and jsonb_typeof(data->'clients'->'items') = 'array';`,
+    "",
+    "-- Studi kasus Ciri (dicari lewat proyeknya): judul kecil, peran, sampul, lalu setiap blok yang masih bawaan",
+    `update public.case_studies set data = jsonb_set(data, '{subtitle}', ${j(cn.subtitle)}) where ${study} and data->'subtitle' = ${j(co.subtitle)};`,
+    `update public.case_studies set data = jsonb_set(data, '{labels,role}', ${j(cn.labels.role)}) where ${study} and data->'labels'->'role' = ${j(co.labels.role)};`,
+    `update public.case_studies set data = jsonb_set(data, '{cover}', ${j(cn.cover)}) where ${study} and data->'cover' = ${j(co.cover)};`,
+    `update public.case_studies c set data = jsonb_set(c.data, '{blocks}', (select coalesce(jsonb_agg(case ${blocks.join(" ")} else b.value end order by b.n), '[]'::jsonb) from jsonb_array_elements(c.data->'blocks') with ordinality as b(value, n))) where c.${study} and jsonb_typeof(c.data->'blocks') = 'array';`,
+    "",
+    "insert into public.content_updates (version) values ('0.2.12');",
+    "raise notice 'Pembaruan isi v0.2.12 selesai.';",
+    "end",
+    "$upd$;",
+    "",
+  ].join("\n");
 }

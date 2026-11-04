@@ -503,20 +503,20 @@ export const SEED_CASES: CaseStudy[] = [
     projectSlug: "ciri",
     published: true,
     subtitle: {
-      id: "Arah visual dan prototipe toko online untuk koleksi perhiasan perak AG925, kini dalam review klien.",
-      en: "Visual direction and an online store prototype for an AG925 sterling-silver collection, now in client review.",
+      id: "Situs toko untuk koleksi perhiasan perak AG925, tempat pembeli meninggalkan tandanya sendiri di kartu ucapan. Kini dalam review klien.",
+      en: "A storefront for an AG925 sterling-silver collection where shoppers leave a mark of their own on the thank-you card. Now in client review.",
     },
     labels: {
       client: "Ciri",
       field: { id: "Perhiasan perak", en: "Silver jewellery" },
-      role: { id: "Arah visual, desain UI, prototipe", en: "Visual direction, UI design, prototype" },
+      role: { id: "Arah visual, desain situs, front-end", en: "Visual direction, site design, front-end" },
       year: "2026",
     },
     cover: {
-      url: "/media/seed/ciri-home.webp",
+      url: "/media/seed/ciri-beranda.webp",
       alt: {
-        id: "Beranda Ciri: tangan memakai cincin perak, dengan judul Your Personal Mark",
-        en: "Ciri homepage: a hand wearing a silver ring under the headline Your Personal Mark",
+        id: "Beranda Ciri: tangan memakai cincin perak, dengan judul Wear Your Personal Mark in Silver",
+        en: "Ciri homepage: a hand wearing a silver ring under the headline Wear Your Personal Mark in Silver",
       },
       width: 1600,
       height: 1000,
@@ -527,31 +527,31 @@ export const SEED_CASES: CaseStudy[] = [
         title: { id: "Situasinya", en: "The situation" },
         paragraphs: [
           {
-            id: "Ciri menjual koleksi perhiasan perak sterling AG925: 13 perhiasan dalam 8 bentuk, terdiri dari cincin, anting, dan kalung. Perhiasan perak dijual lewat fotonya, jadi tampilan toko harus memberi ruang untuk kilau logamnya, bukan bersaing dengannya.",
-            en: "Ciri sells an AG925 sterling-silver collection: 13 pieces in 8 forms across rings, earrings and necklaces. Silver jewellery sells through its photos, so the store has to give the metal room to shine, not compete with it.",
+            id: "Ciri menjual koleksi perhiasan perak sterling AG925: 13 perhiasan dalam 8 bentuk, terdiri dari cincin, kalung, dan anting. Dalam bahasa Indonesia, ciri berarti tanda kecil yang membuat sesuatu dikenali sebagai dirinya. Situsnya harus menjual perak itu sekaligus gagasan tersebut.",
+            en: "Ciri sells an AG925 sterling-silver collection: 13 pieces in 8 forms across rings, necklaces and earrings. In Indonesian, ciri means a trait, the small mark that makes something recognisably itself. The site had to sell the silver and that idea at the same time.",
           },
           {
-            id: "Sebelum toko dibangun, klien perlu melihat dan mencobanya lebih dulu. Saya menyerahkan satu file preview berisi 35 halaman yang bisa diklik, masing-masing dalam versi desktop dan HP. Klien sedang meninjaunya sekarang, dan tokonya belum dibangun.",
-            en: "Before anything gets built, the client needs to see and try the store. I handed over a single preview file with 35 clickable pages, each in a desktop and a phone version. The client is reviewing it now, and the store itself hasn't been built yet.",
+            id: "Versi pertamanya adalah prototipe untuk menyepakati arah visual. Versi ini sudah menjadi situs toko yang utuh dalam satu file: beranda, toko, halaman produk, cerita merek, checkout, dan konfirmasi pesanan, semuanya bisa dicoba di desktop dan HP. Pembayarannya belum tersambung, dan klien sedang meninjaunya sebelum tayang.",
+            en: "The first version was a prototype to agree on the visual direction. This one is a complete storefront in a single file: homepage, shop, product pages, brand story, checkout and order confirmation, all of it ready to try on desktop and phone. Payments aren't connected yet, and the client is reviewing it before launch.",
           },
         ],
       },
       {
         type: "features",
-        title: { id: "Toko yang bisa diklik", en: "A store you can click through" },
+        title: { id: "Toko yang bisa dicoba", en: "A store you can try" },
         items: [
           {
-            title: { id: "Arah visual tanpa warna aksen", en: "A visual direction with no accent colour" },
+            title: { id: "Perak yang bergerak di beranda", en: "Silver that moves on the homepage" },
             text: {
-              id: "Huruf grafit dan abu perak, tanpa warna aksen sama sekali, supaya foto perhiasan yang paling menonjol. Judul memakai Cormorant yang klasik, sedangkan teks memakai Inter Tight yang ringkas dan mudah dibaca di HP.",
-              en: "Graphite type and silver greys with no accent colour at all, so the jewellery photos stand out most. Headings use the classic Cormorant, while body text uses the compact Inter Tight, which reads easily on a phone.",
+              id: "Foto di beranda digambar lewat shader WebGL kecil: pergantian slide mengalir seperti perak cair, dan permukaannya beriak mengikuti kursor. Setiap slide menandai perhiasan yang dipakai beserta kodenya. Di browser tanpa WebGL, fotonya tetap tampil sebagai gambar biasa.",
+              en: "The homepage photos are drawn through a small WebGL shader: slides pour into each other like molten silver, and the surface ripples under the pointer. Each slide tags the piece being worn with its code. In a browser without WebGL, the photos still show as plain images.",
             },
             images: [
               {
-                url: "/media/seed/ciri-hp-home.webp",
+                url: "/media/seed/ciri-hp-beranda.webp",
                 alt: {
-                  id: "Beranda Ciri di HP: cincin perak di jari dengan judul Your Personal Mark dan tombol Shop Now",
-                  en: "Ciri homepage on a phone: a silver ring on a finger with the headline Your Personal Mark and a Shop Now button",
+                  id: "Beranda Ciri di HP: tangan memakai Hollow Ring dengan judul Wear Your Personal Mark in Silver",
+                  en: "Ciri homepage on a phone: a hand wearing the Hollow Ring under the headline Wear Your Personal Mark in Silver",
                 },
                 width: 600,
                 height: 1298,
@@ -559,69 +559,160 @@ export const SEED_CASES: CaseStudy[] = [
             ],
           },
           {
-            title: { id: "Koleksi dan kategori", en: "Collection and categories" },
+            title: { id: "Delapan bentuk", en: "Eight forms" },
             text: {
-              id: "Halaman koleksi menampilkan ketiga belas perhiasan dalam satu grid. Pembeli bisa memilih kategori cincin, kalung, atau anting, menyaring menurut ketersediaan dan bentuk, lalu mengurutkan hasilnya.",
-              en: "The collection page lays out all 13 pieces in one grid. Shoppers can pick rings, necklaces or earrings, filter by availability and form, then sort the results.",
+              id: "Setiap perhiasan dinamai menurut bentuknya: hole, hollow, liquid, rib, drop, wing, drip, dan melt. Saat satu bentuk disorot, perhiasan dalam bentuk itu muncul di sebelahnya, dan setiap baris mencantumkan kode cincin, kalung, atau antingnya.",
+              en: "Every piece is named for the shape it takes: hole, hollow, liquid, rib, drop, wing, drip and melt. Hovering a form brings up the pieces made in it, and each row lists the codes of its ring, necklace or earring.",
             },
             images: [
               {
-                url: "/media/seed/ciri-katalog.webp",
+                url: "/media/seed/ciri-bentuk.webp",
                 alt: {
-                  id: "Halaman koleksi Ciri: pilihan kategori, filter ketersediaan dan bentuk, dan grid cincin perak",
-                  en: "Ciri collection page: category choices, availability and form filters, and a grid of silver rings",
+                  id: "Daftar Eight Forms: baris Liquid disorot, dengan cincin, kalung, dan anting Liquid di sebelahnya",
+                  en: "The Eight Forms list: the Liquid row highlighted, with the Liquid ring, necklace and earring beside it",
                 },
                 width: 1600,
                 height: 1000,
+              },
+            ],
+          },
+          {
+            title: { id: "Toko menurut kategori dan bentuk", en: "A shop by category and form" },
+            text: {
+              id: "Halaman toko memuat ketiga belas perhiasan. Pembeli bisa memilih cincin, kalung, atau anting, menyaring menurut bentuk, lalu mengurutkan menurut harga; jumlah perhiasan di setiap kategori langsung terlihat.",
+              en: "The shop holds all thirteen pieces. Shoppers pick rings, necklaces or earrings, filter by form, then sort by price; each category shows how many pieces it holds.",
+            },
+            images: [
+              {
+                url: "/media/seed/ciri-toko.webp",
+                alt: {
+                  id: "Halaman toko All Pieces: kategori dengan jumlahnya, pilihan bentuk, urutan, dan grid perhiasan",
+                  en: "The All Pieces shop page: categories with their counts, form choices, sorting and a grid of pieces",
+                },
+                width: 1600,
+                height: 1000,
+              },
+              {
+                url: "/media/seed/ciri-hp-toko.webp",
+                alt: {
+                  id: "Halaman toko di HP: judul All Pieces, kategori, urutan, dan pilihan bentuk",
+                  en: "The shop page on a phone: the All Pieces headline, categories, sorting and form choices",
+                },
+                width: 600,
+                height: 1298,
               },
             ],
           },
           {
             title: { id: "Halaman produk dan tas belanja", en: "Product pages and the bag" },
             text: {
-              id: "Setiap perhiasan punya halaman sendiri dengan foto, detail produk, dan catatan perawatan perak. Tas belanja terbuka dari samping, jadi pembeli bisa menambah barang tanpa meninggalkan halaman.",
-              en: "Each piece has its own page with photos, product details and silver care notes. The bag slides open from the side, so shoppers can add items without leaving the page.",
+              id: "Setiap perhiasan punya halaman sendiri dengan foto, harga, dan detail bahan. Anting bisa dibeli sepasang atau satuan, cincin dengan pilihan ukuran, kecuali dua cincin yang bisa disesuaikan sendiri. Tas belanja terbuka dari samping, jadi pembeli bisa menambah barang tanpa meninggalkan halaman.",
+              en: "Each piece has its own page with photos, price and material details. Earrings come as a pair or a single, rings in a choice of sizes, except two that adjust to fit. The bag slides open from the side, so shoppers can add pieces without leaving the page.",
             },
             images: [
               {
-                url: "/media/seed/ciri-produk.webp",
+                url: "/media/seed/ciri-anting.webp",
                 alt: {
-                  id: "Halaman produk Hollow Ring versi desktop",
-                  en: "Hollow Ring product page on desktop",
+                  id: "Halaman produk Hole Earring: foto anting, harga, pilihan sepasang atau satuan, dan tombol Add to Bag",
+                  en: "The Hole Earring product page: the earring, its price, a pair or single choice and the Add to Bag button",
                 },
                 width: 1600,
                 height: 1000,
               },
               {
-                url: "/media/seed/ciri-hp.webp",
+                url: "/media/seed/ciri-hp-anting.webp",
                 alt: {
-                  id: "Halaman produk Hollow Ring versi HP",
-                  en: "Hollow Ring product page on a phone",
+                  id: "Halaman produk Hole Earring di HP",
+                  en: "The Hole Earring product page on a phone",
                 },
                 width: 600,
                 height: 1298,
               },
+              {
+                url: "/media/seed/ciri-tas.webp",
+                alt: {
+                  id: "Tas belanja terbuka dari samping: Hole Earring, kartu ucapan bertanda pembeli, dan tombol Checkout",
+                  en: "The bag open at the side: the Hole Earring, the thank-you card with the shopper's mark and the Checkout button",
+                },
+                width: 1600,
+                height: 1000,
+              },
             ],
           },
           {
-            title: { id: "Journal dan alur belanja lengkap", en: "Journal and the full shopping flow" },
+            title: { id: "Tinggalkan tandamu", en: "Leave your mark" },
             text: {
-              id: "Delapan artikel journal mengisi sisi editorial toko. Halaman tentang, kontak, bantuan, akun, checkout, dan konfirmasi pesanan juga dirancang, jadi klien bisa mencoba belanja dari beranda sampai pesanan selesai.",
-              en: "Eight journal articles carry the editorial side of the store. The about, contact, help, account, checkout and order confirmation pages are designed too, so the client can try a purchase from the homepage to the final confirmation.",
+              id: "Pembeli menggambar tanda pribadinya di pelat perak dengan mouse, jari, atau stylus. Garisnya mengilap seperti logam, dan bila gerakan melambat di ujung garis, peraknya menetes. Tombol Put it on my card memindahkan tanda itu ke kartu ucapan yang ikut di kotak pesanan.",
+              en: "Shoppers draw a mark of their own on a silver plate with a mouse, a finger or a stylus. The line shines like metal, and slowing down at the end of a stroke makes the silver drip. Put it on my card moves the mark onto the thank-you card that comes in the box.",
             },
-            images: [],
+            images: [
+              {
+                url: "/media/seed/ciri-tanda.webp",
+                alt: {
+                  id: "Bagian Leave Your Mark: tanda yang digambar di pelat perak, dengan tombol Clear, Undo, dan Put it on my card",
+                  en: "The Leave Your Mark section: a mark drawn on the silver plate, with Clear, Undo and Put it on my card buttons",
+                },
+                width: 1600,
+                height: 1000,
+              },
+            ],
+          },
+          {
+            title: { id: "Checkout sampai pesanan selesai", en: "Checkout to a finished order" },
+            text: {
+              id: "Checkout meminta kontak, alamat dengan provinsi dan kode pos, pengiriman (reguler, ekspres, atau di hari yang sama untuk Jakarta), dan cara bayar: QRIS, transfer ke virtual account, atau kartu. Ringkasannya menampilkan kartu ucapan bertanda pembeli. Setelah pesanan dibuat, halaman terima kasih menyapa pembeli dengan namanya dan menjelaskan langkah berikutnya.",
+              en: "Checkout asks for contact details, an address with province and postcode, delivery (regular, express, or same day in Jakarta) and a way to pay: QRIS, a virtual account transfer or a card. The summary shows the thank-you card with the shopper's mark. Once the order is placed, the thank-you page greets the shopper by name and explains what happens next.",
+            },
+            images: [
+              {
+                url: "/media/seed/ciri-checkout.webp",
+                alt: {
+                  id: "Halaman checkout Almost Yours: kontak, alamat pengiriman, dan ringkasan pesanan dengan kartu ucapan",
+                  en: "The Almost Yours checkout page: contact, delivery address and an order summary with the thank-you card",
+                },
+                width: 1600,
+                height: 1000,
+              },
+              {
+                url: "/media/seed/ciri-pesanan.webp",
+                alt: {
+                  id: "Halaman terima kasih: nomor pesanan, tiga langkah berikutnya, dan kartu ucapan bertanda pembeli",
+                  en: "The thank-you page: the order number, the three next steps and the thank-you card with the shopper's mark",
+                },
+                width: 1600,
+                height: 1000,
+              },
+            ],
+          },
+          {
+            title: { id: "Cerita merek dan perawatan", en: "The brand story and care" },
+            text: {
+              id: "Halaman cerita menjelaskan arti nama Ciri dan perjalanan setiap perhiasan: digambar, dicetak dalam perak AG925, dipoles tangan di Indonesia, lalu dipakai. Di bawahnya ada cara memakai dan menyimpan perak sehari-hari.",
+              en: "The story page explains what the name Ciri means and each piece's journey: drawn, cast in AG925 silver, polished by hand in Indonesia, then worn. Below it are notes on wearing and storing silver day to day.",
+            },
+            images: [
+              {
+                url: "/media/seed/ciri-cerita.webp",
+                alt: {
+                  id: "Halaman cerita Ciri: permukaan perak cair dengan judul Personal Marks",
+                  en: "The Ciri story page: a liquid silver surface under the headline Personal Marks",
+                },
+                width: 1600,
+                height: 1000,
+              },
+            ],
           },
         ],
       },
       {
         type: "flow",
-        title: { id: "Dari arah visual ke toko", en: "From visual direction to store" },
+        title: { id: "Dari bentuk ke kotak pesanan", en: "From a form to the box" },
         steps: [
-          { id: "Menetapkan arah visual: grafit, abu perak, tanpa aksen", en: "Set the visual direction: graphite, silver greys, no accent" },
-          { id: "Merancang 35 halaman dalam versi desktop dan HP", en: "Design 35 pages in desktop and phone versions" },
-          { id: "Menyatukannya dalam satu file preview yang bisa diklik", en: "Put them together in one clickable preview file" },
-          { id: "Klien mencoba alur belanja dan memberi catatan", en: "The client clicks through the shopping flow and leaves notes" },
-          { id: "Toko dibangun setelah desainnya disetujui", en: "The store gets built once the design is approved" },
+          { id: "Memilih bentuk atau kategori", en: "Choose a form or a category" },
+          { id: "Membuka perhiasan, memilih sepasang, satuan, atau ukuran", en: "Open a piece and choose a pair, a single or a size" },
+          { id: "Menggambar tanda di pelat perak", en: "Draw a mark on the silver plate" },
+          { id: "Checkout: kontak, alamat, pengiriman, pembayaran", en: "Check out: contact, address, delivery, payment" },
+          { id: "Pesanan selesai, tandanya dicetak di kartu ucapan", en: "Order placed, the mark printed on the thank-you card" },
         ],
       },
       {
@@ -629,31 +720,31 @@ export const SEED_CASES: CaseStudy[] = [
         title: { id: "Keputusan yang melindungi bisnis", en: "Decisions that protect the business" },
         items: [
           {
-            title: { id: "Prototipe sebelum kode", en: "Prototype before code" },
+            title: { id: "Pribadi tanpa mengubah produk", en: "Personal without changing the product" },
             text: {
-              id: "Klien bisa mengklik seluruh toko sebelum satu baris kode toko ditulis. Mengubah desain di tahap ini jauh lebih murah dan cepat daripada mengubah toko yang sudah jadi.",
-              en: "The client can click through the whole store before a single line of store code is written. Changing a design at this stage is far cheaper and quicker than changing a finished store.",
+              id: "Ukiran nama butuh waktu dan bisa salah. Tanda pembeli dicetak di kartu ucapan, bukan di peraknya, jadi setiap pesanan terasa pribadi tanpa menambah waktu produksi atau risiko salah ukir.",
+              en: "Engraving takes time and can go wrong. The shopper's mark is printed on the card, not on the silver, so every order feels personal without adding production time or the risk of a wrong engraving.",
             },
           },
           {
             title: { id: "Perak yang menjadi warnanya", en: "The silver is the colour" },
             text: {
-              id: "Tanpa warna aksen, tombol dan tautan tidak berebut perhatian dengan produk. Satu-satunya kilau di halaman datang dari foto perak itu sendiri.",
-              en: "With no accent colour, buttons and links don't compete with the products for attention. The only shine on the page comes from the silver in the photos.",
+              id: "Tanpa warna aksen, tombol dan tautan tidak berebut perhatian dengan produk. Satu-satunya kilau di halaman datang dari perak itu sendiri.",
+              en: "With no accent colour, buttons and links don't compete with the products for attention. The only shine on the page comes from the silver itself.",
             },
           },
           {
-            title: { id: "Setiap halaman punya versi HP", en: "Every page has a phone version" },
+            title: { id: "Tanpa biaya kejutan", en: "No surprise costs" },
             text: {
-              id: "Ke-35 halaman dirancang untuk desktop dan HP sekaligus, jadi klien menilai keduanya sebelum toko dibangun, bukan menemukan masalah tampilan HP setelah tayang.",
-              en: "All 35 pages are designed for desktop and phone together, so the client judges both before the build instead of finding phone layout problems after launch.",
+              id: "Harga sepasang dan satuan tampil di halaman produk, sedangkan ongkos kirim dan totalnya tampil sebelum tombol pesan. Pembeli tahu jumlah yang dibayar sebelum memutuskan.",
+              en: "Pair and single prices show on the product page, while shipping and the total show before the order button. Shoppers know what they'll pay before they decide.",
             },
           },
           {
-            title: { id: "Catatan perawatan di halaman produk", en: "Care notes on the product page" },
+            title: { id: "Jalan di HP dan laptop", en: "Works on phone and laptop" },
             text: {
-              id: "Perak bisa menghitam jika salah dirawat. Catatan perawatan ditaruh di halaman produk, supaya pembeli tahu cara menjaganya sejak sebelum membeli.",
-              en: "Silver can tarnish if it's cared for the wrong way. Care notes sit on the product page, so shoppers know how to look after a piece before they buy it.",
+              id: "Pelat tanda menerima mouse, jari, dan stylus, dan foto beranda kembali ke gambar biasa bila WebGL tidak tersedia, supaya pembeli di HP maupun laptop bisa menyelesaikan pesanan.",
+              en: "The mark plate takes a mouse, a finger or a stylus, and the homepage photos fall back to plain images when WebGL isn't available, so shoppers on a phone or a laptop can both finish their order.",
             },
           },
         ],
@@ -663,13 +754,13 @@ export const SEED_CASES: CaseStudy[] = [
         title: { id: "Dalam angka", en: "By the numbers" },
         facts: [
           { value: "13", label: { id: "perhiasan dalam 8 bentuk", en: "pieces in 8 forms" } },
-          { value: "35", label: { id: "halaman, desktop dan HP", en: "pages, desktop and phone" } },
-          { value: "8", label: { id: "artikel journal", en: "journal articles" } },
+          { value: "3", label: { id: "kategori: cincin, kalung, anting", en: "categories: rings, necklaces, earrings" } },
+          { value: "6", label: { id: "jenis halaman, dari beranda sampai pesanan selesai", en: "kinds of page, from the homepage to a finished order" } },
           { value: "0", label: { id: "warna aksen, perak yang bicara", en: "accent colours, the silver speaks" } },
         ],
         stack: {
-          id: "Dibangun dengan HTML, CSS, dan JavaScript dalam satu file preview, memakai huruf Cormorant dan Inter Tight.",
-          en: "Built with HTML, CSS and JavaScript as a single preview file, set in Cormorant and Inter Tight.",
+          id: "Dibangun dengan HTML, CSS, dan JavaScript dalam satu file, dengan GSAP dan Lenis untuk gerak gulir, shader WebGL untuk foto beranda, serta huruf Alte Haas Grotesk dan Geist Mono.",
+          en: "Built with HTML, CSS and JavaScript in a single file, with GSAP and Lenis for scroll motion, a WebGL shader for the homepage photos, and set in Alte Haas Grotesk and Geist Mono.",
         },
       },
     ],

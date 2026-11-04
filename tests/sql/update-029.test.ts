@@ -3,9 +3,13 @@ import { PGlite } from "@electric-sql/pglite";
 import { beforeAll, describe, expect, it } from "vitest";
 import { contentToRows } from "@/lib/content/rows";
 import { ContentSchema, ProjectSchema } from "@/lib/content/schema";
-import { seed } from "@/lib/content/seed";
+import { contentBefore0212 } from "@/lib/content/ciri-before-0212";
+import { seed as current } from "@/lib/content/seed";
 import { buildUpdateSql029 } from "@/lib/content/update-sql";
 import { VISUALS_BEFORE_029 } from "@/lib/content/visuals-before-029";
+
+/** The seed as this update knew it: Ciri before its new site (v0.2.12 changes it later). */
+const seed = contentBefore0212(current);
 
 /* A database running v0.2.8 has eleven rooms with still screens and no mascots. v0.2.9 must give every room its
    mascot, swap each screen that still shows its shipped image for the live one (still + video), and leave screens

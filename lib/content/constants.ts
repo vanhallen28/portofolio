@@ -1,6 +1,6 @@
 export const LANGS = ["id", "en"] as const;
 export const LINE_KEYS = ["found", "sell", "serve", "run"] as const;
-export const FONT_KEYS = ["schibsted", "marcellus", "jakarta", "archivo", "unbounded", "cormorant", "host", "quicksand", "lora", "vale", "loma", "rua"] as const;
+export const FONT_KEYS = ["schibsted", "marcellus", "jakarta", "archivo", "unbounded", "cormorant", "host", "quicksand", "lora", "vale", "loma", "rua", "ciri"] as const;
 export const SECTION_KEYS = ["hero", "works", "services", "process", "testimonials", "about", "faq", "contact"] as const;
 export const LAYOUTS = ["desk-phone", "back-desk", "two-phones", "brand-card"] as const;
 export const PATTERNS = ["none", "checker", "glow"] as const;

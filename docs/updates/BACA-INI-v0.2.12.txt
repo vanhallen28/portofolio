@@ -1,0 +1,76 @@
+PORTOFOLIO v0.2.12 — BACA INI DULU
+================================================================
+
+Ciri versi situs baru dari klien.
+
+- Preview Ciri diganti dengan file terbaru dari klien (sama persis):
+  situs toko utuh dengan bagian "Leave your mark".
+- Video layar desktop dan HP di ruang Ciri direkam ulang.
+- Huruf judul Ciri kini Alte Haas Grotesk, huruf situs Ciri, di
+  judul ruang, studi kasus, dan deretan klien.
+- Teks, angka, dan keterangan layar ruang Ciri diperbarui, dan logo
+  Ciri kini utuh (yang lama terpotong di huruf terakhir).
+- Studi kasus Ciri ditulis ulang (ID/EN) dengan 12 gambar baru.
+
+Yang berubah: public/preview/ciri.html, empat file video/gambar di
+public/media/seed/live (ciri-desk, ciri-phone), 12 gambar baru
+public/media/seed/ciri-*.webp, logo public/media/seed/mascot/ciri.svg,
+huruf app/fonts/ciri-display.woff2, isi bawaan (seed), SQL pembaruan,
+uji, CHANGELOG, versi paket. Tidak ada file yang dihapus (gambar Ciri
+lama tetap ada), tidak ada migrasi struktur database.
+
+
+1. PASANG (salin-tempel di Terminal)
+----------------------------------------------------------------
+
+  cd ~/Documents/Virgiawan/PROJECT/portofolio
+  unzip -o ~/Downloads/portofolio-v0.2.12.zip -d .
+  npm install
+  npm run build
+  git add -A
+  git commit -m "v0.2.12: Ciri versi situs baru"
+  git push
+
+Push berhasil bila diakhiri "main -> main" dan tidak ada baris
+"error:" atau "fatal:". Cek dengan: git status
+
+
+2. SUPABASE: ISI CIRI (sekali saja)
+----------------------------------------------------------------
+
+a. Tunggu deploy v0.2.12 di Vercel berstatus Ready.
+
+b. Di Terminal:
+
+     pbcopy < supabase/updates/v0.2.12.sql
+
+c. Supabase → SQL Editor → New query, tempel (Cmd+V), Run.
+   Hasilnya "Success. No rows returned" (itu normal).
+
+   SQL ini mengganti huruf judul, teks, angka, keterangan layar,
+   logo, nama di deretan klien, dan studi kasus Ciri HANYA bila
+   isinya masih sama persis dengan bawaan v0.2.11. Bagian yang sudah
+   Anda ubah sendiri di admin tidak disentuh. Urutan ruang, jalur,
+   warna, dan status juga tidak disentuh. Menjalankannya lagi tidak
+   mengubah apa pun.
+
+d. Buka /admin → Pengaturan situs → Simpan (tanpa mengubah apa pun),
+   lalu buka beranda dan tekan Cmd+Shift+R.
+
+
+3. MOHON DICEK SETELAH DEPLOY
+----------------------------------------------------------------
+
+[ ] Beranda → ruang Ciri: judul "CIRI" memakai huruf baru, teks
+    menyebut situs toko dan tanda di kartu ucapan, angka 13 / 6 / 0.
+[ ] Logo Ciri di bawah layar terbaca utuh "Ciri".
+[ ] Layar desktop memutar video tanda yang digambar; layar HP
+    menggulir beranda Ciri.
+[ ] Deretan "Proyek untuk": CIRI memakai huruf baru.
+[ ] Lihat studi kasus Ciri: judul kecil baru, 12 gambar baru.
+[ ] Preview proyek Ciri: bisa memilih perhiasan, menggambar tanda,
+    checkout, sampai halaman "Thank you".
+
+Bila ada bagian Ciri yang masih versi lama, kemungkinan bagian itu
+pernah Anda ubah di admin; ganti manual di Admin → Proyek → Ciri,
+atau tombol "Studi kasus" di baris Ciri pada daftar proyek.

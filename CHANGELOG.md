@@ -3,6 +3,17 @@
 Format: setiap rilis dikirim sebagai `portofolio-vX.Y.Z.zip`. Nomor versi naik setiap kali, jadi zip tidak pernah saling tumpuk.
 Petunjuk pasang per versi: `docs/updates/BACA-INI-vX.Y.Z.txt`.
 
+## v0.2.12 — 4 November 2026
+
+Ciri versi situs baru dari klien.
+
+- **Preview Ciri** diganti dengan file terbaru dari klien, sama persis byte demi byte (`public/preview/ciri.html`). Isinya kini situs toko utuh: beranda, toko, halaman produk, cerita merek, checkout, dan halaman pesanan selesai, dengan bagian *Leave your mark* untuk menggambar tanda sendiri.
+- **Video layar Ciri** direkam ulang dari file baru. Layar desktop memperlihatkan tanda yang digambar di pelat perak; layar HP menggulir beranda. Nama filenya sama.
+- **Huruf judul Ciri** kini Alte Haas Grotesk, huruf situs Ciri (`app/fonts/ciri-display.woff2`), di judul ruang, studi kasus, dan deretan klien. Pilihannya juga muncul di admin.
+- **Ruang Ciri**: teks dan angka baru (13 perhiasan dalam 8 bentuk, 6 jenis halaman, 0 warna aksen), keterangan layar sesuai judul baru, dan logo Ciri yang utuh (logo lama terpotong di huruf terakhir).
+- **Studi kasus Ciri** ditulis ulang dalam dua bahasa, dengan 12 gambar baru dari situsnya: beranda, delapan bentuk, toko, halaman produk dan tas belanja, *Leave your mark*, checkout, halaman terima kasih, dan cerita merek. Data pembeli di gambar adalah contoh.
+- `supabase/updates/v0.2.12.sql`: mengganti bagian Ciri di database **hanya bila masih sama persis dengan bawaan v0.2.11**. Bagian yang sudah Anda ubah di admin tidak disentuh, begitu juga urutan ruang, jalur, warna, dan status. File SQL versi sebelumnya tidak berubah.
+
 ## v0.2.11 — 4 November 2026
 
 Statistik kunjungan, kode iklan, dan performa web di admin.
