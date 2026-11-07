@@ -3,9 +3,14 @@ import { PGlite } from "@electric-sql/pglite";
 import { beforeAll, describe, expect, it } from "vitest";
 import { contentToRows } from "@/lib/content/rows";
 import { CaseStudySchema, ContentSchema, ProjectSchema } from "@/lib/content/schema";
-import { seed } from "@/lib/content/seed";
+import { contentBefore0212 } from "@/lib/content/ciri-before-0212";
+import { contentBefore0213 } from "@/lib/content/ranum-before-0213";
+import { seed as current } from "@/lib/content/seed";
 import { buildUpdateSql027, buildUpdateSql028, TEXT_BEFORE_027, TEXT_BEFORE_028 } from "@/lib/content/update-sql";
 import { projectBefore029 } from "@/lib/content/visuals-before-029";
+
+/** The seed as this update knew it: before Ciri's new site (v0.2.12) and before Ranum (v0.2.13). */
+const seed = contentBefore0212(contentBefore0213(current));
 
 /* A database running v0.2.7 has ten rooms and three sentences that count them. The v0.2.8 update must add RUA
    with its case study, put its wordmark at the end of the client strip, change the counts while they still read

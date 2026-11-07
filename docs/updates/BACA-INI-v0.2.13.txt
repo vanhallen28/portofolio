@@ -1,0 +1,82 @@
+PORTOFOLIO v0.2.13 — BACA INI DULU
+================================================================
+
+Ruang baru: Ranum (ruang 12).
+
+- Preview Ranum dari file yang Anda kirim (sama persis).
+- Video layar desktop dan HP, maskot tube Forest Calm, dinding
+  warna pasir, huruf judul Playfair Display.
+- Efek layar baru "Terik" (bisa dipilih untuk ruang lain di admin).
+- Studi kasus Ranum dalam dua bahasa dengan 14 gambar.
+- Denah: stasiun ke-12 di sisi kanan.
+- Kalimat "sebelas karya" menjadi "dua belas karya".
+
+Yang berubah: public/preview/ranum.html, empat file video/gambar di
+public/media/seed/live (ranum-desk, ranum-phone), 14 gambar baru
+public/media/seed/ranum-*.webp, maskot
+public/media/seed/mascot/ranum.webp, huruf
+app/fonts/ranum-display.woff2, isi bawaan (seed), denah, efek layar,
+SQL pembaruan, uji, CHANGELOG, versi paket. Tidak ada file yang
+dihapus, tidak ada migrasi struktur database.
+
+
+1. PASANG (salin-tempel di Terminal)
+----------------------------------------------------------------
+
+  cd ~/Documents/Virgiawan/PROJECT/portofolio
+  unzip -o ~/Downloads/portofolio-v0.2.13.zip -d .
+  npm install
+  npm run build
+  git add -A
+  git commit -m "v0.2.13: ruang Ranum"
+  git push
+
+Push berhasil bila diakhiri "main -> main" dan tidak ada baris
+"error:" atau "fatal:". Cek dengan: git status
+
+
+2. SUPABASE: RUANG RANUM (sekali saja)
+----------------------------------------------------------------
+
+a. Tunggu deploy v0.2.13 di Vercel berstatus Ready.
+
+b. Bila SQL v0.2.12 (Ciri) belum Anda jalankan, jalankan dulu
+   seperti di BACA-INI-v0.2.12.txt.
+
+c. Di Terminal:
+
+     pbcopy < supabase/updates/v0.2.13.sql
+
+d. Supabase → SQL Editor → New query, tempel (Cmd+V), Run.
+   Hasilnya "Success. No rows returned" (itu normal).
+
+   SQL ini menambah ruang Ranum di BELAKANG ruang terakhir Anda,
+   studi kasusnya, dan nama Ranum di ujung deretan "Proyek untuk"
+   (dilewati bila deretannya sudah berisi 12 nama). Urutan ruang yang
+   sudah Anda atur tidak disentuh. Kalimat "sebelas karya" hanya
+   diganti bila belum pernah Anda ubah. Menjalankannya lagi tidak
+   mengubah apa pun.
+
+e. Buka /admin → Pengaturan situs → Simpan (tanpa mengubah apa pun),
+   lalu buka beranda dan tekan Cmd+Shift+R.
+
+Mau Ranum di posisi lain? Atur urutannya di Admin → Proyek seperti
+biasa.
+
+
+3. MOHON DICEK SETELAH DEPLOY
+----------------------------------------------------------------
+
+[ ] Beranda → ruang Ranum: dinding pasir, judul "Ranum" berhuruf
+    serif, layar muncul dari cahaya terang lalu memutar video.
+[ ] Tube Forest Calm melayang di bawah layar.
+[ ] Denah di hero: stasiun Ranum di sisi kanan (jalur Menjual).
+[ ] Deretan "Proyek untuk": Ranum di ujung.
+[ ] Lihat studi kasus Ranum (ID dan EN): 14 gambar tampil.
+[ ] Preview proyek Ranum: loader, empat terrain, pencari shade,
+    toko, checkout sampai "Thank you".
+
+Bila hero atau bagian Karya masih menulis "sebelas", berarti
+kalimatnya pernah Anda ubah di admin; ganti angkanya sendiri di
+Admin → Hero & denah dan Admin → Karya (teks). Deskripsi SEO ada di
+Admin → Pengaturan situs.

@@ -305,6 +305,14 @@ const SCREEN_EFFECTS: Record<ScreenEffect, (s: ScreenSet, tl: gsap.core.Timeline
       { yPercent: 0, rotation: 0, opacity: 1, duration: 0.8, ease: "back.out(2.8)", stagger: 0.1 }, 0.3);
     return [...drift(desks, { py: 16 }), ...drift(phones, { py: 70, rz: -3 })];
   },
+  /* Terik: the screens come out of a glare, like stepping into bright sun, and their colour settles back */
+  sun: ({ desks, phones }, tl) => {
+    if (desks.length) tl.fromTo(desks, { filter: "brightness(1.9) saturate(0.55) sepia(0.3)", y: 40, scale: 1.03 },
+      { filter: "brightness(1) saturate(1) sepia(0)", y: 0, scale: 1, duration: 1.1, ease: "power2.out", stagger: 0.12 }, 0);
+    if (phones.length) tl.fromTo(phones, { filter: "brightness(2.1) saturate(0.5) sepia(0.3)", y: 90, rotation: 3, opacity: 0 },
+      { filter: "brightness(1) saturate(1) sepia(0)", y: 0, rotation: 0, opacity: 1, duration: 0.9, ease: "power2.out", stagger: 0.1 }, 0.3);
+    return [...drift(desks, { py: 18 }), ...drift(phones, { py: 60, rz: -2 })];
+  },
 };
 
 /* ---------- Home page ---------- */

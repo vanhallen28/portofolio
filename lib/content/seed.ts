@@ -45,8 +45,8 @@ export const seedSettings: SiteSettings = {
   footer: l("Desain dan kode situs ini juga saya kerjakan sendiri.", "I designed and coded this site myself, too."),
   seoTitle: l("Virgiawan Listanto · Sistem untuk bisnis", "Virgiawan Listanto · Systems for business"),
   seoDescription: l(
-    "Portofolio Virgiawan Listanto, desainer dan pengembang produk digital di Bandung. Sebelas karya untuk bisnis nyata, dari sistem internal sampai situs merek.",
-    "Portfolio of Virgiawan Listanto, a digital product designer and developer in Bandung. Eleven projects for real businesses, from internal systems to brand sites.",
+    "Portofolio Virgiawan Listanto, desainer dan pengembang produk digital di Bandung. Dua belas karya untuk bisnis nyata, dari sistem internal sampai situs merek.",
+    "Portfolio of Virgiawan Listanto, a digital product designer and developer in Bandung. Twelve projects for real businesses, from internal systems to brand sites.",
   ),
   availability: { show: false, text: l("Menerima proyek baru", "Taking on new projects") },
   stickyCta: { show: true, text: l("Chat WhatsApp", "Chat on WhatsApp") },
@@ -82,8 +82,8 @@ export const seedSections: Sections = {
       "I build the systems that run your business: from online stores to payroll.",
     ),
     lede: l(
-      "Studio Manager di Invisual Studio. Sebelas karya di halaman ini, dari sistem internal sampai situs merek, saya rancang dan bangun dari tampilan sampai kodenya. Lima di antaranya sudah tayang dan dipakai.",
-      "Studio Manager at Invisual Studio. I designed and built the eleven projects on this page, from internal systems to brand sites, from the interface to the code. Five of them are live and in use.",
+      "Studio Manager di Invisual Studio. Dua belas karya di halaman ini, dari sistem internal sampai situs merek, saya rancang dan bangun dari tampilan sampai kodenya. Lima di antaranya sudah tayang dan dipakai.",
+      "Studio Manager at Invisual Studio. I designed and built the twelve projects on this page, from internal systems to brand sites, from the interface to the code. Five of them are live and in use.",
     ),
     ctaPrimary: l("Konsultasi gratis via WhatsApp", "Free consultation on WhatsApp"),
     ctaSecondary: l("Lihat karya", "See the work"),
@@ -114,14 +114,15 @@ export const seedSections: Sections = {
         { name: "VALE", font: "vale", uppercase: true, projectSlug: "vale" },
         { name: "Loma", font: "loma", uppercase: true, projectSlug: "loma" },
         { name: "RUA", font: "rua", uppercase: true, projectSlug: "rua" },
+        { name: "Ranum", font: "ranum", uppercase: false, projectSlug: "ranum" },
       ],
     },
   },
   works: {
     title: l("Karya", "Work"),
     intro: l(
-      "Sebelas ruang, sebelas bisnis. Setiap ruang memakai warna dan huruf milik kliennya, karena sistem yang baik tampil sebagai brand Anda, bukan template saya.",
-      "Eleven rooms, eleven businesses. Each room wears its client's own colours and type, because a good system looks like your brand, not my template.",
+      "Dua belas ruang, dua belas bisnis. Setiap ruang memakai warna dan huruf milik kliennya, karena sistem yang baik tampil sebagai brand Anda, bukan template saya.",
+      "Twelve rooms, twelve businesses. Each room wears its client's own colours and type, because a good system looks like your brand, not my template.",
     ),
     allLabel: l("Semua", "All"),
     roomLabel: l("Ruang", "Room"),
@@ -477,6 +478,28 @@ export const seedProjects: Project[] = [
     brand: null, pattern: "none",
     mascot: mascot("mascot/rua.svg", 635, 615, 210, "pop", "", "Kura-kura RUA membawa mangkuk di atas nampan", "The RUA turtle carrying a bowl on a tray"),
   }),
+  P({
+    id: "a3299df1-e863-5bc9-b6ad-881a68531433", slug: "ranum", sort: 12, name: "Ranum", mapLabel: "Ranum", mapSlot: 12,
+    titleFont: "ranum", titleStyle: { size: "xxl", uppercase: false, weight: 400, tracking: -0.02 },
+    meta: l("Merek tabir surya, 2026", "Sunblock brand, 2026"),
+    text: l("Situs toko untuk merek tabir surya dengan empat formula, masing-masing dinamai menurut tempat tujuannya: jalan kota, jalur hutan, jalan gurun, dan pantai tropis. Saat digulir, warna, bunga timbul, dan tube-nya berganti mengikuti tempat itu, dua pertanyaan memilihkan satu formula beserta alasannya, dan kotaknya terlipat dari selembar kertas.",
+      "A shop for a sunblock brand with four formulas, each named after where it is headed: city streets, forest trails, desert roads and the tropical coast. As you scroll, the colour, the pressed flower and the tube change with the place, two questions pick one formula and say why, and the box folds from a single sheet of paper."),
+    lines: ["sell", "found"],
+    theme: { wall: "#D5AE91", ink: "#26443A", muted: "#553F30", accent: "#26443A", btnBg: "#26443A", btnInk: "#F0E2C7" },
+    facts: [
+      { value: "4", label: l("formula, satu untuk setiap tempat", "formulas, one for each place") },
+      { value: "2", label: l("pertanyaan untuk menemukan formulanya", "questions to find yours") },
+      { value: "6", label: l("bunga timbul di kotak kertas", "flowers pressed into paper boxes") },
+    ],
+    status: l("Preview desain, belum tayang", "Design preview, not live yet"),
+    liveUrl: "", liveLabel: "", liveNote: null, previewUrl: "/preview/ranum.html", layout: "desk-phone", motion: "sun",
+    visuals: [
+      live("ranum", "desk", "Beranda Ranum: wajah perempuan di air, wordmark Ranum besar, dan judul Protect your skin wherever the sun takes you", "Ranum homepage: a woman's face in the water, the large Ranum wordmark and the headline Protect your skin wherever the sun takes you"),
+      live("ranum", "phone", "Beranda Ranum di HP: wajah perempuan di air, judul Protect your skin wherever the sun takes you, dan wordmark Ranum", "Ranum homepage on phone: a woman's face in the water, the headline Protect your skin wherever the sun takes you and the Ranum wordmark"),
+    ],
+    brand: null, pattern: "none",
+    mascot: mascot("mascot/ranum.webp", 432, 1024, 160, "float", "", "Tube Forest Calm dari Ranum", "A Ranum Forest Calm tube"),
+  }),
 ];
 
 export const aliyaCase: CaseStudy = {
@@ -537,6 +560,7 @@ const CASE_THEMES: Record<string, Theme> = {
   vale: { wall: "#FBEBD6", ink: "#3E2A24", muted: "#6B4A3F", accent: "#817916", btnBg: "#5B3C34", btnInk: "#FED7AB" },
   loma: { wall: "#EEEAE3", ink: "#161513", muted: "#5C5546", accent: "#865F46", btnBg: "#161513", btnInk: "#EEEAE3" },
   rua: { wall: "#FFF7C7", ink: "#5B0808", muted: "#7B0808", accent: "#BA0C0C", btnBg: "#BA0C0C", btnInk: "#FFF7C7" },
+  ranum: { wall: "#F7EFDF", ink: "#26443A", muted: "#4A5F55", accent: "#52667B", btnBg: "#26443A", btnInk: "#F0E2C7" },
 };
 
 /* Before → after, only where the figures come from the project itself. */

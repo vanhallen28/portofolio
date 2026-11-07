@@ -4,7 +4,8 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { CIRI_CASE_BEFORE_0212, CIRI_ID, CIRI_PROJECT_BEFORE_0212, contentBefore0212 } from "@/lib/content/ciri-before-0212";
 import { contentToRows } from "@/lib/content/rows";
 import { CaseStudySchema, ContentSchema, ProjectSchema } from "@/lib/content/schema";
-import { seed } from "@/lib/content/seed";
+import { contentBefore0213 } from "@/lib/content/ranum-before-0213";
+import { seed as current } from "@/lib/content/seed";
 import { buildSeedSql } from "@/lib/content/seed-sql";
 import { buildUpdateSql0212 } from "@/lib/content/update-sql";
 
@@ -22,6 +23,8 @@ const STUBS = `
 `;
 type Any = Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 
+/** The seed as this update knew it (before Ranum, v0.2.13), and as v0.2.11 shipped it. */
+const seed = contentBefore0213(current);
 /** The seed as v0.2.11 shipped it. */
 const v0211 = (): Any => structuredClone(contentBefore0212(seed)) as unknown as Any;
 
@@ -176,12 +179,12 @@ describe("a fresh database from seed.sql", () => {
     const db = await PGlite.create();
     await db.exec(STUBS);
     await db.exec(readFileSync("supabase/migrations/0001_init.sql", "utf8"));
-    await db.exec(buildSeedSql(seed));
-    expect(readFileSync("supabase/seed.sql", "utf8")).toBe(buildSeedSql(seed));
+    await db.exec(buildSeedSql(current));
+    expect(readFileSync("supabase/seed.sql", "utf8")).toBe(buildSeedSql(current));
     expect(await rows(db, "select version from public.content_updates where version = '0.2.12'")).toHaveLength(1);
     const before = await projects(db);
     await db.exec(buildUpdateSql0212(seed));
     expect(await projects(db)).toEqual(before);
-    expect(ciri(before)).toEqual(ciri(seed.projects));
+    expect(ciri(before)).toEqual(ciri(current.projects));
   });
 });

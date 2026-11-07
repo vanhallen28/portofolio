@@ -4,11 +4,12 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { contentToRows } from "@/lib/content/rows";
 import { CaseStudySchema, ProjectSchema, SectionSchemas } from "@/lib/content/schema";
 import { contentBefore0212 } from "@/lib/content/ciri-before-0212";
+import { contentBefore0213 } from "@/lib/content/ranum-before-0213";
 import { seed as current } from "@/lib/content/seed";
 import { buildUpdateSql020 } from "@/lib/content/update-sql";
 
 /** The seed as this update knew it: Ciri before its new site (v0.2.12 changes it later). */
-const seed = contentBefore0212(current);
+const seed = contentBefore0212(contentBefore0213(current));
 
 /* A database seeded by v0.1.x lacks the v0.2.0 fields entirely. The update must fill them in
    without touching anything the owner already edited. */

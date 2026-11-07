@@ -29,6 +29,11 @@ const LAYOUT_LABEL: Record<(typeof LAYOUTS)[number], string> = {
   "two-phones": "Dua layar HP berdampingan",
   "brand-card": "Kartu merek: logo, warna produk, catatan",
 };
+/* where each station sits on the loop (MAP_SLOT_GEOMETRY); a Record, so a new slot cannot ship without a name */
+const SLOT_NAME: Record<(typeof MAP_SLOTS)[number], string> = {
+  1: "Kiri atas", 2: "Atas tengah", 3: "Kanan atas", 4: "Kanan, atas", 5: "Kanan, bawah", 6: "Kanan bawah",
+  7: "Bawah tengah", 8: "Kiri bawah", 9: "Kiri, atas", 10: "Kiri, bawah", 11: "Kiri, tengah", 12: "Kanan, tengah",
+};
 const MOTION_LABEL: Record<(typeof ROOM_MOTIONS)[number], string> = {
   auto: "Otomatis (berbeda dari ruang di sebelahnya)",
   arch: "Gerbang: layar terbuka dari bawah berbentuk lengkung",
@@ -42,6 +47,7 @@ const MOTION_LABEL: Record<(typeof ROOM_MOTIONS)[number], string> = {
   unfold: "Lembaran: desktop terbentang seperti peta, HP berbalik seperti halaman",
   glow: "Nyala: layar menyala dari gelap seperti cahaya lilin",
   pop: "Muncul: layar melompat dari tepi bawah lalu memantul, seperti maskot yang menyapa",
+  sun: "Terik: layar muncul dari cahaya yang menyilaukan, lalu warnanya kembali",
 };
 const MASCOT_LABEL: Record<(typeof MASCOT_MOTIONS)[number], string> = {
   pop: "Muncul: melompat dari bawah, lalu bergoyang patah-patah",
@@ -215,7 +221,7 @@ export function ProjectForm({ initial, index, lines, works, slots, takenSlugs, p
             <div className="adm-grid-2">
               <TextField label="Label di denah" value={p.mapLabel} max={24} onChange={(v) => set("mapLabel", v)} />
               <Select label="Posisi stasiun" value={p.mapSlot}
-                options={MAP_SLOTS.map((s) => ({ value: s, label: `${s} · ${["Kiri atas", "Atas tengah", "Kanan atas", "Kanan, atas", "Kanan, bawah", "Kanan bawah", "Bawah tengah", "Kiri bawah", "Kiri, atas", "Kiri, bawah", "Kiri, tengah"][s - 1]}${slots[s] ? ` (dipakai ${slots[s]})` : ""}` }))}
+                options={MAP_SLOTS.map((s) => ({ value: s, label: `${s} · ${SLOT_NAME[s]}${slots[s] ? ` (dipakai ${slots[s]})` : ""}` }))}
                 onChange={(v) => set("mapSlot", v)}
                 hint={slots[p.mapSlot] ? `Posisi ini juga dipakai ${slots[p.mapSlot]}; hanya satu yang tampil di denah.` : "Pojok berada di pertemuan dua jalur."} />
             </div>

@@ -3,6 +3,7 @@ import { caseToRow, projectToRow } from "./rows";
 import type { Content, Project } from "./types";
 import { VISUALS_BEFORE_029 } from "./visuals-before-029";
 import { CIRI_CLIENT_FONT_BEFORE_0212, CIRI_ID, contentBefore0212 } from "./ciri-before-0212";
+import { RANUM_ID, RANUM_SLUG, TEXT_BEFORE_0213, contentBefore0213 } from "./ranum-before-0213";
 
 /** A project row as v0.2.8 and earlier wrote it: the v0.2.8 screens and no mascot. Keeps the update files
     those versions shipped byte-for-byte the same now that the seed has moved on. */
@@ -21,7 +22,7 @@ function rowBefore029(p: Project) {
    It only ever FILLS what is missing (a new field, an empty FAQ, a case study without colours);
    anything already edited in the admin is left exactly as it is. Safe to run more than once. */
 export function buildUpdateSql020(content: Content): string {
-  const c = ContentSchema.parse(contentBefore0212(content));
+  const c = ContentSchema.parse(contentBefore0212(contentBefore0213(content)));
   const j = (v: unknown) => `'${JSON.stringify(v).replace(/'/g, "''")}'::jsonb`;
   const s = (v: string) => `'${v.replace(/'/g, "''")}'`;
   const out: string[] = [
@@ -91,7 +92,7 @@ where project_slug = ${s(cs.projectSlug)} and not exists (select 1 from jsonb_ar
    the owner already gave visuals or another layout, a cover already chosen, or a feature that already
    has pictures is left exactly as it is. Runs once (recorded in content_updates). */
 export function buildUpdateSql022(content: Content): string {
-  const c = ContentSchema.parse(contentBefore0212(content));
+  const c = ContentSchema.parse(contentBefore0212(contentBefore0213(content)));
   const j = (v: unknown) => `'${JSON.stringify(v).replace(/'/g, "''")}'::jsonb`;
   const s = (v: string) => `'${v.replace(/'/g, "''")}'`;
   const project = c.projects.find((p) => p.slug === "biansa");
@@ -164,7 +165,7 @@ export const TEXT_BEFORE_027 = {
    eight projects. Inserts only what is missing; a sentence is replaced only while it still reads exactly as it
    shipped, so anything the owner rewrote in the admin stays. Runs once (recorded in content_updates). */
 export function buildUpdateSql027(content: Content): string {
-  const c = ContentSchema.parse(contentBefore0212(content));
+  const c = ContentSchema.parse(contentBefore0212(contentBefore0213(content)));
   const j = (v: unknown) => `'${JSON.stringify(v).replace(/'/g, "''")}'::jsonb`;
   const s = (v: string) => `'${v.replace(/'/g, "''")}'`;
   const slugs = ["vale", "loma"];
@@ -242,7 +243,7 @@ export const TEXT_BEFORE_028 = {
    v0.2.7: inserts only what is missing, replaces a sentence only while it still reads exactly as it shipped, and
    runs once (recorded in content_updates). */
 export function buildUpdateSql028(content: Content): string {
-  const c = ContentSchema.parse(contentBefore0212(content));
+  const c = ContentSchema.parse(contentBefore0212(contentBefore0213(content)));
   const j = (v: unknown) => `'${JSON.stringify(v).replace(/'/g, "''")}'::jsonb`;
   const s = (v: string) => `'${v.replace(/'/g, "''")}'`;
   const p = c.projects.find((x) => x.slug === "rua");
@@ -297,7 +298,7 @@ export function buildUpdateSql028(content: Content): string {
    silent video, plus that video). A screen the owner replaced, or a mascot the owner already set, is left alone.
    Runs once (recorded in content_updates). */
 export function buildUpdateSql029(content: Content): string {
-  const c = ContentSchema.parse(contentBefore0212(content));
+  const c = ContentSchema.parse(contentBefore0212(contentBefore0213(content)));
   const j = (v: unknown) => `'${JSON.stringify(v).replace(/'/g, "''")}'::jsonb`;
   const s = (v: string) => `'${v.replace(/'/g, "''")}'`;
   const out: string[] = [
@@ -350,8 +351,8 @@ export function buildUpdateSql029(content: Content): string {
    owner changed in the admin stays; the room order, lines, colours and status are not touched. Runs once
    (recorded in content_updates). */
 export function buildUpdateSql0212(content: Content): string {
-  const c = ContentSchema.parse(content);
-  const o = ContentSchema.parse(contentBefore0212(content));
+  const c = ContentSchema.parse(contentBefore0213(content));
+  const o = ContentSchema.parse(contentBefore0212(contentBefore0213(content)));
   const j = (v: unknown) => `'${JSON.stringify(v).replace(/'/g, "''")}'::jsonb`;
   const s = (v: string) => `'${v.replace(/'/g, "''")}'`;
   const find = (x: Content) => ({ p: x.projects.find((p) => p.id === CIRI_ID), cs: x.caseStudies.find((cs) => cs.projectSlug === "ciri") });
@@ -409,6 +410,64 @@ export function buildUpdateSql0212(content: Content): string {
     "",
     "insert into public.content_updates (version) values ('0.2.12');",
     "raise notice 'Pembaruan isi v0.2.12 selesai.';",
+    "end",
+    "$upd$;",
+    "",
+  ].join("\n");
+}
+
+/* supabase/updates/v0.2.13.sql — a new room: Ranum, with its case study and its name in the client strip, and the
+   sentences that count the works go from eleven to twelve. Only adds what is missing (a project whose id or address is
+   already taken is skipped), and a sentence changes only while it still reads exactly as v0.2.12 shipped it. The new room
+   goes after the last room, so the owner's room order stays. Runs once (recorded in content_updates). */
+export function buildUpdateSql0213(content: Content): string {
+  const c = ContentSchema.parse(content);
+  const j = (v: unknown) => `'${JSON.stringify(v).replace(/'/g, "''")}'::jsonb`;
+  const s = (v: string) => `'${v.replace(/'/g, "''")}'`;
+  const p = c.projects.find((x) => x.id === RANUM_ID);
+  const cs = c.caseStudies.find((x) => x.projectSlug === RANUM_SLUG);
+  if (!p || !cs) throw new Error("seed has no Ranum project / case study");
+  const r = projectToRow(p);
+  const rc = caseToRow(cs);
+  const clients = c.sections.hero.clients.items.filter((it) => it.projectSlug === RANUM_SLUG);
+  /* everything after the room itself only happens when the room is really Ranum: if the owner already uses the address
+     /karya/ranum for another project, the room is skipped and so are its name in the strip and the twelve-works sentences */
+  const added = `exists (select 1 from public.projects where id = ${s(p.id)} and slug = ${s(r.slug)})`;
+  return [
+    "-- Pembaruan isi v0.2.13. Dibuat otomatis oleh `npm run seed:sql` — jangan diedit manual.",
+    "-- Satu ruang baru: Ranum, dengan studi kasusnya.",
+    "-- Hanya menambah yang belum ada; kalimat hanya diganti bila masih sama persis dengan bawaan v0.2.12.",
+    "-- Berjalan sekali saja: menjalankannya lagi tidak mengubah apa pun (dicatat di tabel content_updates).",
+    "",
+    "create table if not exists public.content_updates (version text primary key, applied_at timestamptz not null default now());",
+    "alter table public.content_updates enable row level security;",
+    "revoke all on public.content_updates from anon, authenticated;",
+    "",
+    "do $upd$",
+    "declare next_sort int;",
+    "begin",
+    "if exists (select 1 from public.content_updates where version = '0.2.13') then",
+    "  raise notice 'Pembaruan isi v0.2.13 sudah pernah dijalankan; tidak ada yang diubah.';",
+    "  return;",
+    "end if;",
+    "",
+    "-- Ruang Ranum, di belakang ruang terakhir (dilewati bila id atau alamatnya sudah dipakai)",
+    "select coalesce(max(sort), 0) into next_sort from public.projects;",
+    `insert into public.projects (id, slug, sort, published, data) select ${s(r.id)}, ${s(r.slug)}, next_sort + 1, ${r.published}, ${j(r.data)} where not exists (select 1 from public.projects where id = ${s(r.id)} or slug = ${s(r.slug)});`,
+    "",
+    "-- Studi kasusnya (hanya untuk proyek Ranum yang baru ditambahkan, dan bila belum ada)",
+    `insert into public.case_studies (project_slug, published, data) select ${s(rc.project_slug)}, ${rc.published}, ${j(rc.data)} where ${added} and not exists (select 1 from public.case_studies where project_slug = ${s(rc.project_slug)});`,
+    "",
+    "-- Deretan klien di bawah hero: Ranum ditambahkan di ujung (dilewati bila sudah ada, deretannya sudah penuh, atau ruang Ranum tidak ditambahkan)",
+    `update public.sections set data = jsonb_set(data, '{clients,items}', coalesce(data->'clients'->'items', '[]'::jsonb) || ${j(clients)}) where key = 'hero' and ${added} and jsonb_typeof(data->'clients') = 'object' and case when jsonb_typeof(coalesce(data->'clients'->'items', '[]'::jsonb)) = 'array' then jsonb_array_length(coalesce(data->'clients'->'items', '[]'::jsonb)) <= 11 and not exists (select 1 from jsonb_array_elements(coalesce(data->'clients'->'items', '[]'::jsonb)) x where x->>'projectSlug' = ${s(RANUM_SLUG)}) else false end;`,
+    "",
+    "-- Kalimat yang menghitung jumlah karya (sebelas → dua belas), hanya bila belum Anda ubah dan ruang Ranum ditambahkan",
+    `update public.sections set data = jsonb_set(data, '{lede}', ${j(c.sections.hero.lede)}) where key = 'hero' and ${added} and data->'lede' = ${j(TEXT_BEFORE_0213.lede)};`,
+    `update public.sections set data = jsonb_set(data, '{intro}', ${j(c.sections.works.intro)}) where key = 'works' and ${added} and data->'intro' = ${j(TEXT_BEFORE_0213.intro)};`,
+    `update public.site_settings set data = jsonb_set(data, '{seoDescription}', ${j(c.settings.seoDescription)}) where id = 1 and ${added} and data->'seoDescription' = ${j(TEXT_BEFORE_0213.seo)};`,
+    "",
+    "insert into public.content_updates (version) values ('0.2.13');",
+    "raise notice 'Pembaruan isi v0.2.13 selesai.';",
     "end",
     "$upd$;",
     "",

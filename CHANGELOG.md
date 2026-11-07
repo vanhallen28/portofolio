@@ -3,6 +3,21 @@
 Format: setiap rilis dikirim sebagai `portofolio-vX.Y.Z.zip`. Nomor versi naik setiap kali, jadi zip tidak pernah saling tumpuk.
 Petunjuk pasang per versi: `docs/updates/BACA-INI-vX.Y.Z.txt`.
 
+## v0.2.13 — 7 November 2026
+
+Ruang baru: Ranum.
+
+- **Ruang 12, Ranum**: situs toko untuk merek tabir surya dengan empat formula yang dinamai menurut tempat tujuannya.
+  - Preview asli dari klien, sama persis byte demi byte (`public/preview/ranum.html`).
+  - Video layar desktop dan HP: beranda, lalu bagian empat terrain yang berganti warna saat digulir.
+  - Huruf judul Playfair Display, huruf serif situs Ranum (`app/fonts/ranum-display.woff2`, lisensi OFL), juga di deretan klien dan studi kasus.
+  - Dinding warna pasir dengan tube Forest Calm yang melayang sebagai maskot.
+  - Efek layar baru **Terik**: layar muncul dari cahaya yang menyilaukan, lalu warnanya kembali. Bisa dipilih untuk ruang lain di admin.
+- **Studi kasus Ranum** dalam dua bahasa, dengan 14 gambar dari situsnya: terrain, pencari shade, kampanye dan tekstur krim, toko dan produk, kotak yang terlipat, sampai halaman terima kasih. Data pembeli di gambar adalah contoh.
+- **Denah**: stasiun ke-12 di sisi kanan (jalur Menjual kini tiga stasiun, seperti sisi kiri).
+- Kalimat "sebelas karya" menjadi "dua belas karya" di hero, bagian Karya, dan deskripsi SEO.
+- `supabase/updates/v0.2.13.sql`: menambah ruang Ranum di belakang ruang terakhir, studi kasusnya, dan namanya di deretan klien. Kalimat hanya diganti bila masih sama persis dengan bawaan v0.2.12. File SQL versi sebelumnya tidak berubah.
+
 ## v0.2.12 — 4 November 2026
 
 Ciri versi situs baru dari klien.
