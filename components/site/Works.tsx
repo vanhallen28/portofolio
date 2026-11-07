@@ -20,7 +20,7 @@ export function Works({ content, lang }: { content: Content; lang: Lang }) {
           {content.lines.map((l) => {
             const n = projects.filter((p) => p.lines.includes(l.key)).length;
             return n ? (
-              <button key={l.key} type="button" className="chip" data-filter={l.key} aria-pressed="false">
+              <button key={l.key} type="button" className="chip" data-filter={l.key} aria-pressed="false" title={t(l.desc, lang) || undefined}>
                 <i className="ldot" data-line={l.key}></i>{t(l.name, lang)} <span className="count">{n}</span>
               </button>
             ) : null;

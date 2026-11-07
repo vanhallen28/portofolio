@@ -3,6 +3,19 @@
 Format: setiap rilis dikirim sebagai `portofolio-vX.Y.Z.zip`. Nomor versi naik setiap kali, jadi zip tidak pernah saling tumpuk.
 Petunjuk pasang per versi: `docs/updates/BACA-INI-vX.Y.Z.txt`.
 
+## v0.2.14 — 8 November 2026
+
+Jalur bisnis dengan nama yang lebih profesional dan bisa diatur sendiri.
+
+- **Nama baru keempat jalur** (ID/EN): Kehadiran Digital / Digital Presence, Penjualan Digital / Digital Commerce, Pengalaman Pelanggan / Customer Experience, Operasional Bisnis / Business Operations. Label di studi kasus "Jalur" menjadi "Fokus bisnis" / "Business focus".
+- **Admin → Jalur & warna**:
+  - Pilihan nama siap pakai untuk tiap jalur, termasuk nama lama, cukup sekali klik.
+  - Nama boleh sampai 24 huruf.
+  - Kolom baru **Cakupan**, misalnya "Website, landing page, dan SEO". Muncul saat filter Karya atau nama jalur di denah disorot, dan sebagai panduan di form proyek.
+- **Form proyek**: kolom Jalur menampilkan cakupan tiap jalur dan tautan untuk mengubah nama, cakupan, dan warnanya.
+- **Denah**: nama jalur yang panjang dirapatkan otomatis supaya tetap muat di sisinya.
+- `supabase/updates/v0.2.14.sql`: mengganti nama jalur dan label studi kasus hanya bila masih bawaan, dan menambah cakupan bila belum ada. Warna dan urutan tidak disentuh. File SQL versi sebelumnya tidak berubah.
+
 ## v0.2.13 — 7 November 2026
 
 Ruang baru: Ranum.

@@ -11,7 +11,7 @@ export default async function Page() {
         <div>
           <p className="adm-crumb">Beranda</p>
           <h1>Jalur & warna</h1>
-          <p>Empat jalur fungsi bisnis di denah, filter karya, dan layanan. Urutannya tetap: Ditemukan, Menjual, Melayani, Mengelola.</p>
+          <p>Empat fungsi bisnis yang menjadi sisi denah hero, filter di bagian Karya, judul kartu Layanan, dan label setiap ruang. Nama, cakupan, dan warnanya bebas diganti; posisinya di denah tetap.</p>
         </div>
       </div>
       <LinesForm initial={[...c.lines].sort((a, b) => a.sort - b.sort)} />

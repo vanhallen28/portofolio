@@ -68,10 +68,10 @@ export const seedSettings: SiteSettings = {
 };
 
 export const seedLines: Line[] = [
-  { key: "found", name: l("Ditemukan", "Get found"), color: "#2F6FE4", colorDark: "#5B8EF0", sort: 1 },
-  { key: "sell", name: l("Menjual", "Sell"), color: "#E39A00", colorDark: "#F0B030", sort: 2 },
-  { key: "serve", name: l("Melayani", "Serve"), color: "#12936A", colorDark: "#2DB386", sort: 3 },
-  { key: "run", name: l("Mengelola", "Run"), color: "#D4417A", colorDark: "#E66A98", sort: 4 },
+  { key: "found", name: l("Kehadiran Digital", "Digital Presence"), desc: l("Website, landing page, dan SEO", "Websites, landing pages and SEO"), color: "#2F6FE4", colorDark: "#5B8EF0", sort: 1 },
+  { key: "sell", name: l("Penjualan Digital", "Digital Commerce"), desc: l("Toko online, kasir, dan pembayaran", "Online stores, point of sale and payments"), color: "#E39A00", colorDark: "#F0B030", sort: 2 },
+  { key: "serve", name: l("Pengalaman Pelanggan", "Customer Experience"), desc: l("Portal klien, pemesanan, dan aplikasi pelanggan", "Client portals, bookings and customer apps"), color: "#12936A", colorDark: "#2DB386", sort: 3 },
+  { key: "run", name: l("Operasional Bisnis", "Business Operations"), desc: l("Sistem internal, SDM, dan keuangan", "Internal systems, HR and finance"), color: "#D4417A", colorDark: "#E66A98", sort: 4 },
 ];
 
 export const seedSections: Sections = {
@@ -133,7 +133,7 @@ export const seedSections: Sections = {
     newTab: l("tab baru", "new tab"),
     caseLabels: {
       client: l("Klien", "Client"), field: l("Bidang", "Field"), role: l("Peran saya", "My role"),
-      year: l("Tahun", "Year"), lines: l("Jalur", "Lines"), site: l("Situs", "Site"),
+      year: l("Tahun", "Year"), lines: l("Fokus bisnis", "Business focus"), site: l("Situs", "Site"),
     },
   },
   services: {

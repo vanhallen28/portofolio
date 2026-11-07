@@ -20,6 +20,10 @@ const NAME_POS: Record<LineKey, { x: number; y: number; rotate?: number }> = {
   serve: { x: 79, y: 280, rotate: -90 },
 };
 const ORDER: LineKey[] = ["found", "sell", "run", "serve"];
+/* Room for a name along each side. The labels are 14px bold capitals with .14em tracking, about 11.6 units a
+   character; a longer name (the admin allows 24 characters) is squeezed to fit its side instead of running off it. */
+const ROOM: Record<LineKey, number> = { found: 300, sell: 250, run: 300, serve: 250 };
+const fit = (name: string, k: LineKey) => (name.length * 11.6 > ROOM[k] ? { textLength: ROOM[k], lengthAdjust: "spacingAndGlyphs" as const } : {});
 
 export function TransitMap({ content, lang }: { content: Content; lang: Lang }) {
   const lines = lineMap(content.lines);
@@ -40,10 +44,12 @@ export function TransitMap({ content, lang }: { content: Content; lang: Lang }) 
         <g className="map-linenames">
           {ORDER.map((k) => {
             const p = NAME_POS[k];
+            const name = t(lines[k]?.name, lang), desc = t(lines[k]?.desc, lang);
             return (
               <a key={k} href="#karya" data-filter-link={k}>
-                <text x={p.x} y={p.y} textAnchor="middle" transform={p.rotate ? `rotate(${p.rotate} ${p.x} ${p.y})` : undefined} className="lname" data-line={k}>
-                  {t(lines[k]?.name, lang)}
+                {desc ? <title>{desc}</title> : null}
+                <text x={p.x} y={p.y} textAnchor="middle" transform={p.rotate ? `rotate(${p.rotate} ${p.x} ${p.y})` : undefined} className="lname" data-line={k} {...fit(name, k)}>
+                  {name}
                 </text>
               </a>
             );

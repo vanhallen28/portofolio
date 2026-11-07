@@ -117,9 +117,15 @@ export function ProjectForm({ initial, index, lines, works, slots, takenSlugs, p
             <LField label="Cerita singkat" value={p.text} onChange={(v) => set("text", v)} multiline rows={5} hint="2–4 kalimat: masalah bisnisnya, apa yang Anda bangun, hasilnya." />
             <LField label="Hasil untuk bisnisnya (opsional)" value={p.result ?? emptyL()} onChange={(v) => set("result", v)} multiline rows={2} max={160}
               hint="Satu kalimat yang ditonjolkan di ruang, mis. Payroll yang dulu 2 hari kini selesai dalam 1 jam. Kosongkan bila belum ada angka nyata." />
-            <Checks label="Jalur" values={p.lines} min={1} onChange={(v) => set("lines", v)}
+            <Checks label="Jalur (fungsi bisnis)" values={p.lines} min={1} onChange={(v) => set("lines", v)}
               options={LINE_KEYS.map((k) => ({ value: k, label: <><i className="ldot" style={{ background: lines[k]?.color }} />{lineNames[k]}</> }))}
-              hint="Menentukan filter di bagian Karya dan garis yang menyala di denah." />
+              hint={<>
+                <span className="adm-linehints">
+                  {LINE_KEYS.filter((k) => lines[k]?.desc.id).map((k) => <span key={k}><b>{lineNames[k]}</b>{lines[k]!.desc.id}</span>)}
+                </span>
+                Menentukan filter di bagian Karya dan garis yang menyala di denah.{" "}
+                <Link href="/admin/lines" target="_blank">Ubah nama, cakupan, dan warna jalur</Link> (tab baru, supaya isian di sini tidak hilang).
+              </>} />
           </Card>
 
           <Card title="Fakta (angka besar)" description="Angka menghitung naik saat ruang terlihat. Maks. 4.">

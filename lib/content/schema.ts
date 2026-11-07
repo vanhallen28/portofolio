@@ -71,7 +71,9 @@ export const SettingsSchema = z.object({
   }),
 });
 
-export const LineSchema = z.object({ key: LineKey, name: LSchema, color: hex, colorDark: hex, sort: z.number().int() });
+/** A business line: a side of the loop on the hero map, a filter in Works and a heading in Services. `desc` says what
+    belongs on it (shown as a tooltip on the site and as guidance in the project form). */
+export const LineSchema = z.object({ key: LineKey, name: LSchema, desc: LSchema.default(emptyL), color: hex, colorDark: hex, sort: z.number().int() });
 
 export const ClientSchema = z.object({
   name: short.min(1),

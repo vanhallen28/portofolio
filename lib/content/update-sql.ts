@@ -4,6 +4,7 @@ import type { Content, Project } from "./types";
 import { VISUALS_BEFORE_029 } from "./visuals-before-029";
 import { CIRI_CLIENT_FONT_BEFORE_0212, CIRI_ID, contentBefore0212 } from "./ciri-before-0212";
 import { RANUM_ID, RANUM_SLUG, TEXT_BEFORE_0213, contentBefore0213 } from "./ranum-before-0213";
+import { CASE_LINES_LABEL_BEFORE_0214, LINE_NAMES_BEFORE_0214 } from "./lines-before-0214";
 
 /** A project row as v0.2.8 and earlier wrote it: the v0.2.8 screens and no mascot. Keeps the update files
     those versions shipped byte-for-byte the same now that the seed has moved on. */
@@ -468,6 +469,49 @@ export function buildUpdateSql0213(content: Content): string {
     "",
     "insert into public.content_updates (version) values ('0.2.13');",
     "raise notice 'Pembaruan isi v0.2.13 selesai.';",
+    "end",
+    "$upd$;",
+    "",
+  ].join("\n");
+}
+
+/* supabase/updates/v0.2.14.sql — professional names for the four lines, a scope for each, and the case-study label
+   "Fokus bisnis". A name or the label changes only while it still reads exactly as v0.2.13 shipped it; a scope is only
+   added where a line has none yet. Colours and order are not touched. Runs once (recorded in content_updates). */
+export function buildUpdateSql0214(content: Content): string {
+  const c = ContentSchema.parse(content);
+  const j = (v: unknown) => `'${JSON.stringify(v).replace(/'/g, "''")}'::jsonb`;
+  const s = (v: string) => `'${v.replace(/'/g, "''")}'`;
+  const names = c.lines.map((l) => `update public.lines set data = jsonb_set(data, '{name}', ${j(l.name)}) where key = ${s(l.key)} and data->'name' = ${j(LINE_NAMES_BEFORE_0214[l.key])};`);
+  const descs = c.lines.map((l) => `update public.lines set data = data || jsonb_build_object('desc', ${j(l.desc)}) where key = ${s(l.key)} and jsonb_typeof(data->'desc') is distinct from 'object';`);
+  return [
+    "-- Pembaruan isi v0.2.14. Dibuat otomatis oleh `npm run seed:sql` — jangan diedit manual.",
+    "-- Nama jalur yang lebih profesional, cakupan setiap jalur, dan label studi kasus \"Fokus bisnis\".",
+    "-- Nama dan label hanya diganti bila masih sama persis dengan bawaan v0.2.13; cakupan hanya ditambahkan bila belum ada.",
+    "-- Berjalan sekali saja: menjalankannya lagi tidak mengubah apa pun (dicatat di tabel content_updates).",
+    "",
+    "create table if not exists public.content_updates (version text primary key, applied_at timestamptz not null default now());",
+    "alter table public.content_updates enable row level security;",
+    "revoke all on public.content_updates from anon, authenticated;",
+    "",
+    "do $upd$",
+    "begin",
+    "if exists (select 1 from public.content_updates where version = '0.2.14') then",
+    "  raise notice 'Pembaruan isi v0.2.14 sudah pernah dijalankan; tidak ada yang diubah.';",
+    "  return;",
+    "end if;",
+    "",
+    "-- Nama jalur (hanya yang belum Anda ubah)",
+    ...names,
+    "",
+    "-- Cakupan setiap jalur (hanya bila belum ada)",
+    ...descs,
+    "",
+    "-- Label di studi kasus: Jalur → Fokus bisnis (hanya bila belum Anda ubah)",
+    `update public.sections set data = jsonb_set(data, '{caseLabels,lines}', ${j(c.sections.works.caseLabels.lines)}) where key = 'works' and data->'caseLabels'->'lines' = ${j(CASE_LINES_LABEL_BEFORE_0214)};`,
+    "",
+    "insert into public.content_updates (version) values ('0.2.14');",
+    "raise notice 'Pembaruan isi v0.2.14 selesai.';",
     "end",
     "$upd$;",
     "",

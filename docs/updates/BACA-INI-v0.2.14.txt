@@ -1,0 +1,65 @@
+PORTOFOLIO v0.2.14 — BACA INI DULU
+================================================================
+
+Jalur bisnis: nama lebih profesional dan bisa diatur sendiri.
+
+Nama baru (bawaan):
+  Ditemukan  → Kehadiran Digital      (Digital Presence)
+  Menjual    → Penjualan Digital      (Digital Commerce)
+  Melayani   → Pengalaman Pelanggan   (Customer Experience)
+  Mengelola  → Operasional Bisnis     (Business Operations)
+  Label "Jalur" di studi kasus → "Fokus bisnis" (Business focus)
+
+Cara mengganti sendiri: Admin → Jalur & warna.
+- Klik salah satu "Pilihan nama siap pakai" (nama lama juga ada di
+  sana), atau tulis nama sendiri, maksimal 24 huruf.
+- Isi "Cakupan", misalnya "Website, landing page, dan SEO". Teks ini
+  muncul saat filter Karya disorot dan sebagai panduan di form proyek.
+- Warna tetap bisa diubah seperti sebelumnya.
+- Di form proyek, kolom Jalur kini punya tautan langsung ke halaman ini.
+
+
+1. PASANG (salin-tempel di Terminal)
+----------------------------------------------------------------
+
+  cd ~/Documents/Virgiawan/PROJECT/portofolio
+  unzip -o ~/Downloads/portofolio-v0.2.14.zip -d .
+  npm install
+  npm run build
+  git add -A
+  git commit -m "v0.2.14: nama jalur profesional dan bisa diatur"
+  git push
+
+
+2. SUPABASE (sekali saja)
+----------------------------------------------------------------
+
+a. Tunggu deploy v0.2.14 di Vercel berstatus Ready.
+
+b. Bila SQL v0.2.12 dan v0.2.13 belum dijalankan, jalankan dulu
+   berurutan (lihat BACA-INI masing-masing).
+
+c. Di Terminal:
+
+     pbcopy < supabase/updates/v0.2.14.sql
+
+d. Supabase → SQL Editor → New query, tempel (Cmd+V), Run.
+   Hasilnya "Success. No rows returned" (itu normal).
+
+   Nama jalur dan label studi kasus hanya diganti bila masih nama
+   bawaan; yang sudah Anda ubah tidak disentuh. Cakupan ditambahkan
+   bila belum ada. Warna dan urutan tidak berubah.
+
+e. Buka /admin → Pengaturan situs → Simpan (tanpa mengubah apa pun),
+   lalu buka beranda dan tekan Cmd+Shift+R.
+
+
+3. MOHON DICEK SETELAH DEPLOY
+----------------------------------------------------------------
+
+[ ] Denah hero: keempat nama baru muat di sisinya (ID dan EN).
+[ ] Filter Karya dan judul kartu Layanan memakai nama baru.
+[ ] Studi kasus: baris "Fokus bisnis" menggantikan "Jalur".
+[ ] Admin → Jalur & warna: pilihan nama siap pakai dan kolom Cakupan.
+[ ] Admin → proyek mana pun: kolom Jalur menampilkan cakupan dan
+    tautan "Ubah nama, cakupan, dan warna jalur".
